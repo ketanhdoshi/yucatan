@@ -1,0 +1,247 @@
+'use strict';
+
+const Boom = require('boom');   // for HTTP error codes
+const Joi = require('joi');     // for parameter validation
+const Crypto = require ('../utils/crypto'); // for password encryption
+
+// HAPI plugin that exposes all the REST APIs for the 'user' resource
+// One route is defined for each API URL (+ HTTP verb)
+// GET list, GET read, POST create, PUT update, DELETE
+
+// Plugin registration method
+exports.register = function(server, options, next) {
+
+    // Import `user` mongoose db model from `models/user.js` file 
+    var UserModel = require('../models/user');
+
+    // REST: Get all users
+    server.route({
+        method: 'GET',
+        path: '/api/user',
+        config: {
+            // Swagger documentation fields tags, description, note
+            tags: ['api'],
+            description: 'Get All User data',
+            notes: 'Get All User data',
+            
+            // Use HTTP Basic Auth for this route
+            auth: 'basic',
+            handler: function (request, reply) {
+                // reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
+                //Fetch all data from mongodb User Collection 
+                UserModel.find({}, function (error, data) {
+                    // Callback method to handle results
+                    // Return HTTP success or error code                    
+                    if (error) {
+                        reply(Boom.serverUnavailable ('Internal MongoDB error', error));
+                    } else {
+                        reply({
+                            statusCode: 200,
+                            message: 'User Data Successfully Fetched',
+                            data: data
+                        });
+                    }
+                });
+            }
+        }
+    });
+
+    // REST: Get a user by ID
+    server.route({
+        method: 'GET',
+        //Getting data for particular user "/api/user/1212313123" 
+        path: '/api/user/{id}',
+        config: {
+            // Swagger documentation fields tags, description, note
+            tags: ['api'],
+            description: 'Get specific user data',
+            notes: 'Get specific user data',
+            validate: {
+                // Use Joi plugin to validate request
+                params: {
+                    //`id` is required string field
+                    id: Joi.string().required()
+                },
+                headers:  
+                    Joi.object({
+                        'authorization': Joi.string().required()
+                    }).unknown()
+            },
+            auth: 'jwt'
+        },
+        handler: function (request, reply) {
+            //Find user in db for particular userID 
+            UserModel.find({
+                _id: request.params.id
+            }, function (error, data) {
+                // Callback method to handle results
+                // Return HTTP success or error code
+                if (error) {
+                    reply(Boom.serverUnavailable ('Internal MongoDB error', error));
+                } else {
+                    if (data.length === 0) {
+                        // No data returned
+                        reply(Boom.notFound ());
+                    } else {
+                        reply({
+                            statusCode: 200,
+                            message: 'User Data Successfully Fetched',
+                            data: data
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+    // REST: Create a user
+    server.route({
+        method: 'POST',
+        path: '/api/user',
+        config: {
+            // Swagger documentation fields tags, description, note
+            tags: ['api'],
+            description: 'Save user data',
+            notes: 'Save user data',
+            // We use Joi plugin to validate request 
+            validate: {
+                // Use Joi plugin to validate request
+                payload: {
+                    username: Joi.string().min(3).max(20).required(),
+                    // Client passes plaintext password over SSL
+                    password: Joi.string().min(6).max(12).required(),
+                    name: Joi.string().min(3).max(20).optional(),
+                    scope: Joi.string().optional()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            // encrypt password before saving.
+            request.payload.password = Crypto.hash (request.payload.password); 
+            
+            // Create mongodb user object to save it into database 
+            var user = new UserModel(request.payload);
+                     
+            // Save data into database 
+            user.save(function (error) {
+                // Callback method to handle results
+                // Return HTTP success or error code
+                if (error) {
+                    reply(Boom.serverUnavailable ('Internal MongoDB error', error));
+                } else {
+                    reply({statusCode: 201, message: 'User Saved Successfully'});
+                }
+            });
+        }
+    });
+
+    // REST: Update a user by ID
+    server.route({
+        method: 'PUT',
+        path: '/api/user/{id}',
+        config: {
+            // Swagger documentation fields tags, description, note 
+            tags: ['api'],
+            description: 'Update specific user data',
+            notes: 'Update specific user data',
+            validate: {
+                // Use Joi plugin to validate request
+                params: {
+                    //`id` is required field and can only accept string data 
+                    id: Joi.string().required()
+                },
+                payload: {
+                    username: Joi.string().min(3).max(20).optional(),
+                    password: Joi.string().min(6).max(12).optional(),
+                    name: Joi.string().min(3).max(20).optional(),
+                    scope: Joi.string().optional()
+                }
+            },
+            auth: {
+                    // Use HTTP Cookie Auth for this route
+                    strategy: 'cookie',
+                    mode: 'optional' // Needed for request.auth.isAuthenticated to work
+            },
+        handler: function (request, reply) {
+            console.log ("checking authenticated...");
+            
+            if (request.auth.isAuthenticated) {
+                // session data available
+                var cookie = request.auth.credentials;
+                console.log ("cookie is ", cookie);
+            }
+            
+            // encrypt password before saving.
+            if (request.payload.password) {
+                request.payload.password = Crypto.hash (request.payload.password);
+            }
+            
+            // Find the user by ID in the db and update it 
+            UserModel.findOneAndUpdate({
+                _id: request.params.id
+            },
+                request.payload, // values to be updated
+                function (error, data) {
+                    // Callback method to handle results
+                    // Return HTTP success or error code
+                    if (error) {
+                        reply(Boom.serverUnavailable ('Internal MongoDB error', error));
+                    } else {
+                        reply({
+                            statusCode: 200,
+                            message: 'User Updated Successfully',
+                            data: data
+                        });
+                    }
+                }
+            );
+        }
+                },
+    });
+
+    // REST: Delete a user by ID
+    server.route({
+        method: 'DELETE',
+        path: '/api/user/{id}',
+        config: {
+            // Swagger documentation fields tags, description, note
+            tags: ['api'],
+            description: 'Remove specific user data',
+            notes: 'Remove specific user data',
+            validate: {
+                // Use Joi plugin to validate request
+                params: {
+                    id: Joi.string().required()
+                }
+            }
+        },
+        handler: function (request, reply) {
+            // Delete the particular record from db 
+            UserModel.findOneAndRemove({
+                _id: request.params.id
+            },
+                // Callback method to handle results
+                function (error) {
+
+                    // Return HTTP success or error code
+                    if (error) {
+                        reply(Boom.serverUnavailable ('Internal MongoDB error', error));
+                    } else {
+                        reply({
+                            statusCode: 200,
+                            message: 'User Deleted Successfully'
+                        });
+                    }
+                }
+            );
+        }
+    });
+
+    // Next must be called at the end of register
+    return next();
+};
+
+// Plugin registration attributes
+exports.register.attributes = {  
+  name: 'routes-users'
+};
