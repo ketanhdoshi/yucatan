@@ -25,48 +25,44 @@ const basicValidate = function (request, username, password, callback) {
     }
 
     Bcrypt.compare(password, user.password, (err, isValid) => {
+
         callback(err, isValid, { id: user.id, name: user.name });
     });
 };
 
 // Generate a hash password, given a plain text password
 const hashpwd = (username, plainTextPwd) => {
+
     const saltRounds = 10;
-    Bcrypt.hash(plainTextPwd, saltRounds, function(err, hash) {
-        // Store hash in your password DB. 
+    Bcrypt.hash(plainTextPwd, saltRounds, (err, hash) => {
+        // Store hash in your password DB.
         const user = users[username];
         user.password = hash;
     });
-}
+};
 // ============================== End Basic Auth ======================
 
 // ============================== Start JWT ======================
 
-// Not used. We use our mongo user db instead
-var people = { // our "users database" 
-    1: {
-      id: 1,
-      name: 'Jen Jones'
-    }
-};
- 
 // User-defined validation function that is required by the JWT plugin
 // Given a decoded JWT that has been verified by the plugin, check if the
 // userID in the JWT exists in the user db
-var jwtValidate = function (decoded, request, callback) {
-    let UserModel = require('../models/user');
-    UserModel.findOne ({
+const jwtValidate = function (decoded, request, callback) {
+
+    const UserModel = require('../models/user');
+    UserModel.findOne({
         _id: decoded.id
-        }, function (error, data) {
-            if (error || data.length === 0) {
-                // User not found
-                return callback(null, false);
-            } else {
-                // Validated
-                return callback(null, true);
-            }
+    }, (error, data) => {
+
+        if (error || data.length === 0) {
+            // User not found
+            return callback(null, false);
         }
-    );
+        else {
+            // Validated
+            return callback(null, true);
+        }
+    });
 };
 
 // ============================== End JWT ======================
@@ -75,15 +71,16 @@ var jwtValidate = function (decoded, request, callback) {
 // -----------------------------------------------
 // Initialises all authentication approaches we want to use. For each
 // authentication scheme:
-//      Load the corresponding authentication plugin, create a strategy for it and 
+//      Load the corresponding authentication plugin, create a strategy for it and
 //      set optional parameters
 // -----------------------------------------------
-exports.register = function(server, options, next) {
-    var registerRoutes = options.registerRoutes;
+exports.register = function (server, options, next) {
 
-    hashpwd ("ketan", "hipwd");
-    
-    server.log ('info', "registering simple auth");
+    const registerRoutes = options.registerRoutes;
+
+    hashpwd('ketan', 'hipwd');
+
+    server.log('info', 'registering simple auth');
     server.register([
         {
             // Load Basic Auth plugin
@@ -99,16 +96,16 @@ exports.register = function(server, options, next) {
         }
     ], (err) => {
         // Create strategy for Basic Auth
-        server.auth.strategy('basic', 'basic', 
-            { 
+        server.auth.strategy('basic', 'basic',
+            {
                 // Basic Auth requires us to provide a user-defined
                 //  validation function
-                validateFunc: basicValidate 
+                validateFunc: basicValidate
             }
         );
 
         // Create strategy for Cookie Auth
-        server.auth.strategy('cookie', 'cookie', 
+        server.auth.strategy('cookie', 'cookie',
             {
                 password: 'password-should-be-32-characters-or-more',
                 cookie: 'kdh',  // name of the cookie to set
@@ -118,16 +115,16 @@ exports.register = function(server, options, next) {
 
         // Create strategy for JWT Auth
         server.auth.strategy('jwt', 'jwt',
-            { 
-                key: 'NeverShareYourSecret', 
-                validateFunc: jwtValidate, 
+            {
+                key: 'NeverShareYourSecret',
+                validateFunc: jwtValidate,
                 verifyOptions: {
-                    algorithms: [ 'HS256' ] 
-                } 
+                    algorithms: ['HS256']
+                }
             }
         );
-        
-        registerRoutes ();
+
+        registerRoutes();
     });
 
     // Next must be called at the end of register
@@ -135,6 +132,6 @@ exports.register = function(server, options, next) {
 };
 
 // Plugin registration attributes
-exports.register.attributes = {  
+exports.register.attributes = {
     name: 'auth'
 };

@@ -7,36 +7,37 @@ module.exports.swagger = (server) => {
     const Vision = require('vision');
     const HapiSwagger = require('hapi-swagger');
 
-    // Define options for the plugin ( for documentation and testing ) 
+    // Define options for the plugin ( for documentation and testing )
     const options = {
         info: {
             'title': 'Test API Documentation',
-            'version': "0.0.1",
+            'version': '0.0.1'
         }
     };
-    
+
     // Load the Hapi plugin and its dependent plugins into our server
     server.register([
         Inert,
         Vision,
         {
             'register': HapiSwagger,
-            'options': options
+            options
         }], (err) => {
-            if (err) {
-                server.log(['error'], 'hapi-swagger load error: ' + err)
-            } else {
-                server.log(['start'], 'hapi-swagger interface loaded')
-            }
+
+        if (err) {
+            server.log(['error'], 'hapi-swagger load error: ' + err);
         }
-    );
-}
+        else {
+            server.log(['start'], 'hapi-swagger interface loaded');
+        }
+    });
+};
 
 // Load the Good plugin to help with Server Logging
 module.exports.good = (server) => {
 
     const Good = require('good');
-    
+
     // Define options for the Good plugin and load it into our server
     server.register({
         register: Good,
@@ -55,9 +56,9 @@ module.exports.good = (server) => {
             }
         }
     }, (err) => {
-            if (err) {
-                throw err; // something bad happened loading the plugin
-            }
-        }   
-    );
-}
+
+        if (err) {
+            throw err; // something bad happened loading the plugin
+        }
+    });
+};

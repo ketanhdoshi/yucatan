@@ -2,17 +2,17 @@
 
 const Boom = require('boom');   // for HTTP error codes
 const Joi = require('joi');     // for parameter validation
-const Crypto = require ('../utils/crypto'); // for password encryption
+const Crypto = require('../utils/crypto'); // for password encryption
 
 // HAPI plugin that exposes all the REST APIs for the 'user' resource
 // One route is defined for each API URL (+ HTTP verb)
 // GET list, GET read, POST create, PUT update, DELETE
 
 // Plugin registration method
-exports.register = function(server, options, next) {
+exports.register = function (server, options, next) {
 
-    // Import `user` mongoose db model from `models/user.js` file 
-    var UserModel = require('../models/user');
+    // Import `user` mongoose db model from `models/user.js` file
+    const UserModel = require('../models/user');
 
     // REST: Get all users
     server.route({
@@ -23,22 +23,23 @@ exports.register = function(server, options, next) {
             tags: ['api'],
             description: 'Get All User data',
             notes: 'Get All User data',
-            
+
             // Use HTTP Basic Auth for this route
             auth: 'basic',
             handler: function (request, reply) {
                 // reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
-                //Fetch all data from mongodb User Collection 
-                UserModel.find({}, function (error, data) {
+                //Fetch all data from mongodb User Collection
+                UserModel.find({}, (error, data) => {
                     // Callback method to handle results
-                    // Return HTTP success or error code                    
+                    // Return HTTP success or error code
                     if (error) {
-                        reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                    } else {
+                        reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                    }
+                    else {
                         reply({
                             statusCode: 200,
                             message: 'User Data Successfully Fetched',
-                            data: data
+                            data
                         });
                     }
                 });
@@ -49,7 +50,7 @@ exports.register = function(server, options, next) {
     // REST: Get a user by ID
     server.route({
         method: 'GET',
-        //Getting data for particular user "/api/user/1212313123" 
+        //Getting data for particular user "/api/user/1212313123"
         path: '/api/user/{id}',
         config: {
             // Swagger documentation fields tags, description, note
@@ -62,7 +63,7 @@ exports.register = function(server, options, next) {
                     //`id` is required string field
                     id: Joi.string().required()
                 },
-                headers:  
+                headers:
                     Joi.object({
                         'authorization': Joi.string().required()
                     }).unknown()
@@ -70,23 +71,25 @@ exports.register = function(server, options, next) {
             auth: 'jwt'
         },
         handler: function (request, reply) {
-            //Find user in db for particular userID 
+            //Find user in db for particular userID
             UserModel.find({
                 _id: request.params.id
-            }, function (error, data) {
+            }, (error, data) => {
                 // Callback method to handle results
                 // Return HTTP success or error code
                 if (error) {
-                    reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                } else {
+                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                }
+                else {
                     if (data.length === 0) {
                         // No data returned
-                        reply(Boom.notFound ());
-                    } else {
+                        reply(Boom.notFound());
+                    }
+                    else {
                         reply({
                             statusCode: 200,
                             message: 'User Data Successfully Fetched',
-                            data: data
+                            data
                         });
                     }
                 }
@@ -103,7 +106,7 @@ exports.register = function(server, options, next) {
             tags: ['api'],
             description: 'Save user data',
             notes: 'Save user data',
-            // We use Joi plugin to validate request 
+            // We use Joi plugin to validate request
             validate: {
                 // Use Joi plugin to validate request
                 payload: {
@@ -117,19 +120,20 @@ exports.register = function(server, options, next) {
         },
         handler: function (request, reply) {
             // encrypt password before saving.
-            request.payload.password = Crypto.hash (request.payload.password); 
-            
-            // Create mongodb user object to save it into database 
-            var user = new UserModel(request.payload);
-                     
-            // Save data into database 
-            user.save(function (error) {
+            request.payload.password = Crypto.hash(request.payload.password);
+
+            // Create mongodb user object to save it into database
+            const user = new UserModel(request.payload);
+
+            // Save data into database
+            user.save((error) => {
                 // Callback method to handle results
                 // Return HTTP success or error code
                 if (error) {
-                    reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                } else {
-                    reply({statusCode: 201, message: 'User Saved Successfully'});
+                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                }
+                else {
+                    reply({ statusCode: 201, message: 'User Saved Successfully' });
                 }
             });
         }
@@ -140,14 +144,14 @@ exports.register = function(server, options, next) {
         method: 'PUT',
         path: '/api/user/{id}',
         config: {
-            // Swagger documentation fields tags, description, note 
+            // Swagger documentation fields tags, description, note
             tags: ['api'],
             description: 'Update specific user data',
             notes: 'Update specific user data',
             validate: {
                 // Use Joi plugin to validate request
                 params: {
-                    //`id` is required field and can only accept string data 
+                    //`id` is required field and can only accept string data
                     id: Joi.string().required()
                 },
                 payload: {
@@ -158,45 +162,45 @@ exports.register = function(server, options, next) {
                 }
             },
             auth: {
-                    // Use HTTP Cookie Auth for this route
-                    strategy: 'cookie',
-                    mode: 'optional' // Needed for request.auth.isAuthenticated to work
+                // Use HTTP Cookie Auth for this route
+                strategy: 'cookie',
+                mode: 'optional' // Needed for request.auth.isAuthenticated to work
             },
-        handler: function (request, reply) {
-            console.log ("checking authenticated...");
-            
-            if (request.auth.isAuthenticated) {
-                // session data available
-                var cookie = request.auth.credentials;
-                console.log ("cookie is ", cookie);
-            }
-            
-            // encrypt password before saving.
-            if (request.payload.password) {
-                request.payload.password = Crypto.hash (request.payload.password);
-            }
-            
-            // Find the user by ID in the db and update it 
-            UserModel.findOneAndUpdate({
-                _id: request.params.id
-            },
-                request.payload, // values to be updated
-                function (error, data) {
-                    // Callback method to handle results
-                    // Return HTTP success or error code
-                    if (error) {
-                        reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                    } else {
-                        reply({
-                            statusCode: 200,
-                            message: 'User Updated Successfully',
-                            data: data
-                        });
-                    }
+            handler: function (request, reply) {
+
+                if (request.auth.isAuthenticated) {
+                    // session data available
+                    const cookie = request.auth.credentials;
+                    console.log('cookie is ', cookie);
                 }
-            );
-        }
+
+                // encrypt password before saving.
+                if (request.payload.password) {
+                    request.payload.password = Crypto.hash(request.payload.password);
+                }
+
+                // Find the user by ID in the db and update it
+                UserModel.findOneAndUpdate({
+                    _id: request.params.id
                 },
+                    request.payload, // values to be updated
+                    (error, data) => {
+                        // Callback method to handle results
+                        // Return HTTP success or error code
+                        if (error) {
+                            reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                        }
+                        else {
+                            reply({
+                                statusCode: 200,
+                                message: 'User Updated Successfully',
+                                data
+                            });
+                        }
+                    }
+                );
+            }
+        }
     });
 
     // REST: Delete a user by ID
@@ -216,17 +220,18 @@ exports.register = function(server, options, next) {
             }
         },
         handler: function (request, reply) {
-            // Delete the particular record from db 
+            // Delete the particular record from db
             UserModel.findOneAndRemove({
                 _id: request.params.id
             },
                 // Callback method to handle results
-                function (error) {
+                (error) => {
 
                     // Return HTTP success or error code
                     if (error) {
-                        reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                    } else {
+                        reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                    }
+                    else {
                         reply({
                             statusCode: 200,
                             message: 'User Deleted Successfully'
@@ -242,6 +247,6 @@ exports.register = function(server, options, next) {
 };
 
 // Plugin registration attributes
-exports.register.attributes = {  
-  name: 'routes-users'
+exports.register.attributes = {
+    name: 'routes-users'
 };

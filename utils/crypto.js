@@ -5,14 +5,16 @@ const Bcrypt = require('bcryptjs');
 
 // Generate a hash password, given a plain text password
 module.exports.hash = (plainText) => {
+
     const saltRounds = 10;
-    let hash = Bcrypt.hashSync(plainText, saltRounds);
+    const hash = Bcrypt.hashSync(plainText, saltRounds);
     return (hash);
-}
+};
 
 // Given a plaintext password and a hashed password, compare and
 // check if they match
 module.exports.check = (plainText, hash) => {
-    let isMatch = Bcrypt.compareSync (plainText, hash);
-    return (isMatch);    
-}
+
+    const isMatch = Bcrypt.compareSync(plainText, hash);
+    return (isMatch);
+};

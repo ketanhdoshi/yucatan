@@ -8,10 +8,10 @@ const Joi = require('joi');     // for parameter validation
 // GET list, GET read, POST create, PUT update, DELETE
 
 // Plugin registration method
-exports.register = function(server, options, next) {
+exports.register = function (server, options, next) {
 
     // Importing `property` mongoose db model
-    var PropertyModel = require('../models/property');
+    const PropertyModel = require('../models/property');
 
     // REST: Get all properties
     server.route({
@@ -24,17 +24,23 @@ exports.register = function(server, options, next) {
             notes: 'Get All Property data'
         },
         handler: function (request, reply) {
-            //Fetch all data from mongodb Property Collection            
-            PropertyModel.find({}, function (error, data) {
+
+            server.log('info', 'GET /api/property called');
+
+            //Fetch all data from mongodb Property Collection
+            PropertyModel.find({}, (error, data) => {
+
+                server.log('info', 'DB results received');
                 // Callback method to handle results
                 // Return HTTP success or error code
                 if (error) {
-                    reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                } else {
+                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                }
+                else {
                     reply({
                         statusCode: 200,
                         message: 'Property Data Successfully Fetched',
-                        data: data
+                        data
                     });
                 }
             });
@@ -44,7 +50,7 @@ exports.register = function(server, options, next) {
     // REST: Get a property by ID
     server.route({
         method: 'GET',
-        //Getting data for particular property "/api/property/1212313123" 
+        //Getting data for particular property "/api/property/1212313123"
         path: '/api/property/{id}',
         config: {
             // Swagger documentation fields tags, description, note
@@ -60,23 +66,25 @@ exports.register = function(server, options, next) {
             }
         },
         handler: function (request, reply) {
-            //Find property in db for particular propertyID 
+            //Find property in db for particular propertyID
             PropertyModel.find({
                 _id: request.params.id
-            }, function (error, data) {
-                // Callback method to handle results                
+            }, (error, data) => {
+                // Callback method to handle results
                 // Return HTTP success or error code
                 if (error) {
-                    reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                } else {
+                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                }
+                else {
                     if (data.length === 0) {
                         // No data returned
-                        reply(Boom.notFound ());
-                    } else {
+                        reply(Boom.notFound());
+                    }
+                    else {
                         reply({
                             statusCode: 200,
                             message: 'User Data Successfully Fetched',
-                            data: data
+                            data
                         });
                     }
                 }
@@ -93,7 +101,7 @@ exports.register = function(server, options, next) {
             tags: ['api'],
             description: 'Save property data',
             notes: 'Save property data',
-             
+
             validate: {
                 // Use Joi plugin to validate request
                 payload: {
@@ -115,17 +123,21 @@ exports.register = function(server, options, next) {
             }
         },
         handler: function (request, reply) {
-            // Create mongodb property object to save it into database 
-            var property = new PropertyModel(request.payload);
-                    
-            // Save data into database             
-            property.save(function (error) {
-                // Callback method to handle results                
+
+            server.log('info', 'POST /api/property called');
+
+            // Create mongodb property object to save it into database
+            const property = new PropertyModel(request.payload);
+
+            // Save data into database
+            property.save((error) => {
+                // Callback method to handle results
                 // Return HTTP success or error code
                 if (error) {
-                    reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                } else {
-                    reply({statusCode: 201, message: 'User Saved Successfully'});
+                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                }
+                else {
+                    reply({ statusCode: 201, message: 'User Saved Successfully' });
                 }
             });
         }
@@ -136,14 +148,14 @@ exports.register = function(server, options, next) {
         method: 'PUT',
         path: '/api/property/{id}',
         config: {
-            // Swagger documentation fields tags, description, note 
+            // Swagger documentation fields tags, description, note
             tags: ['api'],
             description: 'Update specific property data',
             notes: 'Update specific property data',
             validate: {
                 // Use Joi plugin to validate request
                 params: {
-                    //`id` is required field and can only accept string data 
+                    //`id` is required field and can only accept string data
                     id: Joi.string().required()
                 },
                 payload: {
@@ -165,22 +177,23 @@ exports.register = function(server, options, next) {
             }
         },
         handler: function (request, reply) {
-            // Find the property by ID in the db and update it 
+            // Find the property by ID in the db and update it
             PropertyModel.findOneAndUpdate({
                 _id: request.params.id
             },
                 request.payload, // values to be updated
-                    
-                // Callback method to handle results                                
-                function (error, data) {
+
+                // Callback method to handle results
+                (error, data) => {
                     // Return HTTP success or error code
                     if (error) {
-                        reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                    } else {
+                        reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                    }
+                    else {
                         reply({
                             statusCode: 200,
                             message: 'User Updated Successfully',
-                            data: data
+                            data
                         });
                     }
                 }
@@ -205,17 +218,18 @@ exports.register = function(server, options, next) {
             }
         },
         handler: function (request, reply) {
-            // Delete the particular record from db 
+            // Delete the particular record from db
             PropertyModel.findOneAndRemove({
                 _id: request.params.id
             },
                 // Callback method to handle results
-                function (error) {
-                    
+                (error) => {
+
                     // Return HTTP success or error code
                     if (error) {
-                        reply(Boom.serverUnavailable ('Internal MongoDB error', error));
-                    } else {
+                        reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                    }
+                    else {
                         reply({
                             statusCode: 200,
                             message: 'User Deleted Successfully'
@@ -231,6 +245,6 @@ exports.register = function(server, options, next) {
 };
 
 // Plugin registration attributes
-exports.register.attributes = {  
-  name: 'routes-properties'
+exports.register.attributes = {
+    name: 'routes-properties'
 };

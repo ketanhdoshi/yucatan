@@ -6,16 +6,18 @@
 // listens on a particular port for incoming connections
 // -----------------------------------------------
 
-// Include Hapi package 
+// Include Hapi package
 const Hapi = require('hapi');
 
 // -----------------------------------------------
 // Create a server with a host and port
+// Export the server variable for automated testing
 // -----------------------------------------------
 const server = new Hapi.Server();
-server.connection({ 
-    host: 'localhost', 
-    port: 3000 
+module.exports = server;
+server.connection({
+    host: 'localhost',
+    port: 3000
 });
 
 // -----------------------------------------------
@@ -23,38 +25,42 @@ server.connection({
 // Invoked after all plugins are loaded
 // -----------------------------------------------
 const registerRoutes = () => {
-    server.log ('info', "registering routes");
-    
+
+    server.log('info', 'registering routes');
+
     server.route([
-        { 
-            method: 'GET', 
-            path: '/auth-cookie-test', 
-            config: { 
+        {
+            method: 'GET',
+            path: '/auth-cookie-test',
+            config: {
                 handler: function (request, reply) {
+
                     reply('<html><head><title>Login page</title></head><body>' +
             '<form method="post" action="/api/login">' +
             'Username: <input type="text" name="username"><br>' +
             'Password: <input type="password" name="password"><br/>' +
             '<input type="submit" value="Login"></form></body></html>');
-                } 
-            } 
-        },
+                }
+            }
+        }
     ]);
 
-    
+
     // APIs for each REST resource are defined in a separate plugin
     // Load all the plugins for our API
-    server.register([  
+    server.register([
         require('./routes/login'),
         require('./routes/user'),
         require('./routes/property')
     ], (err) => {
-            if (err) {
-                throw err;
-            }
+
+        if (err) {
+            throw err;
         }
+        server.log('info', 'Routes registered');
+    }
     );
-}
+};
 
 // -----------------------------------------------
 // Load all required plugins and start the server
@@ -67,33 +73,38 @@ server.register([
         options: {
             // Routes can be registered only after all auth schemes are registered
             // and the strategies created. This has to be done via a callback as
-            // the registration is async 
-            registerRoutes: registerRoutes
+            // the registration is async
+            registerRoutes
         }
     },
     {
         // Load the mongo db plugin
         register: require('./utils/mongo')
     }
-    ], (err) => {
-        if (err) { throw err; }
-       
-        // Start the server if plugins are loaded successfully
-        server.start((err) => {
-            if (err) {
-                throw err;
-            }
-            server.log('info', `Server started at: ${server.info.uri} with [${Object.keys(server.plugins).join(', ')}] enabled`)
-        });
+], (err) => {
+
+    if (err) {
+
+        throw err;
     }
-);
+
+    // Start the server if plugins are loaded successfully
+    server.start((err) => {
+
+        if (err) {
+
+            throw err;
+        }
+        server.log('info', `Server started at: ${server.info.uri} with [${Object.keys(server.plugins).join(', ')}] enabled`);
+    });
+});
 
 // -----------------------------------------------
 // Initialise swagger and good-console
 // -----------------------------------------------
-const myutils = require ('./utils/util');
-myutils.swagger (server);
-myutils.good (server);
+const Myutils = require('./utils/util');
+Myutils.swagger(server);
+Myutils.good(server);
 
 // TODO
 // Create two endpoints - one for serving UI and static HTTP content and
