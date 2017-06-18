@@ -124,8 +124,6 @@ exports.register = function (server, options, next) {
         },
         handler: function (request, reply) {
 
-            server.log('info', 'POST /api/property called');
-
             // Create mongodb property object to save it into database
             const property = new PropertyModel(request.payload);
 
@@ -137,7 +135,7 @@ exports.register = function (server, options, next) {
                     reply(Boom.serverUnavailable('Internal MongoDB error', error));
                 }
                 else {
-                    reply({ statusCode: 201, message: 'User Saved Successfully' });
+                    reply({ statusCode: 201, message: 'Property Saved Successfully' });
                 }
             });
         }
@@ -192,7 +190,7 @@ exports.register = function (server, options, next) {
                     else {
                         reply({
                             statusCode: 200,
-                            message: 'User Updated Successfully',
+                            message: 'Property Updated Successfully',
                             data
                         });
                     }
