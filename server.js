@@ -17,7 +17,10 @@ const server = new Hapi.Server();
 module.exports = server;
 server.connection({
     host: 'localhost',
-    port: 3000
+    port: 3001,
+    routes: { 
+        cors: true // allow CORS response headers to be sent so a webapp can call us
+    }
 });
 
 // -----------------------------------------------
