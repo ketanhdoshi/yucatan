@@ -1,5 +1,5 @@
 {
-  "name": "hapi-mongo",
+  "name": "yucatan",
   "version": "1.0.0",
   "description": "Try to create REST API with hapi and mongo",
   "main": "index.js",

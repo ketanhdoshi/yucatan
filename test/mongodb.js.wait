@@ -1,0 +1,98 @@
+// Automated testing for HAPI REST APIs using Lab test framework
+'use strict';
+
+const Lab = require('lab');           // load Lab module
+const lab = exports.lab = Lab.script(); //export test script
+const Code = require('code');		 //assertion library
+//
+// Use mocha-like BDD syntax
+const describe = lab.describe;
+const before = lab.before;
+const after = lab.after;
+const it = lab.it;
+const expect = Code.expect;
+
+// Wrap mongoose with mockgoose and then call mongoose as normal
+const Mongoose = require('mongoose');
+//const Mockgoose = require('mockgoose').Mockgoose;
+//const mockgoose = new Mockgoose(Mongoose);
+const dbUri = 'mongodb://kdmongo:kdmongo@ds133418.mlab.com:33418/library';
+
+// -----------------------------------------------
+// Connect to the database before the tests are run
+// -----------------------------------------------
+before({timeout: 50000}, (done) => {
+    
+    Mongoose.connect(dbUri);
+    
+    Mongoose.connection.on('connected', () => {
+        console.log('Mongoose> connected: ' + dbUri);
+        done ();
+    });
+    
+    Mongoose.connection.on('error', (err) => {
+        console.log('Mongoose> error: ' + err);
+        done (err);
+    });
+});
+
+// -----------------------------------------------
+// Disconnect from the database after the tests are run
+// -----------------------------------------------
+after((done) => {
+    Mongoose.disconnect ();
+    
+    Mongoose.connection.on('disconnected', () => {
+        console.log('Mongoose> disconnected');
+        done ();
+    });
+});
+
+// Importing `property` mongoose db model
+const PropertyModel = require('../models/property');
+describe('Mongo Property', () => {
+
+    it('Create Property', { timeout: 12000, skip: false }, (done) => {
+
+        const propData = {
+            address: {
+                locality: 'Pune',
+                region: 'Maharashtra',
+                country: 'India'
+            },
+            houseType: 'Castle',
+            roomType: 'Shared Room',
+            description: 'What a superb place',
+            rooms: 3,
+            price: 1500,
+            owner: '58a6e6a4d881c33e605a0067'
+        };
+        const newProp = new PropertyModel(propData);
+        newProp.save((error) => {
+
+            if (error) {
+                console.log('Internal MongoDB error', error);
+            }
+            else {
+                console.log('Property Saved Successfully');
+            }
+        });
+        expect(1 + 6).to.equal(7);
+        done();
+    });
+    
+    it('Get Property', { timeout: 30000 }, (done) => {
+                
+        PropertyModel.find({}, (error, data) => {
+
+            if (error) {
+                console.log('DB error', error);
+                done ();
+            }
+            else {
+                console.log('DB results = ', data.length);
+                done ();
+            }
+        });
+    });
+});
