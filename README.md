@@ -1,4 +1,4 @@
-# hapi-mongo
+# Yucatan
 An experimental project to create a web application using pure Javascript. The application is composed of three logical units:
 
 1) The Web Client is a rich single page client app in React. It is structured as a universal (or isomorphic) Javascript application with common UI code running in both the browser and the server. In other words the same UI can be rendered on either the server-side or the browser-side using identical code.
