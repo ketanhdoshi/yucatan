@@ -1,13 +1,16 @@
 'use strict';
 
+const Path = require('path');
+import srvRender from '../built/serverbundle.js';
+
 // -----------------------------------------------
 // This is our Web UI server.
 // -----------------------------------------------
-var websrv = null;
+//var websrv = null;
 
-const rootHandler = function (request, reply) {
+const testHandler = function (request, reply) {
 
-    reply.view('index', {
+    reply.view('test', {
         html: '<h2>Hello Chintu</h2>',
         message: 'My Superb Message!'
     });
@@ -15,7 +18,7 @@ const rootHandler = function (request, reply) {
 
 module.exports.init = (server, port) => {
 
-    websrv = server.connection({
+    const websrv = server.connection({
         host: 'localhost',
         port: port,
         labels: 'websrv'
@@ -30,11 +33,24 @@ module.exports.init = (server, port) => {
             throw err;
         }
 
+        // Route for a single test URL using a static HTML file
         websrv.route({
             method: 'GET',
             path: '/hello',
             handler: function (request, reply) {
                 reply.file('./webback/templates/hello.html');
+            }
+        });
+
+        // Serve static content at the built URL from the built directory
+        websrv.route({
+            method: 'GET',
+            // URL for serving content is '/built/*'
+            path: '/built/{param}',
+            handler: {
+                directory: {
+                    path: Path.join(__dirname, '../built')
+                }
             }
         });
     });
@@ -56,7 +72,11 @@ module.exports.init = (server, port) => {
             relativeTo: __dirname,
             path: 'templates'
         });
+        
+        // Render a single test URL path using a test template
+        websrv.route({ method: 'GET', path: '/test', handler: testHandler });
 
-        websrv.route({ method: 'GET', path: '/', handler: rootHandler });
+        // Render all URLs with React
+        websrv.route({ method: 'GET', path: '/{param*}', handler: srvRender });
     });
 }

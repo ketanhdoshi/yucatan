@@ -1,0 +1,39 @@
+
+.sidebarForm {
+  border-radius: 3px;
+  border: 1px solid #374850;
+  margin: 10px 10px;
+}
+.sidebarForm {
+  overflow: hidden;
+  text-overflow: clip;
+}
+.sidebarForm input[type="text"],
+.sidebarForm :global(.btn) {
+  box-shadow: none;
+  background-color: #374850;
+  border: 1px solid transparent;
+  height: 35px;
+}
+.sidebarForm input[type="text"] {
+  color: #666;
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+}
+.sidebarForm input[type="text"]:focus,
+.sidebarForm input[type="text"]:focus + :global(.input-group-btn) :global(.btn) {
+  background-color: #fff;
+  color: #666;
+}
+.sidebarForm input[type="text"]:focus + :global(.input-group-btn) :global(.btn) {
+  border-left-color: #fff;
+}
+.sidebarForm :global(.btn) {
+  color: #999;
+  border-top-left-radius: 0;
+  border-top-right-radius: 2px;
+  border-bottom-right-radius: 2px;
+  border-bottom-left-radius: 0;
+}

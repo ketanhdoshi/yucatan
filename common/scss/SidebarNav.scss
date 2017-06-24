@@ -1,0 +1,111 @@
+:global .bg-red {
+  background-color: #dd4b39 !important;
+}
+:global .bg-green {
+  background-color: #00a65a !important;
+}
+:global .bg-yellow {
+  background-color: #f39c12 !important;
+}
+:global .bg-aqua {
+  background-color: #00c0ef !important;
+}
+:global .bg-blue {
+  background-color: #0073b7 !important;
+}
+.sidebarNav :global(span.collapse.in) {
+    display: inline-block;
+}
+.sidebarNav > li > a {
+  border-left: 5px solid transparent;
+}
+.sidebarNav > li:hover > a,
+.sidebarNav > li.active > a,
+.sidebarNav > li > a:hover,
+.sidebarNav > li > a:focus {
+  color: #ffffff;
+  background: #1e282c;
+  border-left-color: #3c8dbc;
+}
+.sidebarNav a {
+  color: #b8c7ce;
+}
+.sidebarNav a:hover {
+  text-decoration: none;
+}
+.sidebarNav > li {
+  position: relative;
+  margin: 0;
+  padding: 0;
+}
+.sidebarNav > li > a {
+  padding: 12px 5px 12px 15px;
+  display: block;
+}
+.sidebarNav > li > a > :global(.fa),
+.sidebarNav > li > a > :global(.glyphicon),
+.sidebarNav > li > a > :global(.ion) {
+  width: 20px;
+}
+.sidebarNav li.header {
+  padding: 10px 25px 10px 15px;
+  font-size: 12px;
+}
+.sidebarNav > li > .sidebarSub {
+  margin: 0 0px;
+  background: #2c3b41;
+}
+.sidebarNav .sidebarSub > li > a {
+  color: #8aa4af;
+}
+.sidebarNav .sidebarSub > li.active > a,
+.sidebarNav .sidebarSub > li > a:hover,
+.sidebarNav .sidebarSub > li > a:focus {
+  color: #ffffff;
+  background: #2c3b41;
+}
+.sidebarNav .sidebarSub {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  padding-left: 5px;
+}
+.sidebarNav .sidebarSub .sidebarSub {
+  padding-left: 20px;
+}
+.sidebarNav .sidebarSub > li {
+  margin: 0;
+}
+.sidebarNav .sidebarSub > li > a {
+  padding: 5px 5px 5px 15px;
+  display: block;
+  font-size: 14px;
+}
+.sidebarNav .sidebarSub > li > a > :global(.fa),
+.sidebarNav .sidebarSub > li > a > :global(.glyphicon),
+.sidebarNav .sidebarSub > li > a > :global(.ion) {
+  width: 20px;
+}
+
+/* Place the icons/badges near the right edge */
+.sidebarNav li > a > span {
+  width: 85%;
+}
+.sidebarNav li > a > span > :global(.fa-angle-left) {
+  margin-top: 2px;
+  margin-right: 8px;
+}
+.sidebarNav > li :global(.label),
+.sidebarNav > li :global(.badge) {
+  margin-right: 4px;
+}
+.sidebarNav > li :global(.badge) {
+  margin-top: 3px;
+}
+/* Rotate the angle icon when the sub-menu is expanded */
+.sidebarNav li > a:not(:global(.collapsed)) > span > :global(.fa-angle-left) {
+  -webkit-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);  
+}

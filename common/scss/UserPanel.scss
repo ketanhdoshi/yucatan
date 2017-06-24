@@ -1,0 +1,45 @@
+
+.userPanel {
+  position: relative;
+  width: 100%;
+  padding: 10px;
+  overflow: hidden;
+}
+.userPanel:before,
+.userPanel:after {
+  content: " ";
+  display: table;
+}
+.userPanel:after {
+  clear: both;
+}
+.userPanel > .image > img {
+  width: 100%;
+  max-width: 45px;
+  height: auto;
+}
+.userPanel > .info,
+.userPanel > .info > a {
+  color: #fff;
+}
+.userPanel > .info {
+  padding: 5px 5px 5px 15px;
+  line-height: 1;
+  position: absolute;
+  left: 55px;
+}
+.userPanel > .info > p {
+  font-weight: 600;
+  margin-bottom: 9px;
+}
+.userPanel > .info > a {
+  text-decoration: none;
+  padding-right: 5px;
+  margin-top: 3px;
+  font-size: 11px;
+}
+.userPanel > .info > a > :global(.fa),
+.userPanel > .info > a > :global(.ion),
+.userPanel > .info > a > :global(.glyphicon) {
+  margin-right: 3px;
+}

@@ -49,7 +49,7 @@ const registerRoutes = () => {
     );
 };
 
-module.exports.init = (server, port) => {
+module.exports.init = (server, port, doneCB) => {
 
     apisrv = server.connection({
         host: 'localhost',
@@ -79,23 +79,8 @@ module.exports.init = (server, port) => {
             // Load the mongo db plugin
             register: require('./utils/mongo')
         }
-    ], (err) => {
-
-        if (err) {
-
-            throw err;
-        }
-
-        // Start the server if plugins are loaded successfully
-        server.start((err) => {
-
-            if (err) {
-
-                throw err;
-            }
-            apisrv.log('info', `Server started at: ${apisrv.info.uri} with [${Object.keys(apisrv.plugins).join(', ')}] enabled`);
-        });
-    });
+    ], doneCB
+    );
 
     // -----------------------------------------------
     // Initialise swagger and good-console
