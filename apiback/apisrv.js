@@ -1,10 +1,10 @@
 'use strict';
 
 // -----------------------------------------------
-// This is our backend API server. It loads the backend plugins
+// This is our API Backend server. It loads the backend plugins
 // and defines the API routes
 // -----------------------------------------------
-var backend = null;
+var apisrv = null;
 
 // -----------------------------------------------
 // Callback function to define routes for our API
@@ -12,10 +12,10 @@ var backend = null;
 // -----------------------------------------------
 const registerRoutes = () => {
 
-    backend.log('info', 'registering routes');
+    apisrv.log('info', 'registering routes');
 
     // This can be removed, only used for a PoC
-    backend.route([
+    apisrv.route([
         {
             method: 'GET',
             path: '/auth-cookie-test',
@@ -35,7 +35,7 @@ const registerRoutes = () => {
 
     // APIs for each REST resource are defined in a separate plugin
     // Load all the plugins for our API
-    backend.register([
+    apisrv.register([
         require('./routes/login'),
         require('./routes/user'),
         require('./routes/property')
@@ -44,17 +44,17 @@ const registerRoutes = () => {
         if (err) {
             throw err;
         }
-        backend.log('info', 'Routes registered');
+        apisrv.log('info', 'Routes registered');
     }
     );
 };
 
 module.exports.init = (server, port) => {
 
-    backend = server.connection({
+    apisrv = server.connection({
         host: 'localhost',
         port: port,
-        labels: 'backend',
+        labels: 'apisrv',
         routes: { 
             cors: true // allow CORS response headers to be sent so a webapp can call us
         }
@@ -63,7 +63,7 @@ module.exports.init = (server, port) => {
     // -----------------------------------------------
     // Load all required plugins and start the server
     // -----------------------------------------------
-    backend.register([
+    apisrv.register([
         {
             // Initialise authentication by loading our auth plugin
             // Any authentication approach we want to use is defined within that plugin
@@ -93,7 +93,7 @@ module.exports.init = (server, port) => {
 
                 throw err;
             }
-            backend.log('info', `Server started at: ${backend.info.uri} with [${Object.keys(backend.plugins).join(', ')}] enabled`);
+            apisrv.log('info', `Server started at: ${apisrv.info.uri} with [${Object.keys(apisrv.plugins).join(', ')}] enabled`);
         });
     });
 
@@ -101,6 +101,6 @@ module.exports.init = (server, port) => {
     // Initialise swagger and good-console
     // -----------------------------------------------
     const Myutils = require('./utils/util');
-    Myutils.swagger(backend);
-    Myutils.good(backend);
+    Myutils.swagger(apisrv);
+    Myutils.good(apisrv);
 }

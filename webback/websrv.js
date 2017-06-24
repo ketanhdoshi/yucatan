@@ -1,9 +1,9 @@
 'use strict';
 
 // -----------------------------------------------
-// This is our frontend web UI server.
+// This is our Web UI server.
 // -----------------------------------------------
-var frontend = null;
+var websrv = null;
 
 const rootHandler = function (request, reply) {
 
@@ -15,26 +15,26 @@ const rootHandler = function (request, reply) {
 
 module.exports.init = (server, port) => {
 
-    frontend = server.connection({
+    websrv = server.connection({
         host: 'localhost',
         port: port,
-        labels: 'frontend'
+        labels: 'websrv'
     });
 
     // -----------------------------------------------
     // Load inert plugin for static content
     // -----------------------------------------------
-    frontend.register(require('inert'), (err) => {
+    websrv.register(require('inert'), (err) => {
 
         if (err) {
             throw err;
         }
 
-        frontend.route({
+        websrv.route({
             method: 'GET',
             path: '/hello',
             handler: function (request, reply) {
-                reply.file('./templates/hello.html');
+                reply.file('./webback/templates/hello.html');
             }
         });
     });
@@ -42,21 +42,21 @@ module.exports.init = (server, port) => {
     // -----------------------------------------------
     // Load vision plugin for rendering templates
     // -----------------------------------------------
-    frontend.register(require('vision'), (err) => {
+    websrv.register(require('vision'), (err) => {
 
         if (err) {
             throw err;
         }
 
-        frontend.log('info', 'Vision loaded');
+        websrv.log('info', 'Vision loaded');
 
         // Use the ejs template engine for all '*.ejs' files
-        frontend.views({
+        websrv.views({
             engines: { ejs: require('ejs') },
             relativeTo: __dirname,
             path: 'templates'
         });
 
-        frontend.route({ method: 'GET', path: '/', handler: rootHandler });
+        websrv.route({ method: 'GET', path: '/', handler: rootHandler });
     });
 }
