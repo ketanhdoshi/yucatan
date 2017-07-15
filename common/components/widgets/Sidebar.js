@@ -43,6 +43,8 @@ const Sidebar = () => (
                 <SidebarSubMenuItem>General</SidebarSubMenuItem>
                 <SidebarSubMenuItem>Button</SidebarSubMenuItem>
                 <SidebarSubMenuItem>Sliders</SidebarSubMenuItem>
+                <SidebarSubMenuItem linkto="/calendar">Calendar</SidebarSubMenuItem>
+                <SidebarSubMenuItem linkto="/googlemaps">Google Maps</SidebarSubMenuItem>
             </SidebarMenu>                        
             <SidebarMenu icon="fa-th" title="Widgets" badges={[{label: "New", bg: "bg-green"}]} />
             <SidebarMenu linkto="/bsview" icon="fa-list-alt" title="React-Bootstrap" />

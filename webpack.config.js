@@ -30,7 +30,12 @@ const config = {
         loader: ExtractTextPlugin.extract('style', 'css')
       },
       {
+        test: /datepicker\.scss$/,
+        loader: ExtractTextPlugin.extract('style', 'css-loader?importLoaders=1')
+      },
+      {
         test: /\.scss$/,
+        exclude: /datepicker\.scss$/,
         loader: ExtractTextPlugin.extract('style', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
       }
     ]
@@ -67,9 +72,15 @@ const serverConfig = {
       },
       {
         test: /\.css$/,
+        exclude: /scss\\rdp\.css$/,
         loader: 'null'
       },
       {
+        test: /scss\\rdp\.css$/,
+        loader: 'css-loader/locals?importLoaders=1'
+      },
+
+     {
         test: /\.scss$/,
         loader: 'css-loader/locals?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
       }

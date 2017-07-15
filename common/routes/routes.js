@@ -12,6 +12,8 @@ import AppContainer from '../containers/AppContainer'
 import MainContainer from '../containers/MainContainer'
 import { PropertiesContainer } from '../containers/PropertiesContainer'
 import { MatchesContainer, getMatches } from '../containers/MatchesContainer'
+import GoogleMaps from '../components/widgets/GoogleMaps'
+import Calendar from '../components/widgets/Calendar'
 import PaymentView from '../components/PaymentView'
 import ModalView from '../components/ModalView'
 import ShortlistContainer from '../containers/ShortlistContainer'
@@ -40,6 +42,8 @@ export const getRoutes = (store) => {
                     <Route path="/home" component={Home}/>
                     <Route path="/dashboard1" component={Dashboard1}/>
                     <Route path="/dashboard2" component={Dashboard2}/>
+                    <Route path="/googlemaps" component={GoogleMaps}/>
+                    <Route path="/calendar" component={Calendar}/>
                     <Route path="/bsview" component={BsView}/>
                     <Route path="/matches" component={MatchesContainer} onEnter={getMatches(store)}/>
                     <Route path="/properties" component={PropertiesContainer}/>
