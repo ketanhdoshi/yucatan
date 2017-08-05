@@ -4,10 +4,13 @@
 import React, { PropTypes } from 'react'
 import DayPicker, { DateUtils } from 'react-day-picker';
 import DayPickerInput from 'react-day-picker/DayPickerInput';
+import BigCalendar from 'react-big-calendar';
+import moment from 'moment';
 
 import '../../scss/rdp.css';    // 3rd party CSS for react-day-picker component
+import '../../scss/rbc.css';    // 3rd party CSS for react-big-calendar component
 
-import s from '../../scss/Calendar.scss'
+import s from '../../scss/CalendarView.scss'
 
 const SELECT_TYPE_SINGLE = "Single";
 const SELECT_TYPE_MULTI = "Multi";
@@ -146,12 +149,95 @@ class DayPickerSelect extends React.Component {
 }
 
 // -----------------------------------------------------------------
+// Calendar component
+// -----------------------------------------------------------------
+class Calendar extends React.Component {
+    constructor(props) {
+        super(props);
+        
+        // Setup the localizer by providing the moment (or globalize) Object
+        // to the correct localizer.
+        BigCalendar.momentLocalizer(moment);
+    }
+    
+    render() {
+        let myEventsList =
+        [
+            {
+                'title': 'All Day Event',
+                'allDay': true,
+                'start': new Date(2015, 3, 0),
+                'end': new Date(2015, 3, 1)
+            },
+            {
+                'title': 'Long Event',
+                'start': new Date(2015, 3, 7),
+                'end': new Date(2015, 3, 10)
+            },
+            {
+                'title': 'Conference',
+                'start': new Date(2015, 3, 11),
+                'end': new Date(2015, 3, 13),
+                desc: 'Big conference for important people'
+            },
+            {
+                'title': 'Meeting',
+                'start': new Date(2015, 3, 12, 10, 30, 0, 0),
+                'end': new Date(2015, 3, 12, 12, 30, 0, 0),
+                desc: 'Pre-meeting meeting, to prepare for the meeting'
+            },
+            {
+                'title': 'Lunch',
+                'start':new Date(2015, 3, 12, 12, 0, 0, 0),
+                'end': new Date(2015, 3, 12, 13, 0, 0, 0),
+                desc: 'Power lunch'
+            },
+            {
+                'title': 'Meeting',
+                'start':new Date(2015, 3, 12,14, 0, 0, 0),
+                'end': new Date(2015, 3, 12,15, 0, 0, 0)
+            },
+            {
+                'title': 'Happy Hour',
+                'start':new Date(2015, 3, 12, 17, 0, 0, 0),
+                'end': new Date(2015, 3, 12, 17, 30, 0, 0),
+                desc: 'Most important meal of the day'
+            },
+            {
+                'title': 'Dinner',
+                'start':new Date(2015, 3, 12, 20, 0, 0, 0),
+                'end': new Date(2015, 3, 12, 21, 0, 0, 0)
+            }
+        ];
+        let allViews = Object.keys(BigCalendar.views).map(k => BigCalendar.views[k]);
+        
+        return (                                            
+            <div>
+                <BigCalendar
+                    className={s.calendar}
+                    events={myEventsList}
+                    views={allViews}
+                    popup
+                    selectable
+                    onSelectEvent={event => alert(event.title)}
+                    onSelectSlot={(slotInfo) => alert(
+                        `selected slot: \n\nstart ${slotInfo.start.toLocaleString()} ` +
+                        `\nend: ${slotInfo.end.toLocaleString()}`
+          )}
+                    defaultDate={new Date(2015, 3, 1)}
+                />
+            </div>
+        )
+    }
+}
+
+// -----------------------------------------------------------------
 // This component constructs the overall page. It is not meant to be
 // a reusable widget, but an orchestrator for the widgets on this
 // page. It allows you to select various options which it passes in
 // as props to those widgets
 // -----------------------------------------------------------------
-class Calendar extends React.Component {
+class CalendarView extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -182,7 +268,7 @@ class Calendar extends React.Component {
     render() {
         const { numMonths, selectType } = this.state;
         return (                                            
-            <div className={s.calendar}>
+            <div className={s.calendarView}>
                 <h1>Calendar</h1>
                 <p>
                     <select value={numMonths} onChange={this.handleOptionNumMonths}>
@@ -202,11 +288,12 @@ class Calendar extends React.Component {
                     numMonths={numMonths} 
                 />
                 <DayPickerInputField />
+                <Calendar />
                 <h1>End</h1>
             </div>
         )
     }
 }
 
-export default Calendar
+export default CalendarView
 

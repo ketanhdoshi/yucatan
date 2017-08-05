@@ -32,6 +32,7 @@
     "mongoose-type-url": "^1.0.2",
     "react": "^15.4.2",
     "react-addons-shallow-compare": "^15.6.0",
+    "react-big-calendar": "^0.14.4",
     "react-bootstrap": "^0.30.7",
     "react-dates": "^12.1.2",
     "react-day-picker": "^6.0.5",

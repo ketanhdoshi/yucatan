@@ -72,11 +72,11 @@ const serverConfig = {
       },
       {
         test: /\.css$/,
-        exclude: /scss\\rdp\.css$/,
+        exclude: /scss\\.*\.css$/,
         loader: 'null'
       },
       {
-        test: /scss\\rdp\.css$/,
+        test: /scss\\.*\.css$/,
         loader: 'css-loader/locals?importLoaders=1'
       },
 
