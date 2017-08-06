@@ -1,0 +1,71 @@
+/*
+ * Component: Info Box
+ * -------------------
+ */
+.infoBox {
+  display: block;
+  min-height: 90px;
+  background: #fff;
+  width: 100%;
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+  border-radius: 2px;
+  margin-bottom: 15px;
+}
+.infoBox small {
+  font-size: 14px;
+}
+.infoBox :global(.progress) {
+  background: rgba(0, 0, 0, 0.2);
+  margin: 5px -10px 5px -10px;
+  height: 2px;
+}
+.infoBox :global(.progress),
+.infoBox :global(.progress) :global(.progress-bar) {
+  border-radius: 0;
+}
+.infoBox :global(.progress) :global(.progress-bar) {
+  background: #fff;
+}
+.infoBoxIcon {
+  border-top-left-radius: 2px;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 2px;
+  display: block;
+  float: left;
+  height: 90px;
+  width: 90px;
+  text-align: center;
+  font-size: 45px;
+  line-height: 90px;
+  background: rgba(0, 0, 0, 0.2);
+}
+.infoBoxIcon > img {
+  max-width: 100%;
+}
+.infoBoxContent {
+  padding: 5px 10px;
+  margin-left: 90px;
+}
+.infoBoxNumber {
+  display: block;
+  font-weight: bold;
+  font-size: 18px;
+}
+.progressDescription,
+.infoBoxText {
+  display: block;
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.infoBoxText {
+  text-transform: uppercase;
+}
+.infoBox-more {
+  display: block;
+}
+.progressDescription {
+  margin: 0;
+}

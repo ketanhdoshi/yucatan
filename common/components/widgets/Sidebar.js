@@ -40,7 +40,7 @@ const Sidebar = () => (
                 <SidebarSubMenuItem>Inline</SidebarSubMenuItem>
             </SidebarMenu>                        
             <SidebarMenu icon="fa-laptop" title="UI Elements" subMenu="subUIElements">
-                <SidebarSubMenuItem>General</SidebarSubMenuItem>
+                <SidebarSubMenuItem linkto="/ui/general">General</SidebarSubMenuItem>
                 <SidebarSubMenuItem>Button</SidebarSubMenuItem>
                 <SidebarSubMenuItem>Sliders</SidebarSubMenuItem>
                 <SidebarSubMenuItem linkto="/calendar">Calendar</SidebarSubMenuItem>

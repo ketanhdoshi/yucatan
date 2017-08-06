@@ -12,6 +12,7 @@ import Sidebar from './widgets/Sidebar'
 import ContentHeader from './widgets/ContentHeader'
 
 import s from '../scss/Main.scss'
+import '../scss/General.css'
 
 const MainView = ({ first, children, onDummyClick }) => (
     <div>
