@@ -99,6 +99,64 @@ exports.register = function (server, options, next) {
         }
     });
 
+    // Oauth Github Login
+    server.route({
+        method: 'GET',
+        path: '/api/login/github',
+        config: {
+            // Swagger documentation fields tags, description, note
+            tags: ['api'],
+            description: 'Github login',
+            notes: 'Github login',
+            auth: 'github',
+            handler: function (request, reply) {
+
+                if (!request.auth.isAuthenticated) {
+                    return reply(Boom.unauthorized('Authentication failed: ' + request.auth.error.message));
+                }
+
+                // Get the github profile details
+                const creds = request.auth.credentials;
+                const profile = creds.profile;
+                const myDetails = {
+                    token: creds.token,
+                    expiry: creds.expiresIn,
+                    refresh: creds.refreshToken,
+                    githubId: profile.id,
+                    username: profile.username,
+                };
+                
+                // TODO: Now these details can be saved in a cookie or
+                // passed back from the API. We could also redirect to
+                // another URL where further post login processing can be done
+                // Save the profile details in the session as a cookie.
+                //request.cookieAuth.set(myDetails);                
+                return reply('Hello ' + myDetails.username);                
+            }
+        },
+    });
+
+    // Oauth Github Logout
+    server.route({
+        method: 'GET',
+        path: '/api/logout/github',
+        config: {
+            // Swagger documentation fields tags, description, note
+            tags: ['api'],
+            description: 'Github logout',
+            notes: 'Github logout',
+            handler: function (request, reply) {
+                
+                // TODO: Remove any state that was saved during login. Also
+                // can redirect to the login page again
+                // Clear any session details saved in the cookie
+                //request.cookieAuth.clear();
+                return reply('Logged out');
+                // reply.redirect('/api/login/github');                
+            }
+        },
+    });
+
     return next();
 };
 

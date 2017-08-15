@@ -93,6 +93,10 @@ exports.register = function (server, options, next) {
         {
             // Load JWT Auth plugin
             register: require('hapi-auth-jwt2')
+        },
+        {
+            // Load Bell OAuth plugin
+            register: require('bell')
         }
     ], (err) => {
         // Create strategy for Basic Auth
@@ -123,6 +127,16 @@ exports.register = function (server, options, next) {
                 }
             }
         );
+
+        // Create strategy for Bell OAuth
+        var bellAuthOptions = {
+                provider: 'github',
+                password: 'secret_cookie_github-encryption-password', //Password used for encryption
+                clientId: 'c781f65a06019360a0f4',       //My Github App ClientId,
+                clientSecret: 'ad9567c9384c518e86788b67abc256ad6fffe933',   //My Github App ClientSecret,
+                isSecure: false
+        };
+        server.auth.strategy('github', 'bell', bellAuthOptions);
 
         registerRoutes();
     });
