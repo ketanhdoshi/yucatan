@@ -41,7 +41,7 @@ const Sidebar = () => (
             </SidebarMenu>                        
             <SidebarMenu icon="fa-laptop" title="UI Elements" subMenu="subUIElements">
                 <SidebarSubMenuItem linkto="/ui/general">General</SidebarSubMenuItem>
-                <SidebarSubMenuItem>Button</SidebarSubMenuItem>
+                <SidebarSubMenuItem linkto="/ui/button">Button</SidebarSubMenuItem>
                 <SidebarSubMenuItem>Sliders</SidebarSubMenuItem>
                 <SidebarSubMenuItem linkto="/calendar">Calendar</SidebarSubMenuItem>
                 <SidebarSubMenuItem linkto="/googlemaps">Google Maps</SidebarSubMenuItem>

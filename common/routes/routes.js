@@ -12,7 +12,8 @@ import AppContainer from '../containers/AppContainer'
 import MainContainer from '../containers/MainContainer'
 import { PropertiesContainer } from '../containers/PropertiesContainer'
 import { MatchesContainer, getMatches } from '../containers/MatchesContainer'
-import UiGeneralView from '../components/widgets/UiGeneralView'
+import UiButtonView from '../components/UiButtonView'
+import UiGeneralView from '../components/UiGeneralView'
 import GoogleMaps from '../components/widgets/GoogleMaps'
 import CalendarView from '../components/widgets/CalendarView'
 import PaymentView from '../components/PaymentView'
@@ -43,6 +44,7 @@ export const getRoutes = (store) => {
                     <Route path="/home" component={Home}/>
                     <Route path="/dashboard1" component={Dashboard1}/>
                     <Route path="/dashboard2" component={Dashboard2}/>
+                    <Route path="/ui/button" component={UiButtonView}/>
                     <Route path="/ui/general" component={UiGeneralView}/>
                     <Route path="/googlemaps" component={GoogleMaps}/>                    
                     <Route path="/calendar" component={CalendarView}/>
