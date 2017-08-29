@@ -4,12 +4,18 @@
 // -----------------------------------------------------------------
 
 import React, { PropTypes } from 'react'
+import { ThemeProvider }  from 'styled-components';
+
+const theme = {
+  primary: 'palevioletred',
+};
 
 const AppView = ({ first, children, onDummyClick }) => (
-  <div>
-   App
-   {children}
-  </div>
+    <ThemeProvider theme={theme}>
+        <div>
+            {children}
+        </div>
+    </ThemeProvider>
 )
 
 AppView.propTypes = {

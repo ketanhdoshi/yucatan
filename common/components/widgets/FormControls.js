@@ -16,6 +16,7 @@ const Input = styled.input.attrs({
     border-radius: 0;
     box-shadow: none;
     border-color: ${props => props.validColor ? props.validColor : '#d2d6de'};
+    color: ${props => props.theme.primary};
 
     &:focus {
         border-color: #3c8dbc;
