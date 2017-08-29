@@ -37,3 +37,86 @@ MainView.propTypes = {
 }
 
 export default MainView
+    
+// -----------------------------------------------------------------
+// Structure of Container components for primary layout
+// 
+// <Body>
+//      <App>
+//          <Header>
+//              <Navbar>
+//                  <NavbarHeader>
+//                      <NavbarLogo />
+//                      <NavbarToggle />
+//                  </NavbarHeader>
+//                  <NavbarMain>
+//                      <NavbarMenu />  // Contains Dropdown Menus or Tabs
+//                      <NavbarStatus />
+//                          <Notifications />
+//                          <LoggedInUserStatus />
+//                          <UserSettings />
+//                  </NavbarMain>
+//              </Navbar>
+//          </Header>
+//          <AppBody>
+//              <Sidebar offCanvas collapsing />
+//                  <UserPanel />
+//                  <SearchBar />
+//                  <SidebarMenu />
+//                      <Application />
+//                          <Dashboards />
+//                          <HousePropertyScreen />
+//                      <Forms />
+//                          <StandardControls />
+//                          <AdvancedControls />
+//                              <RichTextEditor />
+//                      <StandardWidgets />
+//                          <Buttons />
+//                          <ProgressBar />
+//                          <Modals />
+//                          <Alerts and Dialogs />
+//                          <Lists />
+//                          <Sliders />
+//                          <Gauges, Switches and Knobs />
+//                          <Tooltips />
+//                          <Carousel />
+//                          <Slideshow />
+//                          <ImageGallery />
+//                      <Navigations />
+//                          <DropdownMenus />
+//                          <Tabs />
+//                          <AppLauncher />
+//                      <CompositeComponents />
+//                          <Social />
+//                          <Chat />
+//                          <Cards and InfoBoxes />
+//                      <Tables />
+//                      <Charts />
+//                      <AdvancedComponents />
+//                          <GoogleCalendar />
+//                          <Calendar />
+//                          <DatePicker />//                      
+//                      <Pages />
+//                          <LoginPage />
+//                          <RegistrationPage />
+//                          <ForgotPasswordPage />
+//                          <ResetPasswordPage />
+//                          <InvoicePage />
+//                          <MailCompose />
+//                          <MailList />
+//                      <Experiments />
+//                          <Redux />
+//              <Content>
+//                  <ContentHeader>
+//                      <Breadcrumb routes={this.props.routes} params={this.props.params} />
+//                      <TitleHeading /> 
+//                  </ContentHeader>
+//                  <ContentMain>
+//                  </ContentMain>
+//              </Content>
+//              <Aside />
+//          </AppBody>
+//          <Footer />//      
+//      </App>
+// </Body>
+// -----------------------------------------------------------------

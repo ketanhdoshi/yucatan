@@ -4,6 +4,9 @@
 import React, { PropTypes } from 'react'
 import styled from 'styled-components';
 
+// TODO: Disabled Select
+// Input Groups with Buttons
+
 // -----------------------------------------------------------------
 // Form input field component
 // -----------------------------------------------------------------
@@ -140,12 +143,12 @@ export const FormRadio = ({name, items}) => {
 // -----------------------------------------------------------------
 // Select - single or multiple
 // -----------------------------------------------------------------
-export const FormSelect = ({label, items, multiple=false}) => {
+export const FormSelect = ({label, items, multiple=false, disabled=false}) => {
     const Select = Input.withComponent('select');
     return (
         <div className="form-group">
             <label>{label}</label>
-            <Select multiple={multiple} className="form-control">
+            <Select multiple={multiple} className="form-control" disabled={disabled}>
             {
                 items.map ((item, i) => 
                     <option key={i}>{item}</option>
@@ -209,6 +212,31 @@ export const FormInputGroup = ({type = 'text', preType, preInfo, postType, postI
             { preType ? <Addon>{addonFormat (preType, preInfo)}</Addon> : null }
             <Input type={type} placeholder={placeholder} />
             { postType ? <Addon>{addonFormat (postType, postInfo)}</Addon> : null }
+        </div>
+    )
+}
+
+// -----------------------------------------------------------------
+// Input Group Button - button and form control together on same line
+// -----------------------------------------------------------------
+export const FormInputGroupButton = ({type = 'text', preInfo, postInfo, placeholder}) => {
+    const buttonFormat = (info) => {
+        if (info) { 
+            return (
+                <div className="input-group-btn">
+                  <button type="button" className="btn btn-info">{info}</button>
+                </div>                    
+            );
+        } else {
+            return null;
+        }
+    }
+    
+    return (
+        <div className="input-group">
+            {buttonFormat(preInfo)}
+            <Input type={type} placeholder={placeholder} />
+            {buttonFormat(postInfo)}
         </div>
     )
 }

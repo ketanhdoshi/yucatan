@@ -5,7 +5,7 @@ import React, { PropTypes } from 'react'
 
 import Box, {BOX_INFO} from './widgets/Box'
 import {FormText, FormTextArea, FormCheckbox, 
-    FormRadio, FormSelect, FormFileInput, FormInputGroup, 
+    FormRadio, FormSelect, FormFileInput, FormInputGroup, FormInputGroupButton,
     ADDON_LABEL, ADDON_ICON, ADDON_CHECKBOX, ADDON_RADIO,
     FORMTEXT_SUCCESS, FORMTEXT_WARNING, FORMTEXT_ERROR} from './widgets/FormControls'
 
@@ -54,6 +54,8 @@ const UiFormView = () => {
                             <FormInputGroup preType={ADDON_ICON} preInfo="fa-bell" postType={ADDON_ICON} postInfo="fa-ambulance" placeholder="Type..." /><br />
                             <FormInputGroup preType={ADDON_CHECKBOX}  placeholder="Type..." /><br />
                             <FormInputGroup preType={ADDON_RADIO}  placeholder="Type..." /><br />
+                            <FormInputGroupButton preInfo="Input Group Button" /><br />
+                            <FormInputGroupButton preInfo="Button1" postInfo="Button2" /><br />
                         </form>
                     </Box>
                 </div> {/* /.col */} 
@@ -76,6 +78,7 @@ const UiFormView = () => {
                             <FormRadio name="exRadio" items={exRadio}/>
                             <FormSelect label="Single Select" items={exSelect}/>
                             <FormSelect label="Multi Select" items={exSelect} multiple={true}/>
+                            <FormSelect label="Select Disabled" items={exSelect} disabled={true}/>
                         </form>
                     </Box>
                 </div> {/* /.col */} 
