@@ -88,4 +88,8 @@ module.exports.init = (server, port, doneCB) => {
     const Myutils = require('./utils/util');
     Myutils.swagger(apisrv);
     Myutils.good(apisrv);
+    
+    
+    const Cache = require('./utils/cache'); // for Redis cache
+    Cache.try ();
 }
