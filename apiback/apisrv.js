@@ -91,5 +91,5 @@ module.exports.init = (server, port, doneCB) => {
     
     
     const Cache = require('./utils/cache'); // for Redis cache
-    Cache.try ();
+    // Cache.try ();
 }
