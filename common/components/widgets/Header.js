@@ -3,6 +3,7 @@
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
 import styled from 'styled-components';
+import DropdownNotification from './DropdownNotification'
 
 // -----------------------------------------------------------------
 // Navbar component
@@ -150,9 +151,10 @@ const Navbar = () => (
             <NavItem>
                 <NavLink href="#sidebarnav" data-target="#sidebarnav" data-toggle="collapse"><i className="fa fa-clock-o"></i></NavLink>
             </NavItem>
-            <NavItem>
-                <NavLink href="#"><i className="fa fa-facebook"></i></NavLink>
-            </NavItem>
+            <NavItemDropdown>
+                <DropdownToggle><i className="fa fa-facebook"></i></DropdownToggle>
+                <DropdownNotification />
+            </NavItemDropdown>
             <NavItem>
                 <NavLink href="#"><i className="fa fa-instagram"></i></NavLink>
             </NavItem>

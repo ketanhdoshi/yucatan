@@ -71,7 +71,13 @@ const MenuItem = styled.a.attrs({
         background: #1e282c;
         border-left-color: #3c8dbc;
     }
+`;
 
+// -----------------------------------------------------------------
+// MenuItem with a sub-menu component
+// Example of extending an already styled component
+// -----------------------------------------------------------------
+const MenuItemWithSub = styled(MenuItem)`
     /* Put a down-arrow or up-arrow next to sub-menus */
     &.collapsed:after {
         content: "▾";
@@ -81,14 +87,6 @@ const MenuItem = styled.a.attrs({
         content: "▴";
         text-align: right;
     }
-`;
-
-// -----------------------------------------------------------------
-// MyMenuItem component
-// Example of extending an already styled component
-// -----------------------------------------------------------------
-const MyMenuItem = styled(MenuItem)`
-    color: yellow;
 `;
 
 // -----------------------------------------------------------------
@@ -122,6 +120,16 @@ const SubMenu = styled.div.attrs({
 })`
     /* Background of sub-menus */
     background: #2c3b41;
+
+    /* Show the title on the side when you hover on the list item. Happens only 
+        when title is collapsed in Mini mode  */
+    /* TODO */
+    li:hover &.collapse {
+        display: block !important;
+        position: absolute;
+        width: 180px;
+        left: 46px; /* was 50px, needed to align left edge of hover menu with sidebar right edge */
+    }
 `;
 
 // -----------------------------------------------------------------
@@ -130,34 +138,95 @@ const SubMenu = styled.div.attrs({
 const MenuTitle = styled.span.attrs({
     className: '',
 })`
-
+    /* Like a flex-grow - expand to take up available space */
     flex: 1;
+
+    /* Show the title on the side when you hover on the list item. Happens only 
+        when title is collapsed in Mini mode  */
+    li:hover &.collapse {
+        display: block !important;
+        position: absolute;
+        width: 180px;
+        left: 46px; /* was 50px, needed to align left edge of hover menu with sidebar right edge */
+    }
 `;
 
+const DRAWER_MODE_OFF = 1;  // Drawer is off-canvas and not visible
+const DRAWER_MODE_MINI = 2; // Drawer is in collapsed state
+const DRAWER_MODE_FULL = 3; // Drawer is fully visible
 
 // -----------------------------------------------------------------
-// DrawerExample component
+// Menu item in the drawer.
+//      icon - icon for the menu item
+//      title - title for the menu item
+//      badge1 - optional
+//      badge2 - optional
+//      subMenuId - Id of the sub-menu if present, else null
+//      parentId - Id of the parent sub-menu if it is second-level else null
 // -----------------------------------------------------------------
-const DrawerExample = () => (
-    <nav className="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
-        <ul className="nav flex-column">
-            <li className="nav-item">
-                <a className="nav-link" href="#">Overview <span className="sr-only">(current)</span></a>
-            </li>
-            <li className="nav-item">
-                <a className="nav-link" href="#">Reports</a>
-            </li>
-        </ul>
-    </nav>
-)
+const DrawerMenuItem = ({mode, icon, title, badge1, badge2, subMenuId, parentId}) => {
+    // There are three cases:
+    // 1) First-level menu item
+    // 2) First-level menu item with a sub-menu
+    // 3) Second-level menu item
+
+    if (subMenuId) {
+        // Collapse the title for Mini mode
+        let miniCss = '';
+        if (mode === DRAWER_MODE_MINI)
+            miniCss = 'collapse';
+        
+        return (
+            <MenuItemWithSub className="nav-link collapsed d-flex align-items-center py-2 pr-1" 
+                href={subMenuId} data-toggle="collapse" data-target={subMenuId}>
+                <i className={"fa " + icon}></i>
+                <MenuTitle className={"ml-2 " + miniCss}>{title}</MenuTitle>
+            </MenuItemWithSub>
+        )
+    }
+    else if (parentId) {
+        // In mini mode, all second level menus should be closed ie. invisible
+        // let miniCss = '';
+        // if (mode === DRAWER_MODE_MINI)
+        //    return null;
+        // TODO
+        
+        return (
+            <SubMenuItem className="nav-link d-flex align-items-center py-1 pr-1" href="#" data-parent={parentId}>
+                <i className={"fa " + icon}></i>
+                <MenuTitle className="ml-2">{title}</MenuTitle>
+            </SubMenuItem>
+        )
+    }
+    else {
+        // Collapse the title for Mini mode
+        let miniCss = '';
+        if (mode === DRAWER_MODE_MINI)
+            miniCss = 'collapse';
+        
+        return (
+            <MenuItem className="nav-link d-flex align-items-center py-2 pr-1" href="#">
+                <i className={"fa " + icon}></i>
+                <MenuTitle className={"ml-2 " + miniCss}>{title}
+                    {badge1 ? <span className="badge badge-success float-right mr-1">{badge1}</span> : null}
+                    {badge2 ? <span className="badge badge-info float-right mr-1">{badge2}</span> : null}
+                </MenuTitle>
+            </MenuItem>
+        )
+    }
+}
 
 // -----------------------------------------------------------------
 // TODO
-// Spacing
-// Transitions
+// Transitions - too slow, also happen for sub-menu expansion
+// react-responsive - use media queries for mobile off-canvas drawer
+// Mini drawer - the down-arrow still shows up for sub-menus
+// Mini drawer - sub-menus should show on the right on hover
+// Drawer Control - should go on Navbar
+// Drawer should take a fully declarative json menu structure
+// Alternative way to do title shrink in Drawer Mini without using collapse plugin 
 // Multi-level sub-menus
 // Make proper components, and for widgets vs app screens
-// Fix the up-arrow and down-arrow, so it is only for sub-menus
 // Use Reactstrap
 // -----------------------------------------------------------------
 
@@ -179,12 +248,6 @@ const DrawerControl = ({toggleCB, toggleMode}) => {
     )
 }
 
-const Prog = styled.div`
-	/* Adapt the width based on primary prop */
-        background: purple;
-	transition: all 0.25s ease-in-out;
-`;
-
 // -----------------------------------------------------------------
 // Drawer component
 // Off-canvas sidebar toggle works in two modes: 
@@ -197,47 +260,122 @@ const Prog = styled.div`
 // is the mechanism for achieving that behaviour. In both cases, the expanding 
 // and collapsing is achieved using the Collapse functionality
 // -----------------------------------------------------------------
-const Drawer = ({mode}) => {
-    let colCss = null;
-    if (mode) {
-        colCss = "col-3 ";
-    }
-    else {
-        colCss = "col-1 ";
+const Drawer = ({mode, id}) => {
+    let colCss = '';
+    switch (mode){
+        case DRAWER_MODE_OFF:
+            break;
+        case DRAWER_MODE_MINI:
+            colCss = "col-1 ";
+            break;
+        case DRAWER_MODE_FULL:
+            colCss = "col-3 ";
+            break;
     }
     return (
-            <SideMenu className={colCss}>
-        <ul className="nav flex-column">
-            <li className="nav-item" data-parent="#sidebar">
-                <MenuItem className="nav-link d-flex align-items-center py-2 pr-1" href="#">
-                    <i className="fa fa-heart"></i>
-                    <MenuTitle className="collapse show drawerdesk ml-2">Item 1
-                        <span className="badge badge-success float-right mr-1">6</span>
-                        <span className="badge badge-info float-right mr-1">12</span>
-                    </MenuTitle>
-                </MenuItem>
-            </li>
-            <li className="nav-item" data-parent="#sidebar">
-                <MenuItem className="nav-link collapsed d-flex align-items-center py-2 pr-1" href="#submenu2"
-                        data-toggle="collapse" data-target="#submenu2">
-                    <i className="fa fa-list"></i>
-                    <MenuTitle className="collapse show drawerdesk ml-2">Item 2</MenuTitle>
-                </MenuItem>
-                <SubMenu className="collapse fade" id="submenu2" aria-expanded="false">
-                    <ul className="flex-column nav">
-                        <li className="nav-item">
-                            <SubMenuItem className="nav-link d-flex align-items-center py-1 pr-1" href="#" data-parent="#submenu2">
-                                <i className="fa fa-circle-o"></i>
-                                <span className="ml-2">Item 1a</span>
-                            </SubMenuItem>
-                        </li>
-                    </ul>
-                </SubMenu>
-            </li>
-        </ul>
-            </SideMenu>
+        <SideMenu className={colCss} id={id}>
+            <ul className="nav flex-column">
+                <li className="nav-item" data-parent={"#" + id}>
+                    <DrawerMenuItem mode={mode} icon="fa-heart"
+                            title="Item 1" badge1="6" badge2="12" />
+                </li>
+                <li className="nav-item" data-parent={"#" + id}>
+                    <DrawerMenuItem mode={mode} icon="fa-list"
+                            title="Item 2" subMenuId="#submenu2" />
+                    <SubMenu className="collapse fade" id="submenu2" aria-expanded="false">
+                        <ul className="flex-column nav">
+                            <li className="nav-item">
+                                <DrawerMenuItem mode={mode} icon="fa-circle-o"
+                                    title="Item 1a" parentId="#submenu2" />
+                            </li>
+                        </ul>
+                    </SubMenu>
+                </li>
+            </ul>
+        </SideMenu>
     )
 }
+
+// -----------------------------------------------------------------
+// Primary content area
+// -----------------------------------------------------------------
+const Content = ({toggleCB, toggleMode}) => (
+    <main className="col-sm-9 col-6 pt-3" role="main">
+        <DrawerControl toggleCB={toggleCB} toggleMode={toggleMode}/>
+        {/* Sidebar toggle button for desktop only */}
+        <a href=".drawerdesk" data-toggle="collapse"><i className="fa fa-desktop fa-lg"></i></a>
+        {/* Sidebar toggle button for mobile only */}
+        <a href=".drawermobile" data-toggle="collapse"><i className="fa fa-mobile fa-lg"></i></a>
+        <a href="#sidebarlist" data-toggle="collapse"><i className="fa fa-navicon fa-lg"></i></a>
+        <h1>Dashboard</h1>
+    </main>
+)
+
+const SidebarRight = () => (
+    <div></div>
+)
+
+class AppBody extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            drawerMode: DRAWER_MODE_FULL // drawer mode
+        } ;
+        
+        // This binding is necessary to make `this` work in the handleDayClick callback
+        // Without it, 'this' will be undefined in the callback and calling this.setState 
+        // in the callback will give an error
+        // See https://facebook.github.io/react/docs/handling-events.html
+        this.handleToggleMode = this.handleToggleMode.bind(this);
+    }
+
+    handleToggleMode () {
+        let mode = this.state.drawerMode;
+        switch (mode){
+            case DRAWER_MODE_OFF:
+                mode = DRAWER_MODE_FULL;
+                break;
+            case DRAWER_MODE_MINI:
+                mode = DRAWER_MODE_FULL;
+                break;
+            case DRAWER_MODE_FULL:
+                mode = DRAWER_MODE_MINI;
+                break;
+        }
+        this.setState ( {drawerMode: mode});
+    }
+    
+    render() {
+        const { drawerMode } = this.state;
+        return (
+            <div className="container-fluid">
+                <div className="row">
+                    <Drawer mode={drawerMode} />
+                    <Content toggleCB={this.handleToggleMode} toggleMode={drawerMode}/>
+                    <SidebarRight />
+                </div>
+            </div>
+        )
+    }
+}
+
+AppBody.propTypes = {
+}
+
+export default AppBody
+
+
+const AppBodyOld = () => (
+    <div className="container-fluid">
+        <DrawerControl />
+        <div className="row">
+            <Drawer />
+            <Content />
+            <Aside />
+        </div>
+    </div>
+)
+
 
 // -----------------------------------------------------------------
 // Experimental Drawer using Bootstrap CSS
@@ -393,69 +531,24 @@ const DrawerList = () => (
         </div>    
 )
 
+const Prog = styled.div`
+	/* Adapt the width based on primary prop */
+        background: purple;
+	transition: all 0.25s ease-in-out;
+`;
+
 // -----------------------------------------------------------------
-// Primary content area
+// DrawerExample component
 // -----------------------------------------------------------------
-const Content = ({toggleCB, toggleMode}) => (
-    <main className="col-sm-9 col-6 pt-3" role="main">
-        <DrawerControl toggleCB={toggleCB} toggleMode={toggleMode}/>
-        {/* Sidebar toggle button for desktop only */}
-        <a href=".drawerdesk" data-toggle="collapse"><i className="fa fa-desktop fa-lg"></i></a>
-        {/* Sidebar toggle button for mobile only */}
-        <a href=".drawermobile" data-toggle="collapse"><i className="fa fa-mobile fa-lg"></i></a>
-        <a href="#sidebarlist" data-toggle="collapse"><i className="fa fa-navicon fa-lg"></i></a>
-        <h1>Dashboard</h1>
-    </main>
+const DrawerExample = () => (
+    <nav className="col-sm-3 col-md-2 d-none d-sm-block bg-light sidebar">
+        <ul className="nav flex-column">
+            <li className="nav-item">
+                <a className="nav-link" href="#">Overview <span className="sr-only">(current)</span></a>
+            </li>
+            <li className="nav-item">
+                <a className="nav-link" href="#">Reports</a>
+            </li>
+        </ul>
+    </nav>
 )
-
-const Aside = () => (
-    <div></div>
-)
-
-class AppBody extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            drawerMode: true, // drawer mode
-        } ;
-        
-        // This binding is necessary to make `this` work in the handleDayClick callback
-        // Without it, 'this' will be undefined in the callback and calling this.setState 
-        // in the callback will give an error
-        // See https://facebook.github.io/react/docs/handling-events.html
-        this.handleToggleMode = this.handleToggleMode.bind(this);
-    }
-
-    handleToggleMode () {
-        this.setState ( {drawerMode: !this.state.drawerMode});
-    }
-    
-    render() {
-        const { drawerMode } = this.state;
-        return (
-            <div className="container-fluid">
-                <div className="row">
-                    <Drawer mode={drawerMode} />
-                    <Content toggleCB={this.handleToggleMode} toggleMode={drawerMode}/>
-                    <Aside />
-                </div>
-            </div>
-        )
-    }
-}
-
-const AppBodyOld = () => (
-    <div className="container-fluid">
-        <DrawerControl />
-        <div className="row">
-            <Drawer />
-            <Content />
-            <Aside />
-        </div>
-    </div>
-)
-
-AppBody.propTypes = {
-}
-
-export default AppBody
