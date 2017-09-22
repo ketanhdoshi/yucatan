@@ -2,7 +2,7 @@
 // Container component for Login page
 // -----------------------------------------------------------------
 import { connect } from 'react-redux'
-import LoginView from '../components/LoginView'
+import LoginView from '../components/widgets/LoginView'
 
 function myDummy () {
     console.log ("myDummy")

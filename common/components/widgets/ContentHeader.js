@@ -6,6 +6,8 @@ import React, { PropTypes } from 'react'
 
 import s from '../../scss/ContentHeader.scss'
 
+// TODO: Should automatically take router path and construct the breadcrumb
+
 const ContentHeader = (props) => (
     <section className={s.contentHeader}>
         <h1>

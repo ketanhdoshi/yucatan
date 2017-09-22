@@ -10,7 +10,7 @@
 import { connect } from 'react-redux'
 
 // Presentational component
-import MatchesView from '../components/MatchesView'
+import MatchesView from '../screens/MatchesView'
 
 // Action helpers
 import { getMatchesReqAction, 

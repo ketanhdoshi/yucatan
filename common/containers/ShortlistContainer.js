@@ -4,7 +4,7 @@
 // Should be cleaned up and re-written 
 // -----------------------------------------------------------------
 import { connect } from 'react-redux'
-import ShortlistView from '../components/ShortlistView'
+import ShortlistView from '../screens/ShortlistView'
 
 const dummyClick = (filter) => {
     return "dummy Click"

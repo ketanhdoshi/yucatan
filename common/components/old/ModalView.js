@@ -4,9 +4,9 @@
 // Instead we will likely use the React-Bootstrap components
 // -----------------------------------------------------------------
 import React from 'react'
-import ModalButton from '../components/old/ModalButton'
-import TryModalButton from '../components/old/TryModalButton'
-import NewModalButton from '../components/old/NewModalButton'
+import ModalButton from './ModalButton'
+import TryModalButton from './TryModalButton'
+import NewModalButton from './NewModalButton'
 
 const ModalView = () => (
     <div>

@@ -2,7 +2,7 @@
 // Container component for all logged-in pages across the app
 // -----------------------------------------------------------------
 import { connect } from 'react-redux'
-import MainView from '../components/MainView'
+import MainView from '../screens/MainView'
 
 const dummyClick = (filter) => {
     return "dummy Click"

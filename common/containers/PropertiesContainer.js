@@ -21,7 +21,7 @@
 import { connect } from 'react-redux'
 
 // Presentational component
-import PropertiesView from '../components/PropertiesView'
+import PropertiesView from '../screens/PropertiesView'
 
 // Action helpers
 import { getPropertiesReqAction, 

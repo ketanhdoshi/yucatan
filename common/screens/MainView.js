@@ -1,24 +1,104 @@
 // -----------------------------------------------------------------
 // Presentational component for all logged-in pages across the app
-// Has the basic overall skeleton layout into which all screens are placed
-// Layout contains Navbar, Sidebar and a Content area. Most screens
-// will populate themselves in the Content area. 
+// Has the basic overall skeleton layout into which all content screens are
+// placed.
+// The overall organisation is that there is a library of generic and 
+// reusable widgets which are then assembled or composed together on 
+// application-specific screens.
+// The top-level application layout contains a Header and a Footer with the
+// main application body in between. That body area has a Sidebar on the left
+// and the right, with the application content in between. That content area
+// has a Content Header and the actual content. This describes the skeleton 
+// layout of the application. Most application screens then populate this 
+// actual content using the widget library.
+// In other words, the application-specific components are things like Header, 
+// Footer, SidebarLeft, SidebarRight, ContentHeader.
+// These components are placeholders which are populated using the widget 
+// library components. For instance, the Header is populated with the Navbar 
+// widget. The SidebarLeft is populated with the Drawer widget and the 
+// ContentHeader is populated with the Breadcrumb widget. 
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
 import { Link } from 'react-router'
-import App from './widgets/App'
-import Header from './widgets/Header'
-import AppBody from './widgets/AppBody'
-import Footer from './widgets/Footer'
 
-import Navbar from './widgets/Navbar'
-import Sidebar from './widgets/Sidebar'
-import ContentHeader from './widgets/ContentHeader'
+import App from './App'
+import Header from './Header'
+import Footer from './Footer'
+import Drawer, {DrawerControl,
+    DRAWER_MODE_OFF, DRAWER_MODE_MINI, DRAWER_MODE_FULL} from '../components/widgets/Drawer'
+
+import Bs3Navbar from '../components/old/Bs3Navbar'
+import Sidebar from '../components/old/Sidebar'
+import ContentHeader from '../components/widgets/ContentHeader'
 
 //import s from '../scss/Main.scss'
 //import '../scss/General.css'
 
-const MainView = ({ first, children, onDummyClick }) => (
+// TODO: Bring Header component into this file
+
+const SidebarRight = () => (
+    <div></div>
+)
+
+class MainView extends React.Component {
+    constructor(props) {
+        super(props);
+        this.state = {
+            drawerMode: DRAWER_MODE_FULL // drawer mode
+        } ;
+        
+        // This binding is necessary to make `this` work in the handleDayClick callback
+        // Without it, 'this' will be undefined in the callback and calling this.setState 
+        // in the callback will give an error
+        // See https://facebook.github.io/react/docs/handling-events.html
+        this.handleToggleMode = this.handleToggleMode.bind(this);
+    }
+
+    handleToggleMode () {
+        let mode = this.state.drawerMode;
+        switch (mode){
+            case DRAWER_MODE_OFF:
+                mode = DRAWER_MODE_FULL;
+                break;
+            case DRAWER_MODE_MINI:
+                mode = DRAWER_MODE_FULL;
+                break;
+            case DRAWER_MODE_FULL:
+                mode = DRAWER_MODE_MINI;
+                break;
+        }
+        this.setState ( {drawerMode: mode});
+    }
+    
+    render() {
+        const { drawerMode } = this.state;
+        const { first, children, onDummyClick } = this.props;
+        return (
+            <App>
+                <Header />
+                <div className="container-fluid">
+                    <div className="row">
+                        <Drawer mode={drawerMode} />
+                            <main className="col-sm-9 col-6 pt-3" role="main">
+                                <DrawerControl toggleCB={this.handleToggleMode} toggleMode={drawerMode}/>
+                                {/* Sidebar toggle button for desktop only */}
+                                <a href=".drawerdesk" data-toggle="collapse"><i className="fa fa-desktop fa-lg"></i></a>
+                                {/* Sidebar toggle button for mobile only */}
+                                <a href=".drawermobile" data-toggle="collapse"><i className="fa fa-mobile fa-lg"></i></a>
+                                <a href="#sidebarlist" data-toggle="collapse"><i className="fa fa-navicon fa-lg"></i></a>
+                                <ContentHeader header="Stuff"/>
+                                {children}
+                            </main>
+                        <SidebarRight />
+                    </div>
+                </div>
+                <Footer msg="This is my footer"/>
+            </App>
+        )
+    }
+}
+
+const OldMainView = ({ first, children, onDummyClick }) => (
     <App>
         <Header />
         <AppBody />
@@ -26,9 +106,24 @@ const MainView = ({ first, children, onDummyClick }) => (
     </App>
 )
 
+// -----------------------------------------------------------------
+// Primary content area
+// -----------------------------------------------------------------
+const OldContent = ({toggleCB, toggleMode}) => (
+    <main className="col-sm-9 col-6 pt-3" role="main">
+        <DrawerControl toggleCB={toggleCB} toggleMode={toggleMode}/>
+        {/* Sidebar toggle button for desktop only */}
+        <a href=".drawerdesk" data-toggle="collapse"><i className="fa fa-desktop fa-lg"></i></a>
+        {/* Sidebar toggle button for mobile only */}
+        <a href=".drawermobile" data-toggle="collapse"><i className="fa fa-mobile fa-lg"></i></a>
+        <a href="#sidebarlist" data-toggle="collapse"><i className="fa fa-navicon fa-lg"></i></a>
+        <h1>Dashboard</h1>
+    </main>
+)
+
 const OldView = ({ first, children, onDummyClick }) => (
     <div>
-        <Navbar brand={first}/>
+        <Bs3Navbar brand={first}/>
         <div className="container-fluid">
             <div className={"row " + s.main}>
                 <Sidebar />

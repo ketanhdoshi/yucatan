@@ -3,9 +3,9 @@
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
 
-import Box, {BOX_INFO} from './widgets/Box'
-import InfoBox from './widgets/InfoBox'
-import SmallBox from './widgets/SmallBox'
+import Box, {BOX_INFO} from '../components/widgets/Box'
+import InfoBox from '../components/widgets/InfoBox'
+import SmallBox from '../components/widgets/SmallBox'
 
 // -----------------------------------------------------------------
 // This component constructs the overall page. It is not meant to be

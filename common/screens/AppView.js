@@ -6,6 +6,20 @@
 import React, { PropTypes } from 'react'
 import { ThemeProvider }  from 'styled-components';
 
+import { injectGlobal } from 'styled-components';
+
+/* TODO - temporarily hardcoded only for testing */
+injectGlobal`
+    @font-face {
+        font-family: 'Source Sans Pro';
+        src: url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic');
+    }
+
+    body {
+        height: 100%;
+    }
+`;
+
 const theme = {
   primary: 'palevioletred',
 };

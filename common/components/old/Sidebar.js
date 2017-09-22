@@ -2,8 +2,8 @@
 // Presentational component for the Sidebar
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
-import UserPanel from './UserPanel'
-import SidebarSearch from './SidebarSearch'
+import UserPanel from '../widgets/UserPanel'
+import SidebarSearch from '../widgets/SidebarSearch'
 import SidebarNav from './SidebarNav'
 import SidebarMenu from './SidebarMenu'
 import SidebarSubMenuItem from './SidebarSubMenuItem'

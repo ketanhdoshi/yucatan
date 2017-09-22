@@ -3,7 +3,7 @@
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
 
-import s from '../../scss/Footer.scss'
+import s from '../scss/Footer.scss'
 
 const Footer = ({msg}) => (
     <footer className={s.footer}>

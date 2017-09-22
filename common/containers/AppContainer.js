@@ -4,7 +4,7 @@
 // -----------------------------------------------------------------
 
 import { connect } from 'react-redux'
-import AppView from '../components/AppView'
+import AppView from '../screens/AppView'
 
 const dummyClick = (filter) => {
     return "dummy Click"

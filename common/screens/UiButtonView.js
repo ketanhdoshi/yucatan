@@ -3,8 +3,8 @@
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
 
-import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE, SOCIAL_TWITTER} from './widgets/SocialButton'
-import Box, {BOX_INFO} from './widgets/Box'
+import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE, SOCIAL_TWITTER} from '../components/widgets/SocialButton'
+import Box, {BOX_INFO} from '../components/widgets/Box'
 
 // -----------------------------------------------------------------
 // This component constructs the overall page. It is not meant to be

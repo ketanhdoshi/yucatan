@@ -5,22 +5,25 @@
 import React from 'react'
 import { Router, Route, browserHistory, IndexRoute, IndexRedirect, createMemoryHistory } from 'react-router'
 
-import Dashboard1 from '../components/Dashboard1'
-import Dashboard2 from '../components/Dashboard2'
-import Home from '../components/Home'
 import AppContainer from '../containers/AppContainer'
 import MainContainer from '../containers/MainContainer'
 import { PropertiesContainer } from '../containers/PropertiesContainer'
 import { MatchesContainer, getMatches } from '../containers/MatchesContainer'
-import UiButtonView from '../components/UiButtonView'
-import UiGeneralView from '../components/UiGeneralView'
-import UiFormView from '../components/UiFormView'
-import GoogleMaps from '../components/widgets/GoogleMaps'
-import CalendarView from '../components/widgets/CalendarView'
-import PaymentView from '../components/PaymentView'
-import ModalView from '../components/ModalView'
 import ShortlistContainer from '../containers/ShortlistContainer'
 import LoginContainer from '../containers/LoginContainer'
+
+import Home from '../screens/Home'
+import Dashboard1 from '../screens/Dashboard1'
+import Dashboard2 from '../screens/Dashboard2'
+import UiButtonView from '../screens/UiButtonView'
+import UiGeneralView from '../screens/UiGeneralView'
+import UiFormView from '../screens/UiFormView'
+import PaymentView from '../screens/PaymentView'
+
+import GoogleMaps from '../components/widgets/GoogleMaps'
+import CalendarView from '../components/widgets/CalendarView'
+
+import ModalView from '../components/old/ModalView'
 import BsView from '../components/bs/BsView';
 
 var history;

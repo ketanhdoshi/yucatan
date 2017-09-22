@@ -3,11 +3,11 @@
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
 
-import Box, {BOX_INFO} from './widgets/Box'
+import Box, {BOX_INFO} from '../components/widgets/Box'
 import {FormText, FormTextArea, FormCheckbox, 
     FormRadio, FormSelect, FormFileInput, FormInputGroup, FormInputGroupButton,
     ADDON_LABEL, ADDON_ICON, ADDON_CHECKBOX, ADDON_RADIO,
-    FORMTEXT_SUCCESS, FORMTEXT_WARNING, FORMTEXT_ERROR} from './widgets/FormControls'
+    FORMTEXT_SUCCESS, FORMTEXT_WARNING, FORMTEXT_ERROR} from '../components/widgets/FormControls'
 
 var exRadio = [
     {

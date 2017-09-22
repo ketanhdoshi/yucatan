@@ -1,22 +1,8 @@
 // -----------------------------------------------------------------
-// Presentational component for the AppBody
+// Presentational component for the Drawer
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
 import styled from 'styled-components';
-
-import { injectGlobal } from 'styled-components';
-
-/* TODO - temporarily hardcoded only for testing */
-injectGlobal`
-    @font-face {
-        font-family: 'Source Sans Pro';
-        src: url('https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic');
-    }
-
-    body {
-        height: 100%;
-    }
-`;
 
 // -----------------------------------------------------------------
 // SideMenu component
@@ -151,9 +137,9 @@ const MenuTitle = styled.span.attrs({
     }
 `;
 
-const DRAWER_MODE_OFF = 1;  // Drawer is off-canvas and not visible
-const DRAWER_MODE_MINI = 2; // Drawer is in collapsed state
-const DRAWER_MODE_FULL = 3; // Drawer is fully visible
+export const DRAWER_MODE_OFF = 1;  // Drawer is off-canvas and not visible
+export const DRAWER_MODE_MINI = 2; // Drawer is in collapsed state
+export const DRAWER_MODE_FULL = 3; // Drawer is fully visible
 
 // -----------------------------------------------------------------
 // Menu item in the drawer.
@@ -233,7 +219,7 @@ const DrawerMenuItem = ({mode, icon, title, badge1, badge2, subMenuId, parentId}
 // -----------------------------------------------------------------
 // Controls the visibility mode of the Drawer - FULL, NONE, MINI
 // -----------------------------------------------------------------
-const DrawerControl = ({toggleCB, toggleMode}) => {
+export const DrawerControl = ({toggleCB, toggleMode}) => {
     let icon = null;
     if (toggleMode) {
         icon = "fa-mobile";
@@ -296,86 +282,10 @@ const Drawer = ({mode, id}) => {
     )
 }
 
-// -----------------------------------------------------------------
-// Primary content area
-// -----------------------------------------------------------------
-const Content = ({toggleCB, toggleMode}) => (
-    <main className="col-sm-9 col-6 pt-3" role="main">
-        <DrawerControl toggleCB={toggleCB} toggleMode={toggleMode}/>
-        {/* Sidebar toggle button for desktop only */}
-        <a href=".drawerdesk" data-toggle="collapse"><i className="fa fa-desktop fa-lg"></i></a>
-        {/* Sidebar toggle button for mobile only */}
-        <a href=".drawermobile" data-toggle="collapse"><i className="fa fa-mobile fa-lg"></i></a>
-        <a href="#sidebarlist" data-toggle="collapse"><i className="fa fa-navicon fa-lg"></i></a>
-        <h1>Dashboard</h1>
-    </main>
-)
-
-const SidebarRight = () => (
-    <div></div>
-)
-
-class AppBody extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            drawerMode: DRAWER_MODE_FULL // drawer mode
-        } ;
-        
-        // This binding is necessary to make `this` work in the handleDayClick callback
-        // Without it, 'this' will be undefined in the callback and calling this.setState 
-        // in the callback will give an error
-        // See https://facebook.github.io/react/docs/handling-events.html
-        this.handleToggleMode = this.handleToggleMode.bind(this);
-    }
-
-    handleToggleMode () {
-        let mode = this.state.drawerMode;
-        switch (mode){
-            case DRAWER_MODE_OFF:
-                mode = DRAWER_MODE_FULL;
-                break;
-            case DRAWER_MODE_MINI:
-                mode = DRAWER_MODE_FULL;
-                break;
-            case DRAWER_MODE_FULL:
-                mode = DRAWER_MODE_MINI;
-                break;
-        }
-        this.setState ( {drawerMode: mode});
-    }
-    
-    render() {
-        const { drawerMode } = this.state;
-        return (
-            <div className="container-fluid">
-                <div className="row">
-                    <Drawer mode={drawerMode} />
-                    <Content toggleCB={this.handleToggleMode} toggleMode={drawerMode}/>
-                    <SidebarRight />
-                </div>
-            </div>
-        )
-    }
+Drawer.propTypes = {
 }
 
-AppBody.propTypes = {
-}
-
-export default AppBody
-
-
-const AppBodyOld = () => (
-    <div className="container-fluid">
-        <DrawerControl />
-        <div className="row">
-            <Drawer />
-            <Content />
-            <Aside />
-        </div>
-    </div>
-)
-
+export default Drawer
 
 // -----------------------------------------------------------------
 // Experimental Drawer using Bootstrap CSS
