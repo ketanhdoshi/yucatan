@@ -4,49 +4,71 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 const nodeExternals = require('webpack-node-externals');
 
 const config = {
-  name: 'client',
-  devtool: 'inline-source-map',
-  entry: [
-    'webpack-hot-middleware/client',
-    'client/client.js'
-  ],
-  output: {
-    path: path.join(__dirname, 'built/'),
-    filename: 'clientbundle.js',
-    publicPath: '/built/'
-  },
-  module: {
-    loaders: [
-      {
-        test: /\.js$/,
-        exclude: /node_modules/,
-        loader: 'babel',
-        query: {
-          presets: [ 'react-hmre' ]
+    name: 'client',
+    devtool: 'inline-source-map',
+    entry: [
+        'webpack-hot-middleware/client',
+        'client/client.js'
+    ],
+    output: {
+        path: path.join(__dirname, 'built/'),
+        filename: 'clientbundle.js',
+        publicPath: '/built/'
+    },
+    module: {
+        rules: [
+        {
+            test: /\.js$/,
+            exclude: /node_modules/,
+            loader: 'babel-loader',
+            options: {
+                presets: [ 'react-hmre' ]
+            }
+        },
+        {
+            test: /\.css$/,
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: "css-loader",
+            })
+        },
+        {
+            test: /datepicker\.scss$/,
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: [{
+                    loader: 'css-loader',
+                    options: { 
+                        importLoaders: 1 
+                    },
+                }]
+            })
+        },
+        {
+            test: /\.scss$/,
+            exclude: /datepicker\.scss$/,
+            use: ExtractTextPlugin.extract({
+                fallback: "style-loader",
+                use: [{
+                    loader: 'css-loader',
+                    options: {
+                        modules: true,
+                        importLoaders: 1,
+                        localIdentName: '[name]__[local]___[hash:base64:5]'
+                    },
+                }]
+            })
         }
-      },
-      {
-        test: /\.css$/,
-        loader: ExtractTextPlugin.extract('style', 'css')
-      },
-      {
-        test: /datepicker\.scss$/,
-        loader: ExtractTextPlugin.extract('style', 'css-loader?importLoaders=1')
-      },
-      {
-        test: /\.scss$/,
-        exclude: /datepicker\.scss$/,
-        loader: ExtractTextPlugin.extract('style', 'css-loader?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]')
-      }
-    ]
-  },
+        ]
+    },
   plugins: [
-      new webpack.optimize.OccurrenceOrderPlugin(),
-      new webpack.HotModuleReplacementPlugin(),
-      new ExtractTextPlugin('styles.css')
+        new webpack.HotModuleReplacementPlugin(),
+        new ExtractTextPlugin({
+            filename: 'styles.css'
+        })
   ],
   resolve: {
-    root: __dirname
+        modules: [__dirname, "node_modules"]
   }
 };
 
@@ -64,11 +86,17 @@ const serverConfig = {
     libraryTarget: 'commonjs2'
   },
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel'
+        loader: 'babel-loader',
+        options: {
+            presets: [
+                ["es2015", {"modules": false}],
+                "react"
+            ]
+        }
       },
       {
         test: /\.css$/,
@@ -87,7 +115,7 @@ const serverConfig = {
     ]
   },
   resolve: {
-    root: __dirname
+    modules: [__dirname, "node_modules"]
   }
 };
 
