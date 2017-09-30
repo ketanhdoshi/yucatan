@@ -82,7 +82,7 @@ const serverConfig = {
   output: {
     path: path.join(__dirname, 'built/'),
     filename: 'serverbundle.js',
-    publicPath: 'built/',
+    publicPath: '/built/',
     libraryTarget: 'commonjs2'
   },
   module: {

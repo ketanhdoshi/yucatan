@@ -1,6 +1,9 @@
 'use strict';
 
 const Path = require('path');
+const Webpack = require('webpack');
+const Config = require('../webpack.config.js');
+
 import srvRender from '../built/serverbundle.js';
 
 // -----------------------------------------------
@@ -16,6 +19,46 @@ const testHandler = function (request, reply) {
     });
 };
 
+const hmr = (server, host, port) => {
+    const compiler = Webpack(Config);
+
+    const devMiddleware = require('webpack-dev-middleware')(compiler, {
+        host,
+        port,
+        historyApiFallback: true,
+        publicPath: Config[0].output.publicPath
+    });
+
+    const hotMiddleware = require('webpack-hot-middleware')(compiler, {
+        log: () => {}
+    });
+
+    server.ext('onRequest', (request, reply) => {
+
+        devMiddleware(request.raw.req, request.raw.res, (err) => {
+
+            if (err) {
+                return reply(err);
+            }
+
+            reply.continue();
+        });
+    });
+
+    server.ext('onRequest', (request, reply) => {
+
+      hotMiddleware(request.raw.req, request.raw.res, (err) => {
+
+          if (err) {
+              return reply(err);
+          }
+
+          reply.continue();
+      });
+    });
+    
+}
+
 module.exports.init = (server, port) => {
 
     const websrv = server.connection({
@@ -23,6 +66,8 @@ module.exports.init = (server, port) => {
         port: port,
         labels: 'websrv'
     });
+
+    hmr (server, 'localhost', port);
 
     // -----------------------------------------------
     // Load inert plugin for static content

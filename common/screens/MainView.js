@@ -19,7 +19,7 @@
 // ContentHeader is populated with the Breadcrumb widget. 
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import { Route, Link, Switch } from 'react-router'
 
 import App from './App'
 import Header from './Header'
@@ -31,6 +31,25 @@ import Bs3Navbar from '../components/old/Bs3Navbar'
 import Sidebar from '../components/old/Sidebar'
 import ContentHeader from '../components/widgets/ContentHeader'
 
+import { PropertiesContainer } from '../containers/PropertiesContainer'
+import { MatchesContainer, getMatches } from '../containers/MatchesContainer'
+import ShortlistContainer from '../containers/ShortlistContainer'
+
+import Home from './Home'
+import Dashboard1 from './Dashboard1'
+import Dashboard2 from './Dashboard2'
+import UiButtonView from './UiButtonView'
+import UiGeneralView from './UiGeneralView'
+import UiFormView from './UiFormView'
+import PaymentView from './PaymentView'
+
+import GoogleMaps from '../components/widgets/GoogleMaps'
+import CalendarView from '../components/widgets/CalendarView'
+
+import ModalView from '../components/old/ModalView'
+import BsView from '../components/bs/BsView';
+
+
 //import s from '../scss/Main.scss'
 //import '../scss/General.css'
 
@@ -38,6 +57,32 @@ import ContentHeader from '../components/widgets/ContentHeader'
 
 const SidebarRight = () => (
     <div></div>
+)
+
+// -----------------------------------------------------------------
+// Primary content for the application
+// TODO - A Switch is not needed here, but I left it there because
+//  I didn't want to have one more unnecessary level of div
+// TODO - Router doesn't support onEnter any more, so change that
+//  and implement it differently inside MatchesContainer
+// -----------------------------------------------------------------
+const Content = () => (
+    <Switch>
+        <Route path="/home" component={Home}/>
+        <Route path="/dashboard1" component={Dashboard1}/>
+        <Route path="/dashboard2" component={Dashboard2}/>
+        <Route path="/ui/button" component={UiButtonView}/>
+        <Route path="/ui/general" component={UiGeneralView}/>
+        <Route path="/ui/form" component={UiFormView}/>
+        <Route path="/googlemaps" component={GoogleMaps}/>                    
+        <Route path="/calendar" component={CalendarView}/>
+        <Route path="/bsview" component={BsView}/>
+        <Route path="/matches" component={MatchesContainer} onEnter={getMatches()}/>
+        <Route path="/properties" component={PropertiesContainer}/>
+        <Route path="/shortlist" component={ShortlistContainer}/>
+        <Route path="/payment" component={PaymentView}/>
+        <Route path="/modals" component={ModalView}/>
+    </Switch>
 )
 
 class MainView extends React.Component {
@@ -87,7 +132,7 @@ class MainView extends React.Component {
                                 <a href=".drawermobile" data-toggle="collapse"><i className="fa fa-mobile fa-lg"></i></a>
                                 <a href="#sidebarlist" data-toggle="collapse"><i className="fa fa-navicon fa-lg"></i></a>
                                 <ContentHeader header="Stuff"/>
-                                {children}
+                                <Content />
                             </main>
                         <SidebarRight />
                     </div>

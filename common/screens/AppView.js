@@ -4,9 +4,11 @@
 // -----------------------------------------------------------------
 
 import React, { PropTypes } from 'react'
-import { ThemeProvider }  from 'styled-components';
+import { Route, Switch } from 'react-router-dom'
+import { ThemeProvider, injectGlobal }  from 'styled-components';
 
-import { injectGlobal } from 'styled-components';
+import MainContainer from '../containers/MainContainer'
+import LoginContainer from '../containers/LoginContainer'
 
 /* TODO - temporarily hardcoded only for testing */
 injectGlobal`
@@ -24,10 +26,18 @@ const theme = {
   primary: 'palevioletred',
 };
 
+// -----------------------------------------------------------------
+// Every route in the app must be inside the AppContainer
+// TODO - Implement an isLoggedIn check and go to MainContainer if
+//  logged in and LoginContainer if not. Remove the Switch
+// -----------------------------------------------------------------
 const AppView = ({ first, children, onDummyClick }) => (
     <ThemeProvider theme={theme}>
         <div>
-            {children}
+            <Switch>
+                <Route path="/login" component={LoginContainer}/>
+                <Route component={MainContainer} />
+            </Switch>
         </div>
     </ThemeProvider>
 )
