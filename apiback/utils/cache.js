@@ -46,16 +46,16 @@ module.exports.setStr = (key, strVal) => {
 // -----------------------------------------------
 // Get String value
 // -----------------------------------------------
-module.exports.getStr = (key) => {
-    client.get(key, function(err, reply) {
+module.exports.getStr = (key, cb) => {
+    client.get(key, function(err, strVal) {
         
         if (err) {
             console.error('error getting key:', err);
-            return null;
+            cb (err, null);
         }
         else {
-            console.log('Redis found key %s, str value = %s', key, reply);
-            return reply;
+            console.log('Redis found key, str value', key, strVal);
+            cb (null, strVal);
         }        
     });
 }
@@ -111,15 +111,15 @@ module.exports.setList = (key, listVal) => {
 // -----------------------------------------------
 // Get List value
 // -----------------------------------------------
-module.exports.getList = (key) => {
-    client.lrange(key, 0, -1, function(err, reply) {        
+module.exports.getList = (key, cb) => {
+    client.lrange(key, 0, -1, function(err, listVal) {        
         if (err) {
             console.error('error getting key:', err);
-            return null;
+            cb (err, null);
         }
         else {
-            console.log('Redis found key %s, list value = %s', key, reply);
-            return reply;
+            console.log('Redis found key, list value', key, listVal);
+            cb (null, listVal);
         }        
     });
 }
@@ -144,15 +144,15 @@ module.exports.setSet = (key, setVal) => {
 // -----------------------------------------------
 // Get Set value
 // -----------------------------------------------
-module.exports.getSet = (key) => {
-    client.smembers(key, function(err, reply) {        
+module.exports.getSet = (key, cb) => {
+    client.smembers(key, function(err, setVal) {        
         if (err) {
             console.error('error getting key:', err);
-            return null;
+            cb (err, null);
         }
         else {
-            console.log('Redis found key %s, set value = %s', key, reply);
-            return reply;
+            console.log('Redis found key, set value', key, setVal);
+            cb (null, setVal);
         }        
     });
 }
@@ -160,18 +160,19 @@ module.exports.getSet = (key) => {
 // -----------------------------------------------
 // Does Key exist
 // -----------------------------------------------
-module.exports.keyExists = (key) => {
+module.exports.keyExists = (key, cb) => {
     client.exists(key, function(err, reply) {        
         if (err) {
             console.error('error exists:', err);
-            throw err;
+            cb (err, null);
         }
         else if (reply === 1) {
             console.log('Redis exists key %s', key);
-            return true;
+            cb (null, true);
         }
         else {
-            console.log('Redis does not exist key %s reply %s', key, reply);
+            console.log('Redis does not exist key, reply', key, reply);
+            cb (null, false);
         }
     });
 }
@@ -187,7 +188,6 @@ module.exports.delete = (key) => {
         }
         else if (reply === 1) {
             console.log('Redis key %s deleted %s', key, reply);
-            return true;
         }
         else {
             console.log('Redis key not deleted %s', key);
@@ -199,13 +199,13 @@ module.exports.delete = (key) => {
 // Try some operations
 // -----------------------------------------------
 module.exports.try = () => {
-    const host = 'redis-18518.c12.us-east-1-4.ec2.cloud.redislabs.com';
-    const port = '18518';
-    module.exports.connect (host, port);
-    
     const keyStr = 'kStr';
     module.exports.setStr (keyStr, 'angular');
-    let val = module.exports.getStr (keyStr);
+    module.exports.getStr (keyStr, 
+        (err, strVal) => {
+            if (!err) console.log ('try strVal ', strVal);
+        }
+    );
     
     
     const keyHash = 'kHash';
@@ -215,21 +215,40 @@ module.exports.try = () => {
         node: 'Express'
     };
     module.exports.setHash (keyHash, hashVal);
-    val = module.exports.getHash (keyHash);
-    console.log ('value is ', val);
+    module.exports.getHash (keyHash,
+        (err, hashVal) => {
+            if (!err) console.log ('try hashVal ', hashVal);
+        }
+    );
         
     const keyList = 'kList';    
     const listVal = ['james', 'bond'];
     module.exports.setList (keyList, listVal);
-    val = module.exports.getList(keyList);
+    module.exports.getList(keyList,
+        (err, listVal) => {
+            if (!err) console.log ('try listVal ', listVal);
+        }
+    );
     
     const keySet = 'kSet';
     const setVal = ['mintu', 'chintu', 'bantu', 'santa'];
     module.exports.setSet (keySet, setVal);
-    val = module.exports.getSet(keySet);
+    module.exports.getSet(keySet, 
+        (err, setVal) => {
+            if (!err) console.log ('try setVal ', setVal);
+        }
+    );
     
-    val = module.exports.keyExists(keyHash);
-    val = module.exports.keyExists('foo');
+    module.exports.keyExists(keyHash, 
+        (err, exists) => {
+            if (!err) console.log ('try exists ', keyHash, exists);
+        }
+    );
+    module.exports.keyExists('foo',
+        (err, exists) => {
+            if (!err) console.log ('try exists foo ', exists);
+        }
+    );
     
     module.exports.delete ('foo');
     module.exports.delete (keyList);

@@ -65,8 +65,18 @@ module.exports.validateJwt = (decoded, request, callback) => {
             if (userProfile) {
                 // Received a user profile which means the session is validated
                 // So we call the original callback with a True
-                // TODO: Get the scope from the userProfile
-                return callback(null, true, {scope: 'admin'});
+                
+                // After the validation is completed, the normal processing of the
+                // request happens by calling the handler for the route. The 
+                // decoded token can be accessed there via request.auth.credentials
+                // However if you want to pass on additional information to be
+                // available in the request handler you can set it as the third
+                // parameter to the callback below. That object will then be
+                // available in the request.auth.credentials
+                const {scope} = userProfile;
+                decoded.scope = userProfile.scope;
+                decoded.userName = userProfile.userName;
+                return callback(null, true, decoded);
             }
             else {
                 // The session was not validated so we call the original
@@ -76,6 +86,14 @@ module.exports.validateJwt = (decoded, request, callback) => {
         }
     );    
 };
+
+// -----------------------------------------------
+// Delete the Session. Nothing to delete for the JWT token
+// -----------------------------------------------
+module.exports.deleteJwt = (userId, access) => {       
+    // Delete the session from the cache
+    Session.delete (userId, access);
+}
 
 // -----------------------------------------------
 // Create a token object containing access and refresh tokens with an expiry

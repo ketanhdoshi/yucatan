@@ -83,3 +83,14 @@ module.exports.validate = (userId, access, cb) => {
     );
 };
 
+// -----------------------------------------------
+// Delete the session from the cache
+// -----------------------------------------------
+module.exports.delete = (userId, access) => {  
+    // Delete the session with the access token as the key
+    Cache.delete (access);
+    
+    // Delete the user profile with the user Id as the key
+    Cache.delete (userId);
+}
+

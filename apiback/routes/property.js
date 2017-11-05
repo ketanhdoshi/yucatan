@@ -21,7 +21,14 @@ exports.register = function (server, options, next) {
             // Swagger documentation fields tags, description, note
             tags: ['api'],
             description: 'Get All Property data',
-            notes: 'Get All Property data'
+            notes: 'Get All Property data',
+            validate: {
+                headers:
+                    Joi.object({
+                        'authorization': Joi.string().required()
+                    }).unknown()
+            },
+            auth: 'jwt'
         },
         handler: function (request, reply) {
 
@@ -62,8 +69,13 @@ exports.register = function (server, options, next) {
                 params: {
                     //`id` is required string field
                     id: Joi.string().required()
-                }
-            }
+                },
+                headers:
+                    Joi.object({
+                        'authorization': Joi.string().required()
+                    }).unknown()
+            },
+            auth: 'jwt'
         },
         handler: function (request, reply) {
             //Find property in db for particular propertyID
@@ -119,8 +131,13 @@ exports.register = function (server, options, next) {
                     price: Joi.number().required(),
                     amenities: Joi.array().items(Joi.string().valid('AC', 'Garden', 'Internet', 'Wifi', 'Pool', 'Washer')),
                     owner: Joi.string().required()
-                }
-            }
+                },
+                headers:
+                    Joi.object({
+                        'authorization': Joi.string().required()
+                    }).unknown()
+            },
+            auth: 'jwt'
         },
         handler: function (request, reply) {
 
@@ -171,8 +188,13 @@ exports.register = function (server, options, next) {
                     price: Joi.number().optional(),
                     amenities: Joi.array().items(Joi.string().valid('AC', 'Garden', 'Internet', 'Wifi', 'Pool', 'Washer')),
                     owner: Joi.string().optional()
-                }
-            }
+                },
+                headers:
+                    Joi.object({
+                        'authorization': Joi.string().required()
+                    }).unknown()
+            },
+            auth: 'jwt'
         },
         handler: function (request, reply) {
             // Find the property by ID in the db and update it
@@ -212,8 +234,13 @@ exports.register = function (server, options, next) {
                 // Use Joi plugin to validate request
                 params: {
                     id: Joi.string().required()
-                }
-            }
+                },
+                headers:
+                    Joi.object({
+                        'authorization': Joi.string().required()
+                    }).unknown()
+            },
+            auth: 'jwt'
         },
         handler: function (request, reply) {
             // Delete the particular record from db

@@ -66,7 +66,8 @@ exports.register = function (server, options, next) {
                         // use toString here.
                         const userProfile = {
                             userId: data._id.toString(),
-                            userName: data.username
+                            userName: data.username,
+                            scope: data.scope   // user role
                         };
 
                         // Create a JWT token and send it in the response
@@ -85,6 +86,9 @@ exports.register = function (server, options, next) {
 
     // -----------------------------------------------
     // Logout API
+    // It needs the Authorization header to identify the user who must
+    // be logged out. An alternate approach would be to use an API like
+    // /api/logout/{userId}
     // -----------------------------------------------    
     server.route({
         method: 'GET',
@@ -95,10 +99,18 @@ exports.register = function (server, options, next) {
             description: 'User logout',
             notes: 'User logout',
             validate: {
-            }
+                headers:
+                    Joi.object({
+                        'authorization': Joi.string().required()
+                    }).unknown()
+            },
+            auth: 'jwt'
         },
         handler: function (request, reply) {
-            reply('Logged out. See you around :)');
+            doLogout (request.auth.credentials);
+            reply(
+                'Logged out. See you around :)'
+            ).header("Authorization", '');
         }
     });
 
@@ -149,7 +161,8 @@ exports.register = function (server, options, next) {
                         // data.name should match profile.displayName
                         const userProfile = {
                             userId: data._id.toString(),
-                            userName: data.username
+                            userName: data.username,
+                            scope: data.scope   // user role
                         };
 
                         const jwt = loginSuccess (userProfile, token);
@@ -165,6 +178,45 @@ exports.register = function (server, options, next) {
             }
         }
     });
+
+    return next();
+};
+
+// -----------------------------------------------
+// All the /api/login/* routes will first lookup the credentials. If successful
+// they will populate a user profile object and optionally an access token. If failure
+// they will populate an error message. This part is done in a way that is specific
+// for each login type
+// After that they all call the this same loginDone function for common processing
+// -----------------------------------------------
+const loginSuccess = (userProfile, token) => {
+    
+    if (!token) {
+        // For locally authenticated users generate an access token. Users 
+        // authenticated by Oauth will get an access token from the 3rd party
+        token = Token.create (userProfile);
+    }
+
+    const jwt = Token.createJwt (userProfile, token);
+    
+    // return token and user Profile to caller
+    return jwt;
+}
+
+// -----------------------------------------------
+// Clear the token and cache
+// -----------------------------------------------
+const doLogout = (credentials) => {
+    // Get the data from the decoded JWT token, which is preserved in
+    // the Request's Credentials object
+    const {userId, access} = credentials;
+    Token.deleteJwt (userId, access);
+}
+
+exports.register.attributes = {
+    name: 'routes-login'
+};
+
     
     // -----------------------------------------------
     // Basic Auth Login
@@ -204,9 +256,6 @@ exports.register = function (server, options, next) {
     // 
     // -----------------------------------------------
 
-    return next();
-};
-
 // -----------------------------------------------
 // -----------------------------------------------
 const loginOauth = () => {
@@ -220,33 +269,9 @@ const loginOauth = () => {
 const signupOauth = () => {
 }
 
-// -----------------------------------------------
-// All the /api/login/* routes will first lookup the credentials. If successful
-// they will populate a user profile object and optionally an access token. If failure
-// they will populate an error message. This part is done in a way that is specific
-// for each login type
-// After that they all call the this same loginDone function for common processing
-// -----------------------------------------------
-const loginSuccess = (userProfile, token) => {
-    
-    if (!token) {
-        // For locally authenticated users generate an access token. Users 
-        // authenticated by Oauth will get an access token from the 3rd party
-        token = Token.create (userProfile);
-    }
-
-    const jwt = Token.createJwt (userProfile, token);
-    
-    // return token and user Profile to caller
-    return jwt;
-}
-
 function GetUser () {
 }
 
 function GetRole () {
 }
 
-exports.register.attributes = {
-    name: 'routes-login'
-};
