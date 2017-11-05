@@ -54,3 +54,39 @@ function srvRender(request, reply) {
 }
 
 export default srvRender
+
+//var routes = getRoutes (store)
+//    match({ routes, location: request.url.path }, (error, redirectLocation, renderProps) => {
+//        if (error) {
+//            reply(error.message).code(500);
+//        } else if (redirectLocation) {
+//            reply().code(302).redirect(redirectLocation.pathname + redirectLocation.search)
+//        } else if (renderProps) {
+//            // Render the component to a string
+//            html = renderToString(
+//                    <Provider store={store}>
+//                      <RouterContext {//...renderProps} />
+//                  </Provider>//
+//                    )
+//
+//            // Grab the initial state from our Redux store
+//            const finalState = store.getState()
+//
+//            // Send the rendered page back to the client
+//            // Use the html template in file 'index.ejs'
+//            // The React rendered output replaces the %html% tag
+//            // in the template
+//            reply.view('index',
+//                    {
+//                        html: html,
+//                        state: JSON.stringify(finalState).replace(/</g, '\\x3c'),
+//                    }
+//            )
+//        } else {
+//            // You can also check renderProps.components or renderProps.routes for
+//            // your "not found" component or route respectively, and send a 404 as
+//            // below, if you're using a catch-all route.
+//
+//            reply('Not found').code(404)
+//        }
+//    })

@@ -1,20 +1,31 @@
 'use strict';
 
 // Redis library to connect to cache
-var redis = require('redis');
+var Redis = require('redis');
 
 // Redis client connection
 var client = null;
 
-// -----------------------------------------------
-// Connect to Redis cache
-// -----------------------------------------------
-module.exports.connect = (host, port) => {
-    client = redis.createClient(port, host);
+// TODO: Change all the async callbacks to use promises. See promises on
+// https://www.npmjs.com/package/redis
 
-    client.on('connect', function() {
+exports.register = function (server, options, next) {
+    client = Redis.createClient(options.port, options.host);
+
+    client.on('connect', () => {
         console.log('Connected to Redis');
     });
+    client.on('error', (err) => {
+        console.log('Error ' + err);
+    });
+
+    // Next must be called at the end of register
+    return next();
+};
+
+// Plugin registration attributes
+exports.register.attributes = {
+    name: 'redis-cache'
 };
 
 // -----------------------------------------------
@@ -59,7 +70,7 @@ module.exports.setHash = (key, hashVal) => {
             throw err;
         }
         else {
-            console.log('Redis saved ' + reply);
+            console.log('Redis saved ', key, hashVal);
         }
     });
 }
@@ -67,17 +78,16 @@ module.exports.setHash = (key, hashVal) => {
 // -----------------------------------------------
 // Get Hash value
 // -----------------------------------------------
-module.exports.getHash = (key) => {
-    client.hgetall(key, function(err, object) {
-        
+module.exports.getHash = (key, cb) => {
+    client.hgetall(key, function(err, object) {        
         if (err) {
             console.error('error getting key:', err);
-            return null;
+            cb (err, null);
         }
         else {
-            console.log('Redis found key %s, hash value = %s', key, object);
-            return object;
-        }        
+            console.log('Redis found key', key, object);
+            cb (null, object);
+        }
     });
 }
 
@@ -189,8 +199,8 @@ module.exports.delete = (key) => {
 // Try some operations
 // -----------------------------------------------
 module.exports.try = () => {
-    const host = 'redis-19647.c10.us-east-1-4.ec2.cloud.redislabs.com';
-    const port = '19647';
+    const host = 'redis-18518.c12.us-east-1-4.ec2.cloud.redislabs.com';
+    const port = '18518';
     module.exports.connect (host, port);
     
     const keyStr = 'kStr';
@@ -206,7 +216,7 @@ module.exports.try = () => {
     };
     module.exports.setHash (keyHash, hashVal);
     val = module.exports.getHash (keyHash);
-    // console.log ('value is %s, %s, %s', val.javascript, val.css, val.node);
+    console.log ('value is ', val);
         
     const keyList = 'kList';    
     const listVal = ['james', 'bond'];

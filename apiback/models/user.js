@@ -9,7 +9,8 @@ const UserSchema = new Schema({
     password: { type: String, required: true },
     name: String,
     scope: { type: String, enum: ['Admin', 'Customer', 'Guest'], default: 'Customer' },
-    isVerified: { type: Boolean, default: false }
+    isVerified: { type: Boolean, default: false },
+    oAuthUserId: { type: String, required: false, unique: true }
 });
 
 module.exports = Mongoose.model('User', UserSchema, 'User');

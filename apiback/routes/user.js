@@ -2,19 +2,20 @@
 
 const Boom = require('boom');   // for HTTP error codes
 const Joi = require('joi');     // for parameter validation
-const Crypto = require('../utils/crypto'); // for password encryption
+const Crypto = require('../security/crypto'); // for password encryption
+// Import `user` mongoose db model from `models/user.js` file
+const UserModel = require('../models/user');
 
 // HAPI plugin that exposes all the REST APIs for the 'user' resource
 // One route is defined for each API URL (+ HTTP verb)
 // GET list, GET read, POST create, PUT update, DELETE
 
 // Plugin registration method
-exports.register = function (server, options, next) {
+exports.register = (server, options, next) => {
 
-    // Import `user` mongoose db model from `models/user.js` file
-    const UserModel = require('../models/user');
-
-    // REST: Get all users
+    // -----------------------------------------------
+    // Get all users
+    // -----------------------------------------------
     server.route({
         method: 'GET',
         path: '/api/user',
@@ -23,9 +24,6 @@ exports.register = function (server, options, next) {
             tags: ['api'],
             description: 'Get All User data',
             notes: 'Get All User data',
-
-            // Use HTTP Basic Auth for this route
-            auth: 'basic',
             handler: function (request, reply) {
                 // reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
                 //Fetch all data from mongodb User Collection
@@ -47,7 +45,9 @@ exports.register = function (server, options, next) {
         }
     });
 
+    // -----------------------------------------------
     // REST: Get a user by ID
+    // -----------------------------------------------
     server.route({
         method: 'GET',
         //Getting data for particular user "/api/user/1212313123"
@@ -97,7 +97,9 @@ exports.register = function (server, options, next) {
         }
     });
 
-    // REST: Create a user
+    // -----------------------------------------------
+    // Create a user
+    // -----------------------------------------------
     server.route({
         method: 'POST',
         path: '/api/user',
@@ -114,32 +116,30 @@ exports.register = function (server, options, next) {
                     // Client passes plaintext password over SSL
                     password: Joi.string().min(6).max(12).required(),
                     name: Joi.string().min(3).max(20).optional(),
-                    scope: Joi.string().optional()
+                    scope: Joi.string().optional(),
+                    oAuthUserId: Joi.string().optional(),
                 }
             }
         },
         handler: function (request, reply) {
-            // encrypt password before saving.
-            request.payload.password = Crypto.hash(request.payload.password);
-
-            // Create mongodb user object to save it into database
-            const user = new UserModel(request.payload);
-
-            // Save data into database
-            user.save((error) => {
-                // Callback method to handle results
-                // Return HTTP success or error code
-                if (error) {
-                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
+            exports.create(request.payload, 
+                (error) => {
+                    // Callback method to handle results
+                    // Return HTTP success or error code
+                    if (error) {
+                        reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                    }
+                    else {
+                        reply({ statusCode: 201, message: 'User Saved Successfully' });
+                    }
                 }
-                else {
-                    reply({ statusCode: 201, message: 'User Saved Successfully' });
-                }
-            });
+            );
         }
     });
 
-    // REST: Update a user by ID
+    // -----------------------------------------------
+    // Update a user by ID
+    // -----------------------------------------------
     server.route({
         method: 'PUT',
         path: '/api/user/{id}',
@@ -161,18 +161,7 @@ exports.register = function (server, options, next) {
                     scope: Joi.string().optional()
                 }
             },
-            auth: {
-                // Use HTTP Cookie Auth for this route
-                strategy: 'cookie',
-                mode: 'optional' // Needed for request.auth.isAuthenticated to work
-            },
             handler: function (request, reply) {
-
-                if (request.auth.isAuthenticated) {
-                    // session data available
-                    const cookie = request.auth.credentials;
-                    console.log('cookie is ', cookie);
-                }
 
                 // encrypt password before saving.
                 if (request.payload.password) {
@@ -203,7 +192,9 @@ exports.register = function (server, options, next) {
         }
     });
 
-    // REST: Delete a user by ID
+    // -----------------------------------------------
+    // Delete a user by ID
+    // -----------------------------------------------
     server.route({
         method: 'DELETE',
         path: '/api/user/{id}',
@@ -250,3 +241,18 @@ exports.register = function (server, options, next) {
 exports.register.attributes = {
     name: 'routes-users'
 };
+
+// -----------------------------------------------
+// Create a user in the database
+// -----------------------------------------------
+exports.create = (userObj, cb) => {
+    // encrypt password before saving.
+    userObj.password = Crypto.hash(userObj.password);
+
+    // Create mongodb user object to save it into database
+    const user = new UserModel(userObj);
+
+    // Save data into database
+    user.save(cb);
+}
+

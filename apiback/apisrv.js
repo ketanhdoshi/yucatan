@@ -6,6 +6,8 @@
 // -----------------------------------------------
 var apisrv = null;
 
+const Cache = require('./utils/cache');    // Redis caching
+
 // -----------------------------------------------
 // Callback function to define routes for our API
 // Invoked after all plugins are loaded
@@ -14,31 +16,13 @@ const registerRoutes = () => {
 
     apisrv.log('info', 'registering routes');
 
-    // This can be removed, only used for a PoC
-    apisrv.route([
-        {
-            method: 'GET',
-            path: '/auth-cookie-test',
-            config: {
-                handler: function (request, reply) {
-
-                    reply('<html><head><title>Login page</title></head><body>' +
-            '<form method="post" action="/api/login">' +
-            'Username: <input type="text" name="username"><br>' +
-            'Password: <input type="password" name="password"><br/>' +
-            '<input type="submit" value="Login"></form></body></html>');
-                }
-            }
-        }
-    ]);
-
-
     // APIs for each REST resource are defined in a separate plugin
     // Load all the plugins for our API
     apisrv.register([
-        require('./routes/login'),
+        require('./security/login'),
         require('./routes/user'),
-        require('./routes/property')
+        require('./routes/property'),
+        require('./security/tryauth')
     ], (err) => {
 
         if (err) {
@@ -67,12 +51,20 @@ module.exports.init = (server, port, doneCB) => {
         {
             // Initialise authentication by loading our auth plugin
             // Any authentication approach we want to use is defined within that plugin
-            register: require('./utils/auth'),
+            register: require('./security/auth'),
             options: {
                 // Routes can be registered only after all auth schemes are registered
                 // and the strategies created. This has to be done via a callback as
                 // the registration is async
                 registerRoutes
+            }
+        },
+        {
+            // Load the Redis cache plugin
+            register: require('./utils/cache'),
+            options: {
+                host: 'redis-18518.c12.us-east-1-4.ec2.cloud.redislabs.com',
+                port: '18518'
             }
         },
         {
@@ -88,8 +80,4 @@ module.exports.init = (server, port, doneCB) => {
     const Myutils = require('./utils/util');
     Myutils.swagger(apisrv);
     Myutils.good(apisrv);
-    
-    
-    const Cache = require('./utils/cache'); // for Redis cache
-    // Cache.try ();
 }

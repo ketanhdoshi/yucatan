@@ -27,7 +27,7 @@ let show = () => {
 if (module.hot) {
     console.log ('in hot');
   // Whenever a new version of App.js is available
-  module.hot.accept('../common/routes/routes', function () {
+  module.hot.accept('../common/containers/AppContainer', function () {
     // Require the new version and render it instead
     setTimeout(show);
     console.log ('now here ');
