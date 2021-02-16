@@ -1,7 +1,8 @@
 // -----------------------------------------------------------------
 // Presentational component for the dummy Dashboard-2 page
 // -----------------------------------------------------------------
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const Dashboard2 = () => (
     <div>

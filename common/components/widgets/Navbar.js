@@ -15,6 +15,7 @@
 import React, { PropTypes } from 'react'
 import styled from 'styled-components';
 import DropdownNotification from './DropdownNotification'
+import { Link } from 'react-router-dom'
 
 // -----------------------------------------------------------------
 // Navbar component
@@ -157,7 +158,8 @@ const Navbar = ({def}) => {
                         else {
                             return (
                                 <NavItem className={active} key={'mykey' + i} >
-                                    <NavLink href={item.href}>{item.title}</NavLink>
+                                    {/* <NavLink href={item.href}>{item.title}</NavLink> */}
+                                    <Link to={item.href}>{item.title}</Link>
                                 </NavItem>
                             )
                         }

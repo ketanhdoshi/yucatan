@@ -18,8 +18,9 @@
 // widget. The SidebarLeft is populated with the Drawer widget and the 
 // ContentHeader is populated with the Breadcrumb widget. 
 // -----------------------------------------------------------------
-import React, { PropTypes } from 'react'
-import { Route, Link, Switch } from 'react-router'
+import React from 'react'
+import PropTypes from 'prop-types'
+import { Route, Switch } from 'react-router'
 
 import App from './App'
 import Header from './Header'
@@ -44,7 +45,7 @@ import UiFormView from './UiFormView'
 import PaymentView from './PaymentView'
 
 import GoogleMaps from '../components/widgets/GoogleMaps'
-import CalendarView from '../components/widgets/CalendarView'
+// import CalendarView from '../components/widgets/CalendarView'
 
 import ModalView from '../components/old/ModalView'
 import BsView from '../components/bs/BsView';
@@ -75,7 +76,7 @@ const Content = () => (
         <Route path="/ui/general" component={UiGeneralView}/>
         <Route path="/ui/form" component={UiFormView}/>
         <Route path="/googlemaps" component={GoogleMaps}/>                    
-        <Route path="/calendar" component={CalendarView}/>
+        {/* <Route path="/calendar" component={CalendarView}/> */}
         <Route path="/bsview" component={BsView}/>
         <Route path="/matches" component={MatchesContainer} onEnter={getMatches()}/>
         <Route path="/properties" component={PropertiesContainer}/>
@@ -84,6 +85,21 @@ const Content = () => (
         <Route path="/modals" component={ModalView}/>
     </Switch>
 )
+
+/* 
+KD - Feb 2021 - just for quick testing. Remove it.
+import { Link } from 'react-router-dom'
+const MainView = () => (
+    <App>
+        <div>
+            <Link to="/dashboard2">Dashboard2</Link>
+            <Link to="/dashboard1">Dashboard1</Link>
+            <Link to="/matches">Matches</Link>
+        </div>
+        <Content />
+    </App>
+)
+ */
 
 class MainView extends React.Component {
     constructor(props) {

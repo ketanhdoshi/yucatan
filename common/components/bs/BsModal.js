@@ -1,18 +1,18 @@
 import React from 'react';
 import { Button, Modal } from 'react-bootstrap';
 
-const BsModal = React.createClass({
+class BsModal extends React.Component{
     getInitialState() {
         return {showModal: false};
-    },
+    }
 
     close() {
         this.setState({showModal: false});
-    },
+    }
 
     open() {
         this.setState({showModal: true});
-    },
+    }
 
     render() {
         return (
@@ -39,6 +39,6 @@ const BsModal = React.createClass({
             </div>
         );    
     }
-});
+};
 
 export default BsModal;

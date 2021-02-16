@@ -3,7 +3,8 @@
 // Written as an example during the initial Redux experimentation.
 // Should be cleaned up and re-written 
 // -----------------------------------------------------------------
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 const ShortlistView = ({ first, onDummyClick }) => (
   <div>

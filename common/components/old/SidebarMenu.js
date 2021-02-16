@@ -2,7 +2,7 @@
 // Presentational component for a menu in the Sidebar
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 import s from '../../scss/SidebarNav.scss'
 

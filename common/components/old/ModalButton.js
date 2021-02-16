@@ -6,20 +6,20 @@
 import React, { PropTypes } from 'react'
 import Modal from './Modal'
 
-var ModalButton = React.createClass({
-    getInitialState: function() {
+class ModalButton extends React.Component{
+    getInitialState() {
         return { isModalOpen: false };
-    },
+    }
 
-    openModal: function() {
+    openModal() {
         this.setState({ isModalOpen: true });
-    },
+    }
 
-    closeModal: function() {
+    closeModal() {
         this.setState({ isModalOpen: false });
-    },
+    }
 
-    render: function() {
+    render() {
         return (
           <div>
             <h1>Modal demo</h1>
@@ -33,6 +33,6 @@ var ModalButton = React.createClass({
           </div>
         );
     }
-});
+};
 
 export default ModalButton

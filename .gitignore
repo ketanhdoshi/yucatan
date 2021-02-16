@@ -3,3 +3,11 @@
 /OLD cookieserver.js
 /BAKcookieserver_1.js.old
 /OLD cookieserver.js.old
+.gitattributes
+orig server.js
+WATCH package.json
+WATCH server.js
+testmongo.js
+LICENSE
+/.devcontainer/Dockerfile
+node_modules

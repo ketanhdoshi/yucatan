@@ -46,45 +46,37 @@ module.exports.createJwt = (userProfile, token) => {
 // verifies that it has not been tampered. It also verifies that the Jwt has
 // not expired. Then it calls our validation function for any custom validation.
 // Our function receives the decoded data that we had wrapped into the Jwt.
-// Our function is called asynchronously and also receives a callback function. 
-// When we finish validation we have to call this callback function. All of our 
-// downstream validation actions are also asynchronous so we pass in another 
-// callback to those downstream actions resulting in a series of callback 
-// functions.
 // -----------------------------------------------
-module.exports.validateJwt = (decoded, request, callback) => {
-    // Get the data fields that we had wrapped when we created the Jwt 
+module.exports.validateJwt = async (decoded, request, h) => {
+    // Get the data fields that we had wrapped when we created the Jwt
+    // !!!!!! does it have to be 'id' not 'userId'
     const {userId, access} = decoded;
     
-    // Use that data to validate the session. This also happens asynchronously
-    // so we pass it a callback function
-    Session.validate (userId, access,    
-        // Our callback is called when the session validation is completed. We
-        // in turn call the original callback 
-        (userProfile) => {
-            if (userProfile) {
-                // Received a user profile which means the session is validated
-                // So we call the original callback with a True
-                
-                // After the validation is completed, the normal processing of the
-                // request happens by calling the handler for the route. The 
-                // decoded token can be accessed there via request.auth.credentials
-                // However if you want to pass on additional information to be
-                // available in the request handler you can set it as the third
-                // parameter to the callback below. That object will then be
-                // available in the request.auth.credentials
-                const {scope} = userProfile;
-                decoded.scope = userProfile.scope;
-                decoded.userName = userProfile.userName;
-                return callback(null, true, decoded);
-            }
-            else {
-                // The session was not validated so we call the original
-                // callback with a False
-                return callback(null, false);
-            }            
-        }
-    );    
+    // Use that data to validate the session.
+    const userProfile = await Session.validate (userId, access);
+    if (userProfile) {
+        // Received a user profile which means the session is validated
+        // So we call the original callback with a True
+        
+        // After the validation is completed, the normal processing of the
+        // request happens by calling the handler for the route. The 
+        // decoded token can be accessed there via request.auth.credentials
+        // However if you want to pass on additional information to be
+        // available in the request handler you can set it as the 'credentials'
+        // parameter below. That object will then be available in the 
+        // request.auth.credentials
+        // !!!!!! Is this the right way to return the 'credentials decoded'
+        const {scope} = userProfile;
+        decoded.scope = userProfile.scope;
+        decoded.userName = userProfile.userName;
+        return { isValid: true, credentials: decoded };
+    }
+    else {
+        // The session was not validated 
+        return { isValid: false };
+    }            
+
+    
 };
 
 // -----------------------------------------------

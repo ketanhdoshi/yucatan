@@ -4,80 +4,80 @@
 // This is our API Backend server. It loads the backend plugins
 // and defines the API routes
 // -----------------------------------------------
-var apisrv = null;
+// Include Hapi package
+const Hapi = require('@hapi/hapi');
 
 const Cache = require('./utils/cache');    // Redis caching
 
 // -----------------------------------------------
-// Callback function to define routes for our API
+// Define routes for our API
 // Invoked after all plugins are loaded
 // -----------------------------------------------
-const registerRoutes = () => {
+const registerRoutes = async (apisrv) => {
 
     apisrv.log('info', 'registering routes');
 
     // APIs for each REST resource are defined in a separate plugin
     // Load all the plugins for our API
-    apisrv.register([
+    await apisrv.register([
         require('./security/login'),
         require('./routes/user'),
         require('./routes/property'),
         require('./security/tryauth')
-    ], (err) => {
+    ]);
 
-        if (err) {
-            throw err;
-        }
-        apisrv.log('info', 'Routes registered');
-    }
-    );
+    apisrv.log('info', 'Routes registered');
 };
 
-module.exports.init = (server, port, doneCB) => {
+module.exports.init = async (host, port) => {
 
-    apisrv = server.connection({
-        host: 'localhost',
+    // Create a server with a host and port
+    const apisrv = new Hapi.Server({
+        host: host,
         port: port,
-        labels: 'apisrv',
-        routes: { 
+        routes: {
             cors: true // allow CORS response headers to be sent so a webapp can call us
         }
     });
 
+    // Export the server for automated testing
+    module.exports = apisrv;
+
     // -----------------------------------------------
-    // Load all required plugins and start the server
+    // Load all required plugins
     // -----------------------------------------------
-    apisrv.register([
+    await apisrv.register([
         {
             // Initialise authentication by loading our auth plugin
             // Any authentication approach we want to use is defined within that plugin
-            register: require('./security/auth'),
-            options: {
-                // Routes can be registered only after all auth schemes are registered
-                // and the strategies created. This has to be done via a callback as
-                // the registration is async
-                registerRoutes
-            }
+            plugin: require('./security/auth')
         },
         {
             // Load the Redis cache plugin
-            register: require('./utils/cache'),
+            plugin: require('./utils/cache'),
             options: {
-                host: 'redis-18518.c12.us-east-1-4.ec2.cloud.redislabs.com',
-                port: '18518'
+                host: 'redis-18800.c74.us-east-1-4.ec2.cloud.redislabs.com',
+                port: '18800',
+                password: 'meraredis'
             }
         },
         {
             // Load the mongo db plugin
-            register: require('./utils/mongo')
+            plugin: require('./utils/mongo')
         }
-    ], doneCB
-    );
+    ]);
 
     // -----------------------------------------------
     // Initialise swagger and good-console
     // -----------------------------------------------
-    const Myutils = require('./utils/util');
-    Myutils.swagger(apisrv);
-    Myutils.good(apisrv);
+    // const Myutils = require('./utils/util');
+    // await Myutils.swagger(apisrv);
+    // await Myutils.good(apisrv);
+
+    // -----------------------------------------------
+    // Register Routes - Routes can be registered only after all 
+    // auth schemes are registered and the strategies created.
+    await registerRoutes(apisrv);
+
+    return apisrv;
 }

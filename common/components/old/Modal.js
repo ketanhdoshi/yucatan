@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react'
 
-const Modal = React.createClass({
-    
-    render: function() {
+class Modal extends React.Component{
+    render() {
         if(this.props.isOpen){
             var showstyle = {
                 display: 'inline',
@@ -34,6 +33,6 @@ const Modal = React.createClass({
             return null;
         }
     }
-});
+};
 
 export default Modal

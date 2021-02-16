@@ -2,7 +2,7 @@
 // Presentational component for the Sidebar sub-menus
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 const SidebarSubMenuItem = (props) => {
     let linkto = props.linkto ? props.linkto : "#"

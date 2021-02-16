@@ -9,25 +9,25 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 
-var NewModalButton = React.createClass({
-    getInitialState: function() {
+class NewModalButton extends React.Component{
+    getInitialState() {
         return { isModalOpen: false };
-    },
+    }
 
-    handleClick: function() {
+    handleClick() {
         this.openModal ()
         // do the action - this.props.fetchCB ()
-    },
+    }
 
-    openModal: function() {
+    openModal() {
         this.setState({ isModalOpen: true });
-    },
+    }
 
-    closeModal: function() {
+    closeModal() {
         this.setState({ isModalOpen: false });
-    },
+    }
 
-    render: function() {
+    render() {
         console.log ("modal open is", this.state.isModalOpen)
         
         return (
@@ -40,45 +40,44 @@ var NewModalButton = React.createClass({
           </div>
         );
     }
-});
+};
 
-const NewMyModal = React.createClass({
-  
-    componentDidMount: function () {    
+class NewMyModal extends React.Component{
+    componentDidMount() {    
         var modalNode = $(ReactDOM.findDOMNode(this))
         console.log ("new modal mounted...", modalNode)
         if (modalNode) {
             modalNode.modal()
             modalNode.on('hidden.bs.modal', this.props.closeCB)
         }
-    },
+    }
     
-    componentWillUnmount: function () {    
+    componentWillUnmount() {    
         console.log ("new modal unmounted")
-    },
+    }
 
-    render: function() {
-            return (
-                <div id="newMyModal" className="modal fade" role="dialog">
-                  <div className="modal-dialog">
+    render() {
+        return (
+            <div id="newMyModal" className="modal fade" role="dialog">
+              <div className="modal-dialog">
 
-                     <div className="modal-content">
-                      <div className="modal-header">
-                        <button type="button" className="close" data-dismiss="modal">&times;</button>
-                        <h4 className="modal-title">Modal Header</h4>
-                      </div>
-                      <div className="modal-body">
-                        <p>Some new modal.</p>
-                      </div>
-                      <div className="modal-footer">
-                        <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
-                      </div>
-                    </div>
-
+                  <div className="modal-content">
+                  <div className="modal-header">
+                    <button type="button" className="close" data-dismiss="modal">&times;</button>
+                    <h4 className="modal-title">Modal Header</h4>
+                  </div>
+                  <div className="modal-body">
+                    <p>Some new modal.</p>
+                  </div>
+                  <div className="modal-footer">
+                    <button type="button" className="btn btn-default" data-dismiss="modal">Close</button>
                   </div>
                 </div>
-            )
+
+              </div>
+            </div>
+        )
     }
-});
+};
 
 export default NewModalButton

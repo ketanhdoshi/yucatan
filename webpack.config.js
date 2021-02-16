@@ -1,13 +1,14 @@
 const path = require('path');
 const webpack = require('webpack');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
+const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const nodeExternals = require('webpack-node-externals');
 
 const config = {
     name: 'client',
+    mode: 'development',
     devtool: 'inline-source-map',
     entry: [
-        'webpack-hot-middleware/client',
+        // !!!!!!! 'webpack-hot-middleware/client',
         'client/client.js'
     ],
     output: {
@@ -22,48 +23,47 @@ const config = {
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
-                presets: [ 'react-hmre' ]
+                 // presets: [ 'react-hmre' ]
+                 presets: ["@babel/preset-env"]
             }
         },
         {
             test: /\.css$/,
-            use: ExtractTextPlugin.extract({
-                fallback: "style-loader",
-                use: "css-loader",
-            })
+            use: [MiniCssExtractPlugin.loader, 'css-loader']
         },
         {
             test: /datepicker\.scss$/,
-            use: ExtractTextPlugin.extract({
-                fallback: "style-loader",
-                use: [{
-                    loader: 'css-loader',
-                    options: { 
-                        importLoaders: 1 
-                    },
-                }]
-            })
+           use: [
+              MiniCssExtractPlugin.loader, 
+              {
+                loader: 'css-loader',
+                options: { 
+                    importLoaders: 1 
+                },
+              }
+            ]
         },
         {
             test: /\.scss$/,
             exclude: /datepicker\.scss$/,
-            use: ExtractTextPlugin.extract({
-                fallback: "style-loader",
-                use: [{
-                    loader: 'css-loader',
-                    options: {
-                        modules: true,
-                        importLoaders: 1,
-                        localIdentName: '[name]__[local]___[hash:base64:5]'
-                    },
-                }]
-            })
+            use: [
+              MiniCssExtractPlugin.loader, 
+              {
+                loader: 'css-loader',
+                options: {
+                    importLoaders: 1,
+                    modules: {
+                      localIdentName: '[name]__[local]___[hash:base64:5]'
+                  }
+                }
+              }
+            ]
         }
         ]
     },
   plugins: [
-        new webpack.HotModuleReplacementPlugin(),
-        new ExtractTextPlugin({
+        // !!!!!!! new webpack.HotModuleReplacementPlugin(),
+        new MiniCssExtractPlugin({
             filename: 'styles.css'
         })
   ],
@@ -74,6 +74,7 @@ const config = {
 
 const serverConfig = {
   name: 'server',
+  mode: 'development',
   target: 'node',
   externals: [nodeExternals()],
   entry: [
@@ -93,8 +94,8 @@ const serverConfig = {
         loader: 'babel-loader',
         options: {
             presets: [
-                ["es2015", {"modules": false}],
-                "react"
+                ["@babel/preset-env", {"modules": false}],
+                "@babel/preset-react"
             ]
         }
       },
@@ -105,12 +106,28 @@ const serverConfig = {
       },
       {
         test: /scss\\.*\.css$/,
-        loader: 'css-loader/locals?importLoaders=1'
+        use: [
+          {
+            loader: 'css-loader',
+            options: {
+                importLoaders: 1
+            }
+          }
+        ]
       },
-
-     {
+      {
         test: /\.scss$/,
-        loader: 'css-loader/locals?modules&importLoaders=1&localIdentName=[name]__[local]___[hash:base64:5]'
+        use: [
+          {
+            loader: 'css-loader',
+            options: {
+                importLoaders: 1,
+                modules: {
+                  localIdentName: '[name]__[local]___[hash:base64:5]'
+              }
+            }
+          }
+        ]
       }
     ]
   },

@@ -1,5 +1,9 @@
 'use strict';
 
+// -----------------------------------------------
+// Defines an 'auth' plugin
+
+
 const Token = require('./token'); // for JWT tokens
 const BasicCred = require('./basicCred'); // for basic user/pwd auth
 
@@ -12,50 +16,57 @@ const BasicCred = require('./basicCred'); // for basic user/pwd auth
 // schemes are kept here as examples only, along with the logic to make use
 // of them in tryauth.js and basicCred.js
 // -----------------------------------------------
-exports.register = function (server, options, next) {
+module.exports = {
+    name: "auth",
+    version: "1.0.0",
+    register: async (server, options) => {
+    
+        server.log('info', 'registering auth plugin');
+        await server.register([
+            {
+                // Load Basic Auth plugin
+                plugin: require('@hapi/basic')
+            },
+            {
+                // Load Cookie Auth plugin
+                plugin: require('@hapi/cookie')
+            },
+            {
+                // Load JWT Auth plugin
+                plugin: require('hapi-auth-jwt2')
+            },
+            {
+                // Load Bell OAuth plugin
+                plugin: require('@hapi/bell')
+            }
+        ]);
 
-    server.log('info', 'registering auth plugin');
-    server.register([
-        {
-            // Load Basic Auth plugin
-            register: require('hapi-auth-basic')
-        },
-        {
-            // Load Cookie Auth plugin
-            register: require('hapi-auth-cookie')
-        },
-        {
-            // Load JWT Auth plugin
-            register: require('hapi-auth-jwt2')
-        },
-        {
-            // Load Bell OAuth plugin
-            register: require('bell')
-        }
-    ], (err) => {
         // Create strategy for Basic Auth
         server.auth.strategy('basic', 'basic',
             {
                 // Basic Auth requires us to provide a user-defined
                 //  validation function
-                validateFunc: BasicCred.validate
+                validate: BasicCred.validate
             }
         );
 
         // Create strategy for Cookie Auth
         server.auth.strategy('cookie', 'cookie',
             {
-                password: 'password-should-be-32-characters-or-more',
-                cookie: 'kdh',  // name of the cookie to set
-                isSecure: false // needed to send cookie even if no https
+                cookie: {
+                    // Password used to encrypt the cookie
+                    password: 'password-should-be-32-characters-or-more',
+                    name: 'kdh',  // name of the cookie to set
+                    isSecure: false // needed to send cookie even if no https
+                }
             }
         );
 
         // Create strategy for JWT Auth
         server.auth.strategy('jwt', 'jwt',
             {
-                key: 'NeverShareYourSecret',
-                validateFunc: Token.validateJwt,
+                key: 'NeverShareYourSecret',    // Secret key
+                validate: Token.validateJwt,
                 verifyOptions: {
                     algorithms: ['HS256']
                 }
@@ -71,16 +82,6 @@ exports.register = function (server, options, next) {
                 isSecure: false
         };
         server.auth.strategy('github', 'bell', bellAuthOptions);
+    }
+}
 
-        const registerRoutes = options.registerRoutes;
-        registerRoutes();
-    });
-
-    // Next must be called at the end of register
-    return next();
-};
-
-// Plugin registration attributes
-exports.register.attributes = {
-    name: 'auth'
-};

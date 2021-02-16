@@ -3,8 +3,8 @@
 // Load the HAPI-Swagger plugin to generate documentation for our API
 module.exports.swagger = (server) => {
     // Include Hapi package with all its dependencies
-    const Inert = require('inert');
-    const Vision = require('vision');
+    const Inert = require('@hapi/inert');
+    const Vision = require('@hapi/vision');
     const HapiSwagger = require('hapi-swagger');
 
     // Define options for the plugin ( for documentation and testing )
@@ -15,14 +15,19 @@ module.exports.swagger = (server) => {
         }
     };
 
-    // Load the Hapi plugin and its dependent plugins into our server
     server.register([
+        Inert
+    ],
+    (er) => { });
+    // Load the Hapi plugin and its dependent plugins into our server
+/*     server.register([
         Inert,
         Vision,
         {
             'register': HapiSwagger,
             options
-        }], (err) => {
+        }
+        ], (err) => {
 
         if (err) {
             server.log(['error'], 'hapi-swagger load error: ' + err);
@@ -31,12 +36,12 @@ module.exports.swagger = (server) => {
             server.log(['start'], 'hapi-swagger interface loaded');
         }
     });
-};
+ */};
 
 // Load the Good plugin to help with Server Logging
 module.exports.good = (server) => {
 
-    const Good = require('good');
+    const Good = require('@hapi/good');
 
     // Define options for the Good plugin and load it into our server
     server.register({
@@ -50,7 +55,8 @@ module.exports.good = (server) => {
                         // response: '*',
                         log: '*'
                     }]
-                }, {
+                }, 
+                {
                     module: 'good-console'
                 }, 'stdout']
             }

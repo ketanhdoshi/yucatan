@@ -6,20 +6,20 @@
 import React, { PropTypes } from 'react'
 import ReactDOM from 'react-dom'
 
-var TryModalButton = React.createClass({
-    getInitialState: function() {
+class TryModalButton extends React.Component{
+    getInitialState() {
         return { isModalOpen: false };
-    },
+    }
 
-    openModal: function() {
+    openModal() {
         this.setState({ isModalOpen: true });
-    },
+    }
 
-    closeModal: function() {
+    closeModal() {
         this.setState({ isModalOpen: false });
-    },
+    }
 
-    render: function() {
+    render() {
         return (
           <div>
             <button type="button" className="btn btn-primary" onClick={this.openModal}>
@@ -30,27 +30,26 @@ var TryModalButton = React.createClass({
           </div>
         );
     }
-});
+};
 
-const TryMyModal = React.createClass({
-
-    componentWillUpdate: function (nextProps, nextState) {    
+class TryMyModal extends React.Component{
+    componentWillUpdate(nextProps, nextState) {    
         var modalNode = $(ReactDOM.findDOMNode(this))
         if (!nextProps.isOpen && modalNode) {
             console.log ("going to update...", modalNode)
             modalNode.modal('hide')
         }
-    },
-    componentDidUpdate: function () {    
+    }
+    componentDidUpdate() {    
         var modalNode = $(ReactDOM.findDOMNode(this))
         console.log ("updated...", modalNode)
         if (modalNode) {
             modalNode.modal()
         }
-    },
+    }
   
 
-    render: function() {
+    render() {
         if(this.props.isOpen){
             return (
                 <div id="tryMyModal" className="modal fade" role="dialog">
@@ -76,6 +75,6 @@ const TryMyModal = React.createClass({
             return null;
         }
     }
-});
+};
 
 export default TryModalButton

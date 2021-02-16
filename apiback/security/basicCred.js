@@ -16,17 +16,17 @@ const users = {
 // User-defined validation function that is required by the Basic Auth plugin
 // Given an incoming username and password, compare it with the hashed password
 // saved in the user db and check if they match
-module.exports.validate = (request, username, password, callback) => {
+module.exports.validate = async (request, username, password) => {
 
     const user = users[username];
     if (!user) {
-        return callback(null, false);
+        return { credentials: null, isValid: false };
     }
 
-    Bcrypt.compare(password, user.password, (err, isValid) => {
+    const isValid = await Bcrypt.compare(password, user.password);
+    const credentials = { id: user.id, name: user.name };
 
-        callback(err, isValid, { id: user.id, name: user.name });
-    });
+    return { isValid, credentials };
 };
 
 // Generate a hash password, given a plain text password

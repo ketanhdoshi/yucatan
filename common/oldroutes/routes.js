@@ -21,7 +21,7 @@ import UiFormView from '../screens/UiFormView'
 import PaymentView from '../screens/PaymentView'
 
 import GoogleMaps from '../components/widgets/GoogleMaps'
-import CalendarView from '../components/widgets/CalendarView'
+// import CalendarView from '../components/widgets/CalendarView'
 
 import ModalView from '../components/old/ModalView'
 import BsView from '../components/bs/BsView';
@@ -52,7 +52,7 @@ export const getRoutes = (store) => {
                     <Route path="/ui/general" component={UiGeneralView}/>
                     <Route path="/ui/form" component={UiFormView}/>
                     <Route path="/googlemaps" component={GoogleMaps}/>                    
-                    <Route path="/calendar" component={CalendarView}/>
+                    {/* <Route path="/calendar" component={CalendarView}/> */}
                     <Route path="/bsview" component={BsView}/>
                     <Route path="/matches" component={MatchesContainer} onEnter={getMatches(store)}/>
                     <Route path="/properties" component={PropertiesContainer}/>

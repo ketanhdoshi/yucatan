@@ -57,3 +57,8 @@ export const getPostSuccess = (post) => ({
   type: 'GET_POST_SUCCESS',
   post: post
 })
+
+// !!!!!!
+export const SET_COUNTER = 1
+export const INCREMENT_COUNTER = 2
+export const DECREMENT_COUNTER = 3

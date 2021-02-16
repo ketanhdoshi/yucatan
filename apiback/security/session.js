@@ -45,7 +45,7 @@ module.exports.create = (userProfile, token) => {
 // asynchronously with input callback functions so when the cache callbacks 
 // return, we call those input callbacks in turn
 // -----------------------------------------------
-module.exports.validate = (userId, access, cb) => {
+module.exports.validate = async (userId, access, cb) => {
     Cache.getHash (access,
         // The cache calls this first callback
         (err, session) => {

@@ -1,6 +1,6 @@
 'use strict';
 
-const Boom = require('boom');   // for HTTP error codes
+const Boom = require('@hapi/boom');   // for HTTP error codes
 const Joi = require('joi');     // for parameter validation
 
 // HAPI plugin that exposes all the REST APIs for the 'property' resource
@@ -8,268 +8,237 @@ const Joi = require('joi');     // for parameter validation
 // GET list, GET read, POST create, PUT update, DELETE
 
 // Plugin registration method
-exports.register = function (server, options, next) {
+module.exports = {
+    name: "routes-properties",
+    version: "1.0.0",
+    register: async (server, options) => {
 
-    // Importing `property` mongoose db model
-    const PropertyModel = require('../models/property');
+        // Importing `property` mongoose db model
+        const PropertyModel = require('../models/property');
 
-    // REST: Get all properties
-    server.route({
-        method: 'GET',
-        path: '/api/property',
-        config: {
-            // Swagger documentation fields tags, description, note
-            tags: ['api'],
-            description: 'Get All Property data',
-            notes: 'Get All Property data',
-            validate: {
-                headers:
-                    Joi.object({
-                        'authorization': Joi.string().required()
-                    }).unknown()
+        // REST: Get all properties
+        server.route({
+            method: 'GET',
+            path: '/api/property',
+            options: {
+                // Swagger documentation fields tags, description, note
+                tags: ['api'],
+                description: 'Get All Property data',
+                notes: 'Get All Property data',
+                validate: {
+                    headers:
+                        Joi.object({
+                            'authorization': Joi.string().required()
+                        }).unknown()
+                },
+                auth: 'jwt'
             },
-            auth: 'jwt'
-        },
-        handler: function (request, reply) {
+            handler: async (request, h) => {
+                try {
+                    server.log('info', 'GET /api/property called');
 
-            server.log('info', 'GET /api/property called');
+                    //Fetch all data from mongodb Property Collection
+                    const res = await PropertyModel.find({});
 
-            //Fetch all data from mongodb Property Collection
-            PropertyModel.find({}, (error, data) => {
-
-                server.log('info', 'DB results received');
-                // Callback method to handle results
-                // Return HTTP success or error code
-                if (error) {
-                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
-                }
-                else {
-                    reply({
+                    server.log('info', 'DB results received');
+                    return {
                         statusCode: 200,
                         message: 'Property Data Successfully Fetched',
-                        data
-                    });
+                        res
+                    };
+                } catch (error) {
+                    return Boom.serverUnavailable('Internal MongoDB error', error);
                 }
-            });
-        }
-    });
+            }
+        });
 
-    // REST: Get a property by ID
-    server.route({
-        method: 'GET',
-        //Getting data for particular property "/api/property/1212313123"
-        path: '/api/property/{id}',
-        config: {
-            // Swagger documentation fields tags, description, note
-            tags: ['api'],
-            description: 'Get specific property data',
-            notes: 'Get specific property data',
-            validate: {
-                // Use Joi plugin to validate request
-                params: {
-                    //`id` is required string field
-                    id: Joi.string().required()
+        // REST: Get a property by ID
+        server.route({
+            method: 'GET',
+            //Getting data for particular property "/api/property/1212313123"
+            path: '/api/property/{id}',
+            options: {
+                // Swagger documentation fields tags, description, note
+                tags: ['api'],
+                description: 'Get specific property data',
+                notes: 'Get specific property data',
+                validate: {
+                    // Use Joi plugin to validate request
+                    params: Joi.object({
+                        //`id` is required string field
+                        id: Joi.string().required()
+                    }),
+                    headers:
+                        Joi.object({
+                            'authorization': Joi.string().required()
+                        }).unknown()
                 },
-                headers:
-                    Joi.object({
-                        'authorization': Joi.string().required()
-                    }).unknown()
+                auth: 'jwt'
             },
-            auth: 'jwt'
-        },
-        handler: function (request, reply) {
-            //Find property in db for particular propertyID
-            PropertyModel.find({
-                _id: request.params.id
-            }, (error, data) => {
-                // Callback method to handle results
-                // Return HTTP success or error code
-                if (error) {
-                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
-                }
-                else {
-                    if (data.length === 0) {
+            handler: async (request, h) => {
+                try {
+                    //Find property in db for particular propertyID
+                    const res = await PropertyModel.find({_id: request.params.id});
+                    if (res.length === 0) {
                         // No data returned
-                        reply(Boom.notFound());
+                        return Boom.notFound();
                     }
                     else {
-                        reply({
+                        return {
                             statusCode: 200,
                             message: 'User Data Successfully Fetched',
-                            data
-                        });
+                            res
+                        };
                     }
+                } catch (error) {
+                    return Boom.serverUnavailable('Internal MongoDB error', error);
                 }
-            });
-        }
-    });
+            }
+        });
 
-    // REST Create a property
-    server.route({
-        method: 'POST',
-        path: '/api/property',
-        config: {
-            // Swagger documentation fields tags, description, note
-            tags: ['api'],
-            description: 'Save property data',
-            notes: 'Save property data',
+        // REST Create a property
+        server.route({
+            method: 'POST',
+            path: '/api/property',
+            options: {
+                // Swagger documentation fields tags, description, note
+                tags: ['api'],
+                description: 'Save property data',
+                notes: 'Save property data',
 
-            validate: {
-                // Use Joi plugin to validate request
-                payload: {
-                    address: {
-                        locality: Joi.string().required(),
-                        region: Joi.string().optional(),
-                        country: Joi.string().required(),
-                        postalCode: Joi.string().optional()
-                    },
-                    houseType: Joi.string().required().valid('Apartment', 'Bungalow', 'Castle', 'Loft', 'Tent'),
-                    roomType: Joi.string().required().valid('Entire House', 'Private Room', 'Shared Room'),
-                    description: Joi.string().required(),
-                    rooms: Joi.number().min(0).max(20).required(),
-                    photos: Joi.array().items(Joi.string().uri()),
-                    price: Joi.number().required(),
-                    amenities: Joi.array().items(Joi.string().valid('AC', 'Garden', 'Internet', 'Wifi', 'Pool', 'Washer')),
-                    owner: Joi.string().required()
+                validate: {
+                    // Use Joi plugin to validate request
+                    payload: Joi.object({
+                        address: {
+                            locality: Joi.string().required(),
+                            region: Joi.string().optional(),
+                            country: Joi.string().required(),
+                            postalCode: Joi.string().optional()
+                        },
+                        houseType: Joi.string().required().valid('Apartment', 'Bungalow', 'Castle', 'Loft', 'Tent'),
+                        roomType: Joi.string().required().valid('Entire House', 'Private Room', 'Shared Room'),
+                        description: Joi.string().required(),
+                        rooms: Joi.number().min(0).max(20).required(),
+                        photos: Joi.array().items(Joi.string().uri()),
+                        price: Joi.number().required(),
+                        amenities: Joi.array().items(Joi.string().valid('AC', 'Garden', 'Internet', 'Wifi', 'Pool', 'Washer')),
+                        owner: Joi.string().required()
+                    }),
+                    headers:
+                        Joi.object({
+                            'authorization': Joi.string().required()
+                        }).unknown()
                 },
-                headers:
-                    Joi.object({
-                        'authorization': Joi.string().required()
-                    }).unknown()
+                auth: 'jwt'
             },
-            auth: 'jwt'
-        },
-        handler: function (request, reply) {
+            handler: async (request, h) => {
+                try {
+                    // Create mongodb property object to save it into database
+                    const property = new PropertyModel(request.payload);
 
-            // Create mongodb property object to save it into database
-            const property = new PropertyModel(request.payload);
-
-            // Save data into database
-            property.save((error) => {
-                // Callback method to handle results
-                // Return HTTP success or error code
-                if (error) {
-                    reply(Boom.serverUnavailable('Internal MongoDB error', error));
+                    // Save data into database
+                    await property.save();
+                    return { 
+                        statusCode: 201, 
+                        message: 'Property Saved Successfully' 
+                    };
+                } catch (error) {
+                    return Boom.serverUnavailable('Internal MongoDB error', error);
                 }
-                else {
-                    reply({ statusCode: 201, message: 'Property Saved Successfully' });
-                }
-            });
-        }
-    });
+            }
+        });
 
-    // REST Update a property by ID
-    server.route({
-        method: 'PUT',
-        path: '/api/property/{id}',
-        config: {
-            // Swagger documentation fields tags, description, note
-            tags: ['api'],
-            description: 'Update specific property data',
-            notes: 'Update specific property data',
-            validate: {
-                // Use Joi plugin to validate request
-                params: {
-                    //`id` is required field and can only accept string data
-                    id: Joi.string().required()
+        // REST Update a property by ID
+        server.route({
+            method: 'PUT',
+            path: '/api/property/{id}',
+            options: {
+                // Swagger documentation fields tags, description, note
+                tags: ['api'],
+                description: 'Update specific property data',
+                notes: 'Update specific property data',
+                validate: {
+                    // Use Joi plugin to validate request
+                    params: Joi.object({
+                        //`id` is required field and can only accept string data
+                        id: Joi.string().required()
+                    }),
+                    payload: Joi.object({
+                        address: {
+                            locality: Joi.string().optional(),
+                            region: Joi.string().optional(),
+                            country: Joi.string().optional(),
+                            postalCode: Joi.string().optional()
+                        },
+                        houseType: Joi.string().optional().valid('Apartment', 'Bungalow', 'Castle', 'Loft', 'Tent'),
+                        roomType: Joi.string().optional().valid('Entire House', 'Private Room', 'Shared Room'),
+                        description: Joi.string().optional(),
+                        rooms: Joi.number().min(0).max(20).optional(),
+                        photos: Joi.array().items(Joi.string().uri()),
+                        price: Joi.number().optional(),
+                        amenities: Joi.array().items(Joi.string().valid('AC', 'Garden', 'Internet', 'Wifi', 'Pool', 'Washer')),
+                        owner: Joi.string().optional()
+                    }),
+                    headers:
+                        Joi.object({
+                            'authorization': Joi.string().required()
+                        }).unknown()
                 },
-                payload: {
-                    address: {
-                        locality: Joi.string().optional(),
-                        region: Joi.string().optional(),
-                        country: Joi.string().optional(),
-                        postalCode: Joi.string().optional()
-                    },
-                    houseType: Joi.string().optional().valid('Apartment', 'Bungalow', 'Castle', 'Loft', 'Tent'),
-                    roomType: Joi.string().optional().valid('Entire House', 'Private Room', 'Shared Room'),
-                    description: Joi.string().optional(),
-                    rooms: Joi.number().min(0).max(20).optional(),
-                    photos: Joi.array().items(Joi.string().uri()),
-                    price: Joi.number().optional(),
-                    amenities: Joi.array().items(Joi.string().valid('AC', 'Garden', 'Internet', 'Wifi', 'Pool', 'Washer')),
-                    owner: Joi.string().optional()
-                },
-                headers:
-                    Joi.object({
-                        'authorization': Joi.string().required()
-                    }).unknown()
+                auth: 'jwt'
             },
-            auth: 'jwt'
-        },
-        handler: function (request, reply) {
-            // Find the property by ID in the db and update it
-            PropertyModel.findOneAndUpdate({
-                _id: request.params.id
-            },
-                request.payload, // values to be updated
-
-                // Callback method to handle results
-                (error, data) => {
-                    // Return HTTP success or error code
-                    if (error) {
-                        reply(Boom.serverUnavailable('Internal MongoDB error', error));
-                    }
-                    else {
-                        reply({
-                            statusCode: 200,
-                            message: 'Property Updated Successfully',
-                            data
-                        });
-                    }
+            handler: async (request, h) => {
+                try {
+                    // Find the property by ID in the db and update it
+                    const res = await PropertyModel.findOneAndUpdate(
+                        {_id: request.params.id},
+                        request.payload // values to be updated
+                    );
+                    return {
+                        statusCode: 200,
+                        message: 'Property Updated Successfully',
+                        res
+                    };
+                } catch (error) {
+                    return Boom.serverUnavailable('Internal MongoDB error', error);
                 }
-            );
-        }
-    });
+            }
+        });
 
-    // REST Delete a property by ID
-    server.route({
-        method: 'DELETE',
-        path: '/api/property/{id}',
-        config: {
-            // Swagger documentation fields tags, description, note
-            tags: ['api'],
-            description: 'Remove specific property data',
-            notes: 'Remove specific property data',
-            validate: {
-                // Use Joi plugin to validate request
-                params: {
-                    id: Joi.string().required()
+        // REST Delete a property by ID
+        server.route({
+            method: 'DELETE',
+            path: '/api/property/{id}',
+            options: {
+                // Swagger documentation fields tags, description, note
+                tags: ['api'],
+                description: 'Remove specific property data',
+                notes: 'Remove specific property data',
+                validate: {
+                    // Use Joi plugin to validate request
+                    params: Joi.object({
+                        id: Joi.string().required()
+                    }),
+                    headers:
+                        Joi.object({
+                            'authorization': Joi.string().required()
+                        }).unknown()
                 },
-                headers:
-                    Joi.object({
-                        'authorization': Joi.string().required()
-                    }).unknown()
+                auth: 'jwt'
             },
-            auth: 'jwt'
-        },
-        handler: function (request, reply) {
-            // Delete the particular record from db
-            PropertyModel.findOneAndRemove({
-                _id: request.params.id
-            },
-                // Callback method to handle results
-                (error) => {
-
-                    // Return HTTP success or error code
-                    if (error) {
-                        reply(Boom.serverUnavailable('Internal MongoDB error', error));
-                    }
-                    else {
-                        reply({
-                            statusCode: 200,
-                            message: 'User Deleted Successfully'
-                        });
-                    }
+            handler: async(request, reply) => {
+                try {
+                    // Delete the particular record from db
+                    const res = await PropertyModel.findOneAndRemove(
+                        {_id: request.params.id}
+                    );
+                    return {
+                        statusCode: 200,
+                        message: 'User Deleted Successfully'
+                    };
+                } catch (error) {
+                    return Boom.serverUnavailable('Internal MongoDB error', error);
                 }
-            );
-        }
-    });
-
-    // Next must be called at the end of register
-    return next();
-};
-
-// Plugin registration attributes
-exports.register.attributes = {
-    name: 'routes-properties'
+            }
+        });
+    }
 };

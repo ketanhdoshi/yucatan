@@ -9,24 +9,21 @@ var client = null;
 // TODO: Change all the async callbacks to use promises. See promises on
 // https://www.npmjs.com/package/redis
 
-exports.register = function (server, options, next) {
-    client = Redis.createClient(options.port, options.host);
 
-    client.on('connect', () => {
-        console.log('Connected to Redis');
-    });
-    client.on('error', (err) => {
-        console.log('Error ' + err);
-    });
+exports.plugin = {
+    name: "redis-cache",
+    version: "1.0.0",
+    register: async (server, options) => {
+        client = await Redis.createClient(options.port, options.host, {password: options.password});
 
-    // Next must be called at the end of register
-    return next();
-};
-
-// Plugin registration attributes
-exports.register.attributes = {
-    name: 'redis-cache'
-};
+        client.on('connect', () => {
+            console.log('Connected to Redis');
+        });
+        client.on('error', (err) => {
+            console.log('Error ' + err);
+        });
+    }
+}
 
 // -----------------------------------------------
 // Save String value

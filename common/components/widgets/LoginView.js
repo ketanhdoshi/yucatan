@@ -1,7 +1,8 @@
 // -----------------------------------------------------------------
 // Presentational component for Login page
 // -----------------------------------------------------------------
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE} from './SocialButton'
 
 import s from '../../scss/LoginView.scss'

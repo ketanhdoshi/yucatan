@@ -1,7 +1,8 @@
 // -----------------------------------------------------------------
 // Presentational component for the Properties page
 // -----------------------------------------------------------------
-import React, { PropTypes } from 'react'
+import React from 'react'
+import PropTypes from 'prop-types'
 
 import s from '../scss/PropertiesView.scss';
 

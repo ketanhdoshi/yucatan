@@ -1,0 +1,35 @@
+// For format details, see https://aka.ms/vscode-remote/devcontainer.json or this file's README at:
+// https://github.com/microsoft/vscode-dev-containers/tree/v0.134.0/containers/javascript-node
+{
+	"name": "Node.js",
+	"image": "kd/vsnode",
+
+	// Set *default* container specific settings.json values on container create.
+	"settings": { 
+		"terminal.integrated.shell.linux": "/bin/bash"
+	},
+
+	// Add the IDs of extensions you want installed when the container is created.
+	// 
+	// Also, add this to the container's settings.json, to allow the Debugger for Chrome to
+	// be installed on a remote container (ie. 'workspace'). It's default mode is 'ui' which
+	// is to run locally. 
+	// "remote.extensionKind": {
+	//	"msjsdiag.debugger-for-chrome": [ "workspace" ]
+	// }
+	// For details see https://code.visualstudio.com/docs/remote/containers#_managing-extensions
+	// and refer to the section "Forcing an extension to run locally or remotely"
+	"extensions": [
+		"dbaeumer.vscode-eslint",
+		"msjsdiag.debugger-for-chrome"
+	],
+	
+	// Use 'forwardPorts' to make a list of ports inside the container available locally.
+	"forwardPorts": [3010, 3011, 9222],
+
+	// Specifies a command that should be run after the container has been created.
+	"postCreateCommand": "yarn install",
+
+	// Comment out the next line to run as root instead.
+	"remoteUser": "node"
+}

@@ -1,18 +1,18 @@
 import React from 'react';
 import { Pagination } from 'react-bootstrap';
 
-const BsPagination = React.createClass({
+class BsPagination extends React.Component{
   getInitialState() {
     return {
       activePage: 1
     };
-  },
+  }
 
   handleSelect(eventKey) {
     this.setState({
       activePage: eventKey
     });
-  },
+  }
 
   render() {
     return (
@@ -23,7 +23,7 @@ const BsPagination = React.createClass({
           onSelect={this.handleSelect} />
     );
   }
-});
+};
 
 
 export default BsPagination;

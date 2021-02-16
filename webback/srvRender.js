@@ -16,7 +16,7 @@ import AppContainer from '../common/containers/AppContainer'
 // TODO - Include Router cases for Redirect, Not Found 404 etc and for 
 //  Data fetching
 // -----------------------------------------------------------------
-function srvRender(request, reply) {
+function srvRender(request, h) {
     console.info ('here it is ', request.url.path)
 
     // Compile an initial state and create a new Redux store instance
@@ -34,7 +34,7 @@ function srvRender(request, reply) {
     )
     
     if (context.url) {
-        reply().code(302).redirect(context.url)
+        return h.code(302).redirect(context.url)
     }
     else {
         // Grab the initial state from our Redux store
@@ -44,7 +44,7 @@ function srvRender(request, reply) {
         // Use the html template in file 'index.ejs'
         // The React rendered output replaces the %html% tag
         // in the template
-        reply.view('index',
+        return h.view('index',
             {
                 html: html,
                 state: JSON.stringify(finalState).replace(/</g, '\\x3c'),

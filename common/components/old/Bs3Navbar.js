@@ -2,7 +2,7 @@
 // OBSOLETE Presentational component for the Bootstrap 3 Navbar
 // -----------------------------------------------------------------
 import React, { PropTypes } from 'react'
-import { Link } from 'react-router'
+import { Link } from 'react-router-dom'
 
 const Bs3Navbar = (props) => (
     <nav className="navbar navbar-inverse navbar-fixed-top">

@@ -6,14 +6,17 @@ const Config = require('../webpack.config.js');
 
 import srvRender from '../built/serverbundle.js';
 
+// Include Hapi package
+const Hapi = require('@hapi/hapi');
+
 // -----------------------------------------------
 // This is our Web UI server.
 // -----------------------------------------------
 //var websrv = null;
 
-const testHandler = function (request, reply) {
+const testHandler = (request, h) => {
 
-    reply.view('test', {
+    return h.view('test', {
         html: '<h2>Hello Chintu</h2>',
         message: 'My Superb Message!'
     });
@@ -59,69 +62,77 @@ const hmr = (server, host, port) => {
     
 }
 
-module.exports.init = (server, port) => {
+const registerInertRoutes = async (websrv) => {
 
-    const websrv = server.connection({
-        host: 'localhost',
-        port: port,
-        labels: 'websrv'
+    websrv.log('info', 'Registering Inert Routes');
+
+    // Route for a single test URL using a static HTML file
+    websrv.route({
+        method: 'GET',
+        path: '/hello',
+        handler: async (request, h) => {
+            return h.file('./webback/templates/hello.html');
+        }
     });
 
-    hmr (server, 'localhost', port);
-
-    // -----------------------------------------------
-    // Load inert plugin for static content
-    // -----------------------------------------------
-    websrv.register(require('inert'), (err) => {
-
-        if (err) {
-            throw err;
+    // Serve static content at the built URL from the built directory
+    websrv.route({
+        method: 'GET',
+        // URL for serving content is '/built/*'
+        path: '/built/{param}',
+        handler: {
+            directory: {
+                path: Path.join(__dirname, '../built')
+            }
         }
+    });
+}
+    
+const registerVisionRoutes = async (websrv) => {
 
-        // Route for a single test URL using a static HTML file
-        websrv.route({
-            method: 'GET',
-            path: '/hello',
-            handler: function (request, reply) {
-                reply.file('./webback/templates/hello.html');
-            }
-        });
+    websrv.log('info', 'Registering Vision Routes');
 
-        // Serve static content at the built URL from the built directory
-        websrv.route({
-            method: 'GET',
-            // URL for serving content is '/built/*'
-            path: '/built/{param}',
-            handler: {
-                directory: {
-                    path: Path.join(__dirname, '../built')
-                }
-            }
-        });
+    // Use the ejs template engine for all '*.ejs' files
+    websrv.views({
+        engines: { ejs: require('ejs') },
+        relativeTo: __dirname,
+        path: 'templates'
     });
     
-    // -----------------------------------------------
-    // Load vision plugin for rendering templates
-    // -----------------------------------------------
-    websrv.register(require('vision'), (err) => {
+    // Render a single test URL path using a test template
+    websrv.route({ method: 'GET', path: '/test', handler: testHandler });
 
-        if (err) {
-            throw err;
-        }
+    // Render all URLs with React
+    websrv.route({ method: 'GET', path: '/{param*}', handler: srvRender });
+}
 
-        websrv.log('info', 'Vision loaded');
+module.exports.init = async (host, port) => {
 
-        // Use the ejs template engine for all '*.ejs' files
-        websrv.views({
-            engines: { ejs: require('ejs') },
-            relativeTo: __dirname,
-            path: 'templates'
-        });
-        
-        // Render a single test URL path using a test template
-        websrv.route({ method: 'GET', path: '/test', handler: testHandler });
-
-        // Render all URLs with React
-        websrv.route({ method: 'GET', path: '/{param*}', handler: srvRender });
+    // Create a server with a host and port
+    const websrv = new Hapi.Server({
+        host: host,
+        port: port,
     });
+
+    // !!!!!!!!! Enable HMR later
+    // hmr (server, 'localhost', port);
+
+    // -----------------------------------------------
+    // Load plugins
+    // -----------------------------------------------
+    await websrv.register([
+        {
+            // Load inert plugin for static content
+            plugin: require('@hapi/inert')
+        },
+        {
+            // Load vision plugin for rendering templates
+            plugin: require('@hapi/vision')
+        }
+    ]);
+    
+    await registerInertRoutes(websrv);
+    await registerVisionRoutes(websrv);
+    
+    return websrv;
 }

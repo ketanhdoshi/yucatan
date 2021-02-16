@@ -1,11 +1,11 @@
 import React from 'react';
-import { Panel } from 'react-bootstrap';
+import { Card } from 'react-bootstrap';
 
 const BsPanel = (props) => (
     <div>
-        <Panel header={<h3>{props.title}</h3>}>
+        <Card header={<h3>{props.title}</h3>}>
             {props.content}
-        </Panel>
+        </Card>
     </div>
 )
 
