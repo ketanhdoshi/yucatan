@@ -24,7 +24,8 @@ const MatchesView = ({ status, list, post, onClickCb, fetchCb }) => (
         }
 
        <div className="well well-lg">{post? post.title : "nothing"}</div>
-       <button type="button" onClick={onClickCb}>Click Me!</button>
+       <button type="button" onClick={onClickCb}>Get Posts!</button>
+       <button type="button" onClick={fetchCb}>Get Matches!</button>
    </div>
 )
 

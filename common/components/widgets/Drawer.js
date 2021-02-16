@@ -1,7 +1,8 @@
 // -----------------------------------------------------------------
 // Presentational component for the Drawer
 // -----------------------------------------------------------------
-import React, { PropTypes } from 'react'
+import React, { PropTypes } from 'react';
+import { Link } from 'react-router-dom';
 import styled from 'styled-components';
 
 // -----------------------------------------------------------------
@@ -41,6 +42,7 @@ const NavLinkMenu = styled.a.attrs({
 
 // -----------------------------------------------------------------
 // MenuItem component
+// !!!!!!!!! Replaced with RouterMenuItem
 // -----------------------------------------------------------------
 const MenuItem = styled.a.attrs({
     className: '',
@@ -137,6 +139,45 @@ const MenuTitle = styled.span.attrs({
     }
 `;
 
+// -----------------------------------------------------------------
+// RouterMenuItem component with Router Link
+// -----------------------------------------------------------------
+const RouterMenuItem = styled(Link)`
+    /* Text colour of menu item */
+    color: #b8c7ce;
+
+    /* This is a vertical strip on the Left border, highlighted during hover */
+    /* On hover, highlight the left border strip, and change the text colour */
+    border-left: 5px solid transparent;
+    &:hover,
+    &:focus {
+        color: #ffffff;
+        background: #1e282c;
+        border-left-color: #3c8dbc;
+    }
+`;
+
+// -----------------------------------------------------------------
+// RouterSubMenuItem component with Router Link
+// -----------------------------------------------------------------
+const RouterSubMenuItem = styled(Link)`
+    /* Text colour of menu item */
+    color: #8aa4af;
+
+    /* Add a border to line it up with other MenuItems since there is no 
+        left border strip. We need to set only the left-width here but for 
+        some reason that doesn't take effect unless we set the border-style
+        and background as well */
+    border-left: 5px solid #2c3b41;
+
+    /* On hover, change the text colour */
+    &:hover,
+    &:focus {
+        color: #ffffff;
+        background: #2c3b41;
+    }
+`;
+
 export const DRAWER_MODE_OFF = 1;  // Drawer is off-canvas and not visible
 export const DRAWER_MODE_MINI = 2; // Drawer is in collapsed state
 export const DRAWER_MODE_FULL = 3; // Drawer is fully visible
@@ -145,12 +186,13 @@ export const DRAWER_MODE_FULL = 3; // Drawer is fully visible
 // Menu item in the drawer.
 //      icon - icon for the menu item
 //      title - title for the menu item
+//      href - href for the Router link
 //      badge1 - optional
 //      badge2 - optional
 //      subMenuId - Id of the sub-menu if present, else null
 //      parentId - Id of the parent sub-menu if it is second-level else null
 // -----------------------------------------------------------------
-const DrawerMenuItem = ({mode, icon, title, badge1, badge2, subMenuId, parentId}) => {
+const DrawerMenuItem = ({mode, icon, title, href, badge1, badge2, subMenuId, parentId}) => {
     // There are three cases:
     // 1) First-level menu item
     // 2) First-level menu item with a sub-menu
@@ -178,10 +220,10 @@ const DrawerMenuItem = ({mode, icon, title, badge1, badge2, subMenuId, parentId}
         // TODO
         
         return (
-            <SubMenuItem className="nav-link d-flex align-items-center py-1 pr-1" href="#" data-parent={parentId}>
+            <RouterSubMenuItem className="nav-link d-flex align-items-center py-1 pr-1" to={href} data-parent={parentId}>
                 <i className={"fa " + icon}></i>
                 <MenuTitle className="ml-2">{title}</MenuTitle>
-            </SubMenuItem>
+            </RouterSubMenuItem>
         )
     }
     else {
@@ -191,13 +233,13 @@ const DrawerMenuItem = ({mode, icon, title, badge1, badge2, subMenuId, parentId}
             miniCss = 'collapse';
         
         return (
-            <MenuItem className="nav-link d-flex align-items-center py-2 pr-1" href="#">
+            <RouterMenuItem className="nav-link d-flex align-items-center py-2 pr-1" to={href}>
                 <i className={"fa " + icon}></i>
                 <MenuTitle className={"ml-2 " + miniCss}>{title}
                     {badge1 ? <span className="badge badge-success float-right mr-1">{badge1}</span> : null}
                     {badge2 ? <span className="badge badge-info float-right mr-1">{badge2}</span> : null}
                 </MenuTitle>
-            </MenuItem>
+            </RouterMenuItem>
         )
     }
 }
@@ -263,16 +305,72 @@ const Drawer = ({mode, id}) => {
             <ul className="nav flex-column">
                 <li className="nav-item" data-parent={"#" + id}>
                     <DrawerMenuItem mode={mode} icon="fa-heart"
-                            title="Item 1" badge1="6" badge2="12" />
+                            title="Modals" href="/modals" badge1="4" />
+                </li>
+                <li className="nav-item" data-parent={"#" + id}>
+                    <DrawerMenuItem mode={mode} icon="fa-heart"
+                            title="Payment" href="/payment" />
+                </li>
+                <li className="nav-item" data-parent={"#" + id}>
+                    <DrawerMenuItem mode={mode} icon="fa-heart"
+                            title="Shortlist" href="/shortlist" badge1="6" badge2="12" />
                 </li>
                 <li className="nav-item" data-parent={"#" + id}>
                     <DrawerMenuItem mode={mode} icon="fa-list"
-                            title="Item 2" subMenuId="#submenu2" />
+                            title="Dashboards" subMenuId="#submenu2" />
                     <SubMenu className="collapse fade" id="submenu2" aria-expanded="false">
                         <ul className="flex-column nav">
                             <li className="nav-item">
                                 <DrawerMenuItem mode={mode} icon="fa-circle-o"
-                                    title="Item 1a" parentId="#submenu2" />
+                                    title="Dashboard 1" href="/dashboard1" parentId="#submenu2" />
+                            </li>
+                            <li className="nav-item">
+                                <DrawerMenuItem mode={mode} icon="fa-circle-o"
+                                    title="Dashboard 2" href="/dashboard2" parentId="#submenu2" />
+                            </li>
+                        </ul>
+                    </SubMenu>
+                </li>
+                <li className="nav-item" data-parent={"#" + id}>
+                    <DrawerMenuItem mode={mode} icon="fa-list"
+                            title="UI" subMenuId="#submenu3" />
+                    <SubMenu className="collapse fade" id="submenu3" aria-expanded="false">
+                        <ul className="flex-column nav">
+                            <li className="nav-item">
+                                <DrawerMenuItem mode={mode} icon="fa-circle-o"
+                                    title="Button" href="/ui/button" parentId="#submenu3" />
+                            </li>
+                            <li className="nav-item">
+                                <DrawerMenuItem mode={mode} icon="fa-circle-o"
+                                    title="General" href="/ui/general" parentId="#submenu3" />
+                            </li>
+                            <li className="nav-item">
+                                <DrawerMenuItem mode={mode} icon="fa-circle-o"
+                                    title="Form" href="/ui/form" parentId="#submenu3" />
+                            </li>
+                        </ul>
+                    </SubMenu>
+                </li>
+                <li className="nav-item" data-parent={"#" + id}>
+                    <DrawerMenuItem mode={mode} icon="fa-list"
+                            title="Widgets" subMenuId="#submenu4" />
+                    <SubMenu className="collapse fade" id="submenu4" aria-expanded="false">
+                        <ul className="flex-column nav">
+                            <li className="nav-item">
+                                <DrawerMenuItem mode={mode} icon="fa-circle-o"
+                                    title="Google Maps" href="/googlemaps" parentId="#submenu4" />
+                            </li>
+                        </ul>
+                    </SubMenu>
+                </li>
+                <li className="nav-item" data-parent={"#" + id}>
+                    <DrawerMenuItem mode={mode} icon="fa-list"
+                            title="Views" subMenuId="#submenu5" />
+                    <SubMenu className="collapse fade" id="submenu5" aria-expanded="false">
+                        <ul className="flex-column nav">
+                            <li className="nav-item">
+                                <DrawerMenuItem mode={mode} icon="fa-circle-o"
+                                    title="BS View" href="/bsview" parentId="#submenu5" />
                             </li>
                         </ul>
                     </SubMenu>

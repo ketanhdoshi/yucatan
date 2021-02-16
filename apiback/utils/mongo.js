@@ -11,8 +11,8 @@ module.exports = {
 
         // URL for `library` database in the hosted mlab mongodb
         // const mongoDB = 'mongodb://kdmongo:kdmongo@ds133418.mlab.com:33418/library';
-        const mongoDB = 'mongodb+srv://kdmongo:kdmongo@kdcluster0.atzzm.mongodb.net/kdlib?retryWrites=true&w=majority';
-        //const mongoDB = 'mongodb+srv://kdmongo:<password>@kdcluster0.atzzm.mongodb.net/library?retryWrites=true&w=majority';
+        // const mongoDB = 'mongodb+srv://kdmongo:kdmongo@kdcluster0.atzzm.mongodb.net/kdlib?retryWrites=true&w=majority';
+        const mongoDB = 'mongodb+srv://kdmongo:kdmongo@kdcluster0.atzzm.mongodb.net/library?retryWrites=true&w=majority';
 
         // Connect with mongoose database
         await Mongoose.connect(mongoDB);

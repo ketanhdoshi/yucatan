@@ -86,21 +86,6 @@ const Content = () => (
     </Switch>
 )
 
-/* 
-KD - Feb 2021 - just for quick testing. Remove it.
-import { Link } from 'react-router-dom'
-const MainView = () => (
-    <App>
-        <div>
-            <Link to="/dashboard2">Dashboard2</Link>
-            <Link to="/dashboard1">Dashboard1</Link>
-            <Link to="/matches">Matches</Link>
-        </div>
-        <Content />
-    </App>
-)
- */
-
 class MainView extends React.Component {
     constructor(props) {
         super(props);

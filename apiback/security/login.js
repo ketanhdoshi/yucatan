@@ -73,7 +73,7 @@ module.exports = {
                         return h.response ({
                             statusCode: 200,
                             message: 'Succesful login'
-                        }.header("Authorization", jwt);                
+                        }).header("Authorization", jwt);                
                     }
                 } catch (error) {
                     return Boom.serverUnavailable('Internal Mongo error', error);

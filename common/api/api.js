@@ -10,19 +10,17 @@ const apiUrl = 'http://localhost:3011/api';
 // -----------------------------------------------------------------
 // Get list of Properties
 // -----------------------------------------------------------------
-export const apiGetProperties = (successCB, errorCB, dispatch) => {
-    axios.get(apiUrl + '/property')
-        .then(res => {
-            return res.data.data;
-        })
-        .then(data => {
-            console.log ("data is ", data)
-            successCB (dispatch, data)
-        })  
-        .catch(err => {
-            console.log(err);
-            errorCB (dispatch, err);
-        }); 
+export const apiGetProperties = async (successCB, errorCB, dispatch) => {
+    // axios.get(apiUrl + '/property') !!!!!!!!!!!!
+    try {
+        const res = await axios.get(apiUrl + '/user');
+        let data = res.data.res;
+        console.log ("data is ", data);
+        successCB (dispatch, data)
+    } catch (err) {
+        console.error(err);
+        errorCB (dispatch, err);
+    }
 }
 
 // -----------------------------------------------------------------

@@ -62,6 +62,8 @@ const NavItemDropdown = styled.li.attrs({
 
 // -----------------------------------------------------------------
 // NavLink component
+// !!!!!!! We've replaced this with RouterLink. Make sure that all the
+// styles get transferred to that.
 // -----------------------------------------------------------------
 const NavLink = styled.a.attrs({
     className: 'nav-link',
@@ -120,6 +122,13 @@ const DropdownDivider = () => (
 )
 
 // -----------------------------------------------------------------
+// Router Link component
+// -----------------------------------------------------------------
+const RouterLink = ({href, children}) => (
+    <Link to={href} className='nav-link'>{children}</Link>
+)
+
+// -----------------------------------------------------------------
 // Wrapping Navbar
 // -----------------------------------------------------------------
 const Navbar = ({def}) => {
@@ -159,7 +168,7 @@ const Navbar = ({def}) => {
                             return (
                                 <NavItem className={active} key={'mykey' + i} >
                                     {/* <NavLink href={item.href}>{item.title}</NavLink> */}
-                                    <Link to={item.href}>{item.title}</Link>
+                                    <RouterLink href={item.href}>{item.title}</RouterLink>
                                 </NavItem>
                             )
                         }
