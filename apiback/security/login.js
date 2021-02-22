@@ -54,7 +54,7 @@ module.exports = {
                     }
 
                     // Check if user input password matches hashed password saved in db
-                    const dbpassword = data.password;
+                    const dbpassword = res.password;
                     if (!Crypto.check(password, dbpassword)) {
                         return Boom.unauthorized('Username or Password invalid');
                     }
@@ -63,9 +63,9 @@ module.exports = {
                         // redis complains about nested objects. Figure out how to not
                         // use toString here.
                         const userProfile = {
-                            userId: data._id.toString(),
-                            userName: data.username,
-                            scope: data.scope   // user role
+                            userId: res._id.toString(),
+                            userName: res.username,
+                            scope: res.scope   // user role
                         };
 
                         // Create a JWT token and send it in the response
@@ -128,11 +128,12 @@ module.exports = {
                         return reply(Boom.unauthorized('Authentication failed: ' + request.auth.error.message));
                     }
 
-                    // Get the github access and refresh tokens
+                    // Get the github access and refresh tokens. For some reason github sends
+                    // us expiry time as 'undefined', so we set it to 1 hr (ie. 3600s)
                     const creds = request.auth.credentials;
                     const token = {
                         access: creds.token,
-                        expiry: creds.expiresIn,
+                        expiry: creds.expiresIn ? creds.expiresIn : 3600,
                         refresh: creds.refreshToken
                     };
                     
@@ -141,35 +142,30 @@ module.exports = {
                     const oAuthUserId = profile.id;
                     
                     //Find user in db by oAuthUserId
-                    UserModel.findOne({
-                        oAuthUserId
-                    }, (error, data) => {
-                        if (error) {
-                            reply(Boom.serverUnavailable('Internal Mongo error'), error);
-                        }
-                        else if (data === null) {
+                    try {
+                        const res = await UserModel.findOne({ oAuthUserId})
+                        if (res === null) {
                             // No matching user
-                            reply(Boom.unauthorized('User invalid'));
+                            return Boom.unauthorized('User invalid');
                         }
-                        else {
-                            // NB: data.username should match profile.username and
-                            // data.name should match profile.displayName
-                            const userProfile = {
-                                userId: data._id.toString(),
-                                userName: data.username,
-                                scope: data.scope   // user role
-                            };
 
-                            const jwt = loginSuccess (userProfile, token);
-                            console.log ('jwt is ', jwt);
-                            return reply(
-                                {
-                                    statusCode: 200,
-                                    message: 'Succesful login'
-                                }
-                            ).header("Authorization", jwt);
-                        }
-                    });
+                        // NB: data.username should match profile.username and
+                        // data.name should match profile.displayName
+                        const userProfile = {
+                            userId: res._id.toString(),
+                            userName: res.username,
+                            scope: res.scope   // user role
+                        };
+
+                        const jwt = loginSuccess (userProfile, token);
+                        console.log ('jwt is ', jwt);
+                        return h.response ({
+                            statusCode: 200,
+                            message: 'Succesful login'
+                        }).header("Authorization", jwt);  
+                    } catch (error) {
+                        return Boom.serverUnavailable('Internal Mongo error', error);
+                    }
                 }
             }
         });

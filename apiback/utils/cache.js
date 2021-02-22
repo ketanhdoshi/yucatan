@@ -72,20 +72,26 @@ module.exports.setHash = (key, hashVal) => {
     });
 }
 
+const {promisify} = require('util');
+
 // -----------------------------------------------
 // Get Hash value
 // -----------------------------------------------
-module.exports.getHash = (key, cb) => {
-    client.hgetall(key, function(err, object) {        
-        if (err) {
-            console.error('error getting key:', err);
-            cb (err, null);
-        }
-        else {
-            console.log('Redis found key', key, object);
-            cb (null, object);
-        }
-    });
+/* module.exports.getHash = async (key) => {
+    const hgetallAsync = promisify(client.hgetall).bind(client);
+    try {
+        const res = await hgetallAsync(key);
+        console.log('Redis found key', key, res);
+        return res;
+    } catch (err) {
+        console.error('error getting key:', key, err);
+        return null;
+    }
+} */
+
+module.exports.getHash = (key) => {
+    const hgetallAsync = promisify(client.hgetall).bind(client);
+    return hgetallAsync(key);
 }
 
 // -----------------------------------------------

@@ -84,8 +84,8 @@ exports.plugin = {
                         };
                     }
 
-                } catch {
-                    return Boom.serverUnavailable('Internal MongoDB error', error);
+                } catch (err) {
+                    return Boom.serverUnavailable('Internal MongoDB error', err);
                 }
             }
         });

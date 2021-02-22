@@ -233,7 +233,7 @@ module.exports = {
                     );
                     return {
                         statusCode: 200,
-                        message: 'User Deleted Successfully'
+                        message: 'Property Deleted Successfully'
                     };
                 } catch (error) {
                     return Boom.serverUnavailable('Internal MongoDB error', error);

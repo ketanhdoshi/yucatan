@@ -70,9 +70,9 @@ module.exports.init = async (host, port) => {
     // -----------------------------------------------
     // Initialise swagger and good-console
     // -----------------------------------------------
-    // const Myutils = require('./utils/util');
-    // await Myutils.swagger(apisrv);
-    // await Myutils.good(apisrv);
+    const Myutils = require('./utils/util');
+    await Myutils.swagger(apisrv);
+    await Myutils.good(apisrv);
 
     // -----------------------------------------------
     // Register Routes - Routes can be registered only after all 

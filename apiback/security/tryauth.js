@@ -20,7 +20,9 @@ module.exports = {
 
         // Use HTTP Basic Auth. To test you only need to use this single route
         // The first time the browser will popup a dialog prompting you for the
-        // username and password. Once you provide it the call goes through
+        // username and password. Once you provide it the call goes through.
+        // With Postman, provide the username/password in the Authorization header
+        // for Basic Auth
         server.route({
             method: 'GET',
             path: '/api/tryauth/basic',

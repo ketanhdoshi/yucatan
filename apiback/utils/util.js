@@ -1,55 +1,42 @@
 'use strict';
 
-// Load the HAPI-Swagger plugin to generate documentation for our API
-module.exports.swagger = (server) => {
+// Register the HAPI-Swagger plugin and its dependencies to generate 
+// documentation for our API
+module.exports.swagger = async (apisrv) => {
     // Include Hapi package with all its dependencies
-    const Inert = require('@hapi/inert');
-    const Vision = require('@hapi/vision');
-    const HapiSwagger = require('hapi-swagger');
-
-    // Define options for the plugin ( for documentation and testing )
-    const options = {
-        info: {
-            'title': 'Test API Documentation',
-            'version': '0.0.1'
-        }
-    };
-
-    server.register([
-        Inert
-    ],
-    (er) => { });
-    // Load the Hapi plugin and its dependent plugins into our server
-/*     server.register([
-        Inert,
-        Vision,
+    await apisrv.register([
         {
-            'register': HapiSwagger,
-            options
-        }
-        ], (err) => {
-
-        if (err) {
-            server.log(['error'], 'hapi-swagger load error: ' + err);
-        }
-        else {
-            server.log(['start'], 'hapi-swagger interface loaded');
-        }
-    });
- */};
+            // Load the Inert plugin
+            plugin: require('@hapi/inert')
+        },
+        {
+            // Load the Vision plugin
+            plugin: require('@hapi/vision')
+        },
+        {
+            // Load the Hapi Swagger plugin
+            plugin: require('hapi-swagger'),
+            // Plugin options (for documentation and testing)
+            options: {
+                info: {
+                    title: 'Test API Documentation',
+                    version: '0.0.1'
+                }
+            }
+        }     
+    ]);
+};
 
 // Load the Good plugin to help with Server Logging
-module.exports.good = (server) => {
+module.exports.good = async (apisrv) => {
 
-    const Good = require('@hapi/good');
-
-    // Define options for the Good plugin and load it into our server
-    server.register({
-        register: Good,
+    await apisrv.register({
+        plugin: require('@hapi/good'),
+        // Define options for the Good plugin
         options: {
             reporters: {
                 console: [{
-                    module: 'good-squeeze',
+                    module: '@hapi/good-squeeze',
                     name: 'Squeeze',
                     args: [{
                         // response: '*',
@@ -57,14 +44,9 @@ module.exports.good = (server) => {
                     }]
                 }, 
                 {
-                    module: 'good-console'
+                    module: '@hapi/good-console'
                 }, 'stdout']
             }
-        }
-    }, (err) => {
-
-        if (err) {
-            throw err; // something bad happened loading the plugin
         }
     });
 };

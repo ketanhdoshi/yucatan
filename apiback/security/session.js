@@ -41,47 +41,63 @@ module.exports.create = (userProfile, token) => {
 // -----------------------------------------------
 // Validate the session, called during Jwt validation. It looks up the values
 // that were cached when the session was created. Since the cache calls are
-// asynchronous, we pass in callback functions to them. We are also called
-// asynchronously with input callback functions so when the cache callbacks 
-// return, we call those input callbacks in turn
+// asynchronous, we pass in callback functions to them. We are called
+// synchronously with await so when the cache callbacks return, we 
+// return those values
 // -----------------------------------------------
-module.exports.validate = async (userId, access, cb) => {
-    Cache.getHash (access,
-        // The cache calls this first callback
-        (err, session) => {
-            // console.log ('received session', session, userId);
-            
-            if (session && session.uId === userId) {
-                // session exists in cache and session's userId matches.
-                // We don't check for session expiry because the JWT plugin checks that
-                // for us. For now we are not implementing extending of the session    
-                Cache.getHash (userId,
-                
-                    // The cache calls this second callback
-                    (err, userProfile) => {
-                        if (userProfile) {
-                            // user profile exists in cache
-                            // console.log ('user profile', userProfile);
-                            // Now call our input callback with the user profile
-                            cb (userProfile);
-                        }
-                        else {
-                            console.log ('no user profile');
-                            // Validation failed so call our input callback 
-                            // with null
-                            cb (null);
-                        }
-                    }
-                );
-            }
-            else {
-                console.log ('no session');
-                // Validation failed so call our input callback with null
-                cb (null);
-            }
-        }
-    );
+module.exports.validate = async (userId, access) => {
+    try {
+        const session = await Cache.getHash (access);
+        console.log ('received session', session, userId);
+        // Redis returns null, not error, if a key is not found in the cache. So
+        // we have to explicitly check whether we received a null.
+        if (!session || session.uId !== userId) { throw "no session"}
+        // session exists in cache and session's userId matches.
+        // We don't check for session expiry because the JWT plugin checks that
+        // for us. For now we are not implementing extending of the session    
+        const userProfile = await Cache.getHash (userId);
+        if (!userProfile) { throw "no user profile"}        
+        // user profile exists in cache
+        console.log ('user profile', userProfile);
+        // Now return the user profile
+        return (userProfile);
+    } catch (err) {
+        // Validation failed so return null
+        console.log ('user validation failed', err);
+        return (null);
+    }
 };
+
+/* This is trial logic which worked, but wasn't using the async await nicely.
+This resulted in code that was not as easy to read both here, and in the 
+Cache.getHash for redis
+
+module.exports.validate = async (userId, access) => {
+    const session = await Cache.getHash (access);
+    console.log ('received session', session, userId);
+    if (session && session.uId === userId) {
+        // session exists in cache and session's userId matches.
+        // We don't check for session expiry because the JWT plugin checks that
+        // for us. For now we are not implementing extending of the session    
+        const userProfile = await Cache.getHash (userId);        
+        if (userProfile) {
+            // user profile exists in cache
+            console.log ('user profile', userProfile);
+            // Now return the user profile
+            return (userProfile);
+        }
+        else {
+            console.log ('no user profile');
+            // Validation failed so return null
+            return (null);
+        }
+    } else {
+        console.log ('no session');
+        // Validation failed so return null
+        return (null);
+    }
+};
+ */
 
 // -----------------------------------------------
 // Delete the session from the cache
