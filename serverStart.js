@@ -3,5 +3,8 @@
 var args = process.argv.slice(2);
 var app = args[0];
 
-require('@babel/register');
+// !!!!!! Comment out now for apisrv. Otherwise the code becomes totally different
+// after babel and debugging breakpoints shift to different lines of code. 
+// We do need babel for websrv. So Need a better way to start two servers
+// require('@babel/register');
 require('./server')(app);

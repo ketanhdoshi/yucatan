@@ -36,7 +36,15 @@ module.exports.init = async (host, port) => {
         host: host,
         port: port,
         routes: {
-            cors: true // allow CORS response headers to be sent so a webapp can call us
+            // Allow CORS response headers to be sent so a webapp can call us
+            // Without this, axios API calls from the client app will not see the Authorization
+            // header in the response
+            cors: {
+                origin: ['*'],
+                headers: ['Accept', 'Authorization', 'Content-Type', 'If-None-Match'],
+                exposedHeaders: ['WWW-Authenticate', 'Server-Authorization'],
+                additionalExposedHeaders: ['Authorization']
+            }
         }
     });
 

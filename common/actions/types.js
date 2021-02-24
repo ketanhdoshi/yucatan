@@ -4,6 +4,29 @@
 // -----------------------------------------------------------------
 
 // -----------------------------------------------------------------
+// REQ action object for LOGIN_LOCAL
+// -----------------------------------------------------------------
+export const loginLocalReq = () => ({
+  type: 'LOGIN_LOCAL_REQ',
+})
+
+// -----------------------------------------------------------------
+// SUCCESS action object for LOGIN_LOCAL
+// -----------------------------------------------------------------
+export const loginLocalSuccess = (jwt) => ({
+  type: 'LOGIN_LOCAL_SUCCESS',
+  jwt: jwt
+})
+
+// -----------------------------------------------------------------
+// ERROR action object for LOGIN_LOCAL
+// -----------------------------------------------------------------
+export const loginLocalError = (error) => ({
+  type: 'LOGIN_LOCAL_ERROR',
+  error: error
+})
+
+// -----------------------------------------------------------------
 // REQ action object for GET_PROPERTIES
 // -----------------------------------------------------------------
 export const getPropertiesReq = () => ({

@@ -15,8 +15,21 @@ import s from '../../scss/LoginView.scss'
 // to be added
 // -----------------------------------------------------------------
 
+const SimpleLoginView = ({user, name, onLoginLocalCb, onLoginGoogleCb, onLoginFBCb}) => (
+    <div>
+        <button type="button" onClick={onLoginLocalCb}>Click Me!</button>
+    </div>
+)
 
-const LoginView = (user, name, onDummyClick) => (
+const FormLoginView = ({user, name, onLoginLocalCb, onLoginGoogleCb, onLoginFBCb}) => (
+    <div>
+        <form onSubmit={onLoginLocalCb}>
+            <button type="submit">Sign In!</button>
+        </form>
+    </div>
+)
+    
+const LoginView = ({user, name, onLoginLocalCb, onLoginGoogleCb, onLoginFBCb}) => (
     <div className={s.loginPage}>  
         <div className={s.loginBox}>
             <div className={s.loginLogo}>
@@ -25,7 +38,7 @@ const LoginView = (user, name, onDummyClick) => (
             <div className={s.loginBoxBody}>
                 <p className={s.loginBoxMsg}>Sign in to start your session</p>
 
-                <form action="../../index2.html" method="post">
+                <form onSubmit={onLoginLocalCb}>
                     <div className="form-group has-feedback">
                         <input type="email" className="form-control" placeholder="Email" />
                         <span className="glyphicon glyphicon-envelope form-control-feedback"></span>
@@ -43,18 +56,20 @@ const LoginView = (user, name, onDummyClick) => (
                             </div>
                         </div> {/* /.col */}
                         <div className="col-xs-4">
-                            <button type="submit" className="btn btn-primary btn-block btn-flat">Sign In</button>
+                            <button type="submit" className="btn btn-primary btn-block btn-flat">
+                                Sign In Now
+                            </button>
                         </div> {/* /.col */}
                     </div>
                 </form>
 
                 <div className={s.socialAuthLinks + " text-center"}>
                     <p>- OR -</p>
-                    <SocialButton type={SOCIAL_FACEBOOK}/>
-                    <SocialButton type={SOCIAL_GOOGLE}/>
+                    <SocialButton type={SOCIAL_FACEBOOK} onClick={onLoginGoogleCb}/>
+                    <SocialButton type={SOCIAL_GOOGLE} onClick={onLoginFBCb}/>
                 </div> {/* /.social-auth-links */}
-                <a href="#">I forgot my password</a><br />
-                <a href="#" className="text-center">Register a new membership</a>
+                <a href="#" onClick={onLoginGoogleCb}>I forgot my password</a><br />
+                <a href="#" onClick={onLoginFBCb} className="text-center">Register a new membership</a>
             </div> {/* /.loginBoxBody */}
         </div>                
     </div>
@@ -63,7 +78,9 @@ const LoginView = (user, name, onDummyClick) => (
 LoginView.propTypes = {
     user: PropTypes.string.isRequired,
     name: PropTypes.string.isRequired,
-    onDummyClick: PropTypes.func.isRequired
+    onLoginLocalCb: PropTypes.func.isRequired,
+    onLoginGoogleCb: PropTypes.func.isRequired,
+    onLoginFBCb: PropTypes.func.isRequired
 }
 
 export default LoginView

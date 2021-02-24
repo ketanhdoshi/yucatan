@@ -8,9 +8,13 @@ const config = {
     mode: 'development',
     devtool: 'inline-source-map',
     entry: [
-        // !!!!!!! 'webpack-hot-middleware/client',
+        'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=4000&overlay=false',
         'client/client.js'
     ],
+    watchOptions: { 
+      poll: true,
+      ignored: /node_modules/,
+    },
     output: {
         path: path.join(__dirname, 'built/'),
         filename: 'clientbundle.js',
@@ -62,13 +66,13 @@ const config = {
         ]
     },
   plugins: [
-        // !!!!!!! new webpack.HotModuleReplacementPlugin(),
-        new MiniCssExtractPlugin({
-            filename: 'styles.css'
-        })
+    new webpack.HotModuleReplacementPlugin(),
+    new MiniCssExtractPlugin({
+      filename: 'styles.css'
+    }),
   ],
   resolve: {
-        modules: [__dirname, "node_modules"]
+    modules: [__dirname, "node_modules"]
   }
 };
 
@@ -78,7 +82,7 @@ const serverConfig = {
   target: 'node',
   externals: [nodeExternals()],
   entry: [
-    'webback/srvRender.js',
+    'webback/expressRender.js',
   ],
   output: {
     path: path.join(__dirname, 'built/'),

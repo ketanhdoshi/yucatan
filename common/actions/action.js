@@ -21,7 +21,8 @@
 // -----------------------------------------------------------------
 
 // Import the Action objects
-import { 
+import {
+    loginLocalReq, loginLocalSuccess, loginLocalError, 
     getPropertiesReq, getPropertiesSuccess, getPropertiesError,
     getMatchesReq, getMatchesSuccess,
     getPostReq, getPostSuccess,
@@ -29,10 +30,46 @@ import {
 
 // Import the API calls
 import { 
+    apiLoginLocal,
     apiGetProperties,
     apiGetUsers, 
     apiGetPost,
 } from '../api/api'
+
+// -----------------------------------------------------------------
+// ReqAction to Login Local
+// -----------------------------------------------------------------
+export const localLoginReqAction = (creds, dispatch) => {
+    console.log ("login local request")
+    
+    // Call the API to Login
+    apiLoginLocal (creds, localLoginSuccessAction, localLoginErrorAction, dispatch)
+    
+    // Call the Dispatcher with an action object of type GET_PROPERTIES_REQ
+    dispatch (loginLocalReq ())
+}
+
+// -----------------------------------------------------------------
+// SuccessAction to get the list of Properties
+// -----------------------------------------------------------------
+export const localLoginSuccessAction = (dispatch, jwt) => {
+    console.log ("login success", jwt)
+    
+    // Call the Dispatcher with an action object of type LOGIN_LOCAL_SUCCESS
+    var action = loginLocalSuccess (jwt);
+    console.log ('action is ', action);
+    dispatch (action)
+}
+
+// -----------------------------------------------------------------
+// ErrorAction for Login Local
+// -----------------------------------------------------------------
+export const localLoginErrorAction = (dispatch, error) => {
+    console.log ("login error", error)
+    
+    // Call the Dispatcher with an action object of type GET_MATCHES_SUCCESS
+    dispatch (loginLocalError (error))
+}
 
 // -----------------------------------------------------------------
 // ReqAction to get the list of Properties
@@ -53,7 +90,7 @@ export const getPropertiesReqAction = (dispatch) => {
 export const getPropertiesSuccessAction = (dispatch, propertyList) => {
     console.log ("get properties success", propertyList[0])
     
-    // Call the Dispatcher with an action object of type GET_MATCHES_SUCCESS
+    // Call the Dispatcher with an action object of type GET_PROPERTIES_SUCCESS
     var action = getPropertiesSuccess (propertyList);
     console.log ('action is ', action);
     dispatch (action)

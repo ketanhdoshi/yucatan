@@ -7,6 +7,29 @@
 import axios from 'axios';  // Promise-based async HTTP calls
 
 const apiUrl = 'http://localhost:3011/api';
+
+// -----------------------------------------------------------------
+// Login Local
+// -----------------------------------------------------------------
+export const apiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
+    console.log ("calling api");
+    try {
+        // Alternate way to send axios requests instead of axios.post(). This way
+        // allows you to sent additional options like Request Headers.
+        const res = await axios({
+            method: 'post',
+            url: apiUrl + '/login/local',
+            data: creds,
+        });
+        let jwt = res.headers['authorization'];
+        console.log ("jwt is ", jwt, res);
+        successCB (dispatch, jwt)
+    } catch (err) {
+        console.error(err);
+        errorCB (dispatch, err);
+    }
+}
+
 // -----------------------------------------------------------------
 // Get list of Properties
 // -----------------------------------------------------------------

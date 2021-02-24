@@ -29,7 +29,7 @@ exports.plugin = {
                 notes: 'Get All User data'
             },
             handler: async (request, h) => {
-                // reply('Hello, ' + encodeURIComponent(request.params.name) + '!');
+                console.log('GET /api/user called');
                 //Fetch all data from mongodb User Collection
                 try {
                     const res = await UserModel.find({});

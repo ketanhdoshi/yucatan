@@ -3,11 +3,13 @@ import counter from './counter'
 import properties from './properties'
 import matches from './matches'
 import posts from './posts'
+import login from './login'
 
 const rootReducer = combineReducers({
     counter,
     properties,
     matches,
+    login,
     posts
 })
 
