@@ -52,11 +52,11 @@ export const localLoginReqAction = (creds, dispatch) => {
 // -----------------------------------------------------------------
 // SuccessAction to get the list of Properties
 // -----------------------------------------------------------------
-export const localLoginSuccessAction = (dispatch, jwt) => {
-    console.log ("login success", jwt)
-    
+export const localLoginSuccessAction = (dispatch, userData) => {
+    console.log ("login success", userData)
+
     // Call the Dispatcher with an action object of type LOGIN_LOCAL_SUCCESS
-    var action = loginLocalSuccess (jwt);
+    var action = loginLocalSuccess (userData);
     console.log ('action is ', action);
     dispatch (action)
 }

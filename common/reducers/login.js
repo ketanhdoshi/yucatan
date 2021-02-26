@@ -10,9 +10,9 @@ const login = (state = [], action) => {
                 api: "requesting"
             }
         case 'LOGIN_LOCAL_SUCCESS':
-            console.log ('reducer list = ', action.jwt);
+            console.log ('login reducer user = ', action.userData);
             return {
-                jwt: action.jwt,
+                userData: action.userData,
                 api: "success"
             }
         case 'LOGIN_LOCAL_ERROR':

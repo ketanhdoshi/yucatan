@@ -9,6 +9,40 @@ import axios from 'axios';  // Promise-based async HTTP calls
 const apiUrl = 'http://localhost:3011/api';
 
 // -----------------------------------------------------------------
+// Get User Data (with JWT token) from LocalStorage
+// -----------------------------------------------------------------
+const getUserToken = () => {
+    return JSON.parse(localStorage.getItem('user'));
+}
+
+// -----------------------------------------------------------------
+// Save User Data (with JWT token) in LocalStorage
+// -----------------------------------------------------------------
+const setUserToken = (userData) => {
+    localStorage.setItem("user", JSON.stringify(userData));
+}
+
+// -----------------------------------------------------------------
+// Remove User Data (with JWT token) from LocalStorage
+// -----------------------------------------------------------------
+const removeUserToken = () => {
+    localStorage.removeItem("user");
+}
+
+// -----------------------------------------------------------------
+// Set the JWT token into the Authorization request header
+// -----------------------------------------------------------------
+const authHeader = () => {
+    const userData = getUserToken();
+  
+    if (userData && userData.token) {
+      return { Authorization: 'Bearer ' + userData.token };
+    } else {
+      return {};
+    }
+  }
+
+// -----------------------------------------------------------------
 // Login Local
 // -----------------------------------------------------------------
 export const apiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
@@ -22,8 +56,16 @@ export const apiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
             data: creds,
         });
         let jwt = res.headers['authorization'];
+        let userData = {
+            // info: res.data.message,
+            token: jwt
+        }
+
+        // Save the user data in Local Storage
+        setUserToken(userData)
+
         console.log ("jwt is ", jwt, res);
-        successCB (dispatch, jwt)
+        successCB (dispatch, userData)
     } catch (err) {
         console.error(err);
         errorCB (dispatch, err);
@@ -34,9 +76,9 @@ export const apiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
 // Get list of Properties
 // -----------------------------------------------------------------
 export const apiGetProperties = async (successCB, errorCB, dispatch) => {
-    // axios.get(apiUrl + '/property') !!!!!!!!!!!!
+    
     try {
-        const res = await axios.get(apiUrl + '/user');
+        const res = await axios.get(apiUrl + '/property', { headers: authHeader()});
         let data = res.data.res;
         console.log ("data is ", data);
         successCB (dispatch, data)
