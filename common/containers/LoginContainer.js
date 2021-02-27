@@ -43,10 +43,13 @@ const LoginContainer = connect(
 import React from 'react'
 import { render } from 'react-dom'
 import { useDispatch, useSelector } from "react-redux"
+import { Redirect } from 'react-router-dom';
 import { Form, Field } from 'react-final-form'
 
 // Action helpers
-import { localLoginReqAction } from '../actions/action.js'
+import { localLoginReqAction,
+         logoutReqAction 
+} from '../actions/action.js'
 
 import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE} from '../components/widgets/SocialButton'
 import s from '../scss/LoginView.scss'
@@ -58,7 +61,14 @@ const onSubmitOld = async values => {
   window.alert(JSON.stringify(values, 0, 2))
 }
 
-const LoginContainer = () => {
+export const LoginContainer = () => {
+  // Redirect to the home page if we're already logged in
+  const { userData: currentUser } = useSelector((state) => state.login);
+  console.log ("Login Container, user data is ", currentUser);
+  if (currentUser) {
+    return <Redirect to="/" />;
+  }
+
   const dispatch = useDispatch();
   const onSubmit = async values => {
     console.log ('Doing Local Login')
@@ -139,7 +149,16 @@ const LoginContainer = () => {
   );
 }
 
-export default LoginContainer
+export const LogoutCb = () => {
+  const userData = useSelector((state) => state.login);
+  if (userData) {
+    const dispatch = useDispatch();
+    logoutReqAction (dispatch);
+  }
+
+  // Redirect to the home page if we're already logged in
+  // return <Redirect to="/" />;
+}
 
 /* const LoginContainer = () => (
   <div>

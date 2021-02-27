@@ -3,7 +3,12 @@
 // 3 action types for REQ, SUCCESS and ERROR
 // -----------------------------------------------------------------
 
-const login = (state = [], action) => {
+import { getUserToken } from '../api/api.js';
+
+const userData = getUserToken();
+const initialState = userData ? { userData } : { userData: null };
+
+const login = (state = initialState, action) => {
     switch (action.type) {
         case 'LOGIN_LOCAL_REQ':
             return {
@@ -20,6 +25,8 @@ const login = (state = [], action) => {
                 error: action.error,
                 api: "error"
             }
+        case 'LOGOUT':
+            return { userData: null }
         default:
             return state
     }

@@ -32,8 +32,9 @@ function srvRender(request, res) {
     )
     
     if (context.url) {
+        // We received a redirect
         console.info ('redirect', context.url)
-        return h.code(302).redirect(context.url)
+        return res.status(302).redirect(context.url)
     }
     else {
         // Grab the initial state from our Redux store

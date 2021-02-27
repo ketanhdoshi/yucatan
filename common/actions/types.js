@@ -13,9 +13,9 @@ export const loginLocalReq = () => ({
 // -----------------------------------------------------------------
 // SUCCESS action object for LOGIN_LOCAL
 // -----------------------------------------------------------------
-export const loginLocalSuccess = (jwt) => ({
+export const loginLocalSuccess = (userData) => ({
   type: 'LOGIN_LOCAL_SUCCESS',
-  jwt: jwt
+  userData
 })
 
 // -----------------------------------------------------------------
@@ -24,6 +24,13 @@ export const loginLocalSuccess = (jwt) => ({
 export const loginLocalError = (error) => ({
   type: 'LOGIN_LOCAL_ERROR',
   error: error
+})
+
+// -----------------------------------------------------------------
+// Action object for LOGOUT
+// -----------------------------------------------------------------
+export const logoutReq = () => ({
+  type: 'LOGOUT'
 })
 
 // -----------------------------------------------------------------

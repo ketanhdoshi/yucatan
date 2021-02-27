@@ -11,8 +11,14 @@ const apiUrl = 'http://localhost:3011/api';
 // -----------------------------------------------------------------
 // Get User Data (with JWT token) from LocalStorage
 // -----------------------------------------------------------------
-const getUserToken = () => {
-    return JSON.parse(localStorage.getItem('user'));
+export const getUserToken = () => {
+    if (typeof window !== 'undefined') {
+        // We don't have a browser (the APIs that the browser provides) when rendering on the server,  
+        // “Window” is the root object provided by the browser for all its APIs.
+        return JSON.parse(localStorage.getItem('user'));
+    } else {
+        return null;
+    }
 }
 
 // -----------------------------------------------------------------
@@ -25,7 +31,7 @@ const setUserToken = (userData) => {
 // -----------------------------------------------------------------
 // Remove User Data (with JWT token) from LocalStorage
 // -----------------------------------------------------------------
-const removeUserToken = () => {
+export const removeUserToken = () => {
     localStorage.removeItem("user");
 }
 
@@ -69,6 +75,22 @@ export const apiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
     } catch (err) {
         console.error(err);
         errorCB (dispatch, err);
+    }
+}
+
+// -----------------------------------------------------------------
+// Logout
+// -----------------------------------------------------------------
+export const apiLogout = async () => {
+    try {
+        // Before removing the token, get the authorization header as we will need it for the API call. 
+        let auth = authHeader();
+        // Remvove the user data from Local Storage
+        removeUserToken();
+        // Call the Logout API. We don't really care about the success or failure
+        const res = await axios.get(apiUrl + '/logout', { headers: auth});
+    } catch (err) {
+        console.error(err);
     }
 }
 

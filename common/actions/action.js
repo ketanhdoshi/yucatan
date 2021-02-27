@@ -22,7 +22,7 @@
 
 // Import the Action objects
 import {
-    loginLocalReq, loginLocalSuccess, loginLocalError, 
+    loginLocalReq, loginLocalSuccess, loginLocalError, logoutReq,
     getPropertiesReq, getPropertiesSuccess, getPropertiesError,
     getMatchesReq, getMatchesSuccess,
     getPostReq, getPostSuccess,
@@ -31,6 +31,7 @@ import {
 // Import the API calls
 import { 
     apiLoginLocal,
+    apiLogout,
     apiGetProperties,
     apiGetUsers, 
     apiGetPost,
@@ -45,7 +46,7 @@ export const localLoginReqAction = (creds, dispatch) => {
     // Call the API to Login
     apiLoginLocal (creds, localLoginSuccessAction, localLoginErrorAction, dispatch)
     
-    // Call the Dispatcher with an action object of type GET_PROPERTIES_REQ
+    // Call the Dispatcher with an action object of type LOGIN_LOCAL_REQ
     dispatch (loginLocalReq ())
 }
 
@@ -67,8 +68,21 @@ export const localLoginSuccessAction = (dispatch, userData) => {
 export const localLoginErrorAction = (dispatch, error) => {
     console.log ("login error", error)
     
-    // Call the Dispatcher with an action object of type GET_MATCHES_SUCCESS
+    // Call the Dispatcher with an action object of type LOGIN_LOCAL_ERROR
     dispatch (loginLocalError (error))
+}
+
+// -----------------------------------------------------------------
+// Action to Logout
+// -----------------------------------------------------------------
+export const logoutReqAction = (dispatch) => {
+    console.log ("logout request")
+    
+    // Call the API to Logout
+    apiLogout ()
+    
+    // Call the Dispatcher with an action object of type LOGOUT_REQ
+    dispatch (logoutReq ())
 }
 
 // -----------------------------------------------------------------

@@ -128,6 +128,30 @@ const RouterLink = ({href, children}) => (
     <Link to={href} className='nav-link'>{children}</Link>
 )
 
+import { useDispatch, useSelector } from "react-redux"
+import { logoutReqAction } from '../../actions/action.js'
+import { useHistory } from "react-router-dom";
+
+const NavUser = () => {
+    const { userData: currentUser } = useSelector((state) => state.login);
+    const dispatch = useDispatch();
+    const history = useHistory();
+
+    const LogoutCb = () => {
+        console.log ("Logout user data is ", currentUser);
+        if (currentUser) {
+          logoutReqAction (dispatch);
+          history.push("/");
+        }
+    }
+
+    return (
+        <NavItem>
+            <NavLink href="#" onClick={LogoutCb}>Logout</NavLink>
+        </NavItem>
+    );
+}
+
 // -----------------------------------------------------------------
 // Wrapping Navbar
 // -----------------------------------------------------------------
@@ -180,6 +204,7 @@ const Navbar = ({def}) => {
                 </form>
             </NavbarCollapse>
             <ul className="navbar-nav flex-row">
+                <NavUser />
                 <NavItem>
                     <NavLink href="#sidebarnav" data-target="#sidebarnav" data-toggle="collapse"><i className="fa fa-clock-o"></i></NavLink>
                 </NavItem>
