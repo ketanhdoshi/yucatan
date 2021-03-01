@@ -4,15 +4,13 @@
 // This is our main file and the entry point for our server application.
 // It creates the two separate backends, one for the Web UI and another
 // for the API, and listens on two separate ports for incoming connections
+//
+// NB: We now use an Express Web UI server, rather than this one from HAPI 
+// as it doesn't support Hot Module Reload.
 // -----------------------------------------------
 
 // -----------------------------------------------
-// -----------------------------------------------
-const host = 'localhost';
-const port = 3010;
-
-// -----------------------------------------------
-// Start the Web Backend server and the API Backend server
+// Start the Web Backend server
 // -----------------------------------------------
 const webStart = async (WebSrv) => {
     // Create the server
@@ -24,6 +22,9 @@ const webStart = async (WebSrv) => {
     console.log('Web Server running on %s', websrv.info.uri);
 };
 
+// -----------------------------------------------
+// Start the API Backend server
+// -----------------------------------------------
 const apiStart = async (ApiSrv) => {
     // Create the server
     const apisrv = await ApiSrv.init(host, port + 1);
@@ -39,11 +40,11 @@ process.on('unhandledRejection', (err) => {
     process.exit(1);
 });
 
-console.log('Server...')
-
+// -----------------------------------------------
 // This lets us pass in an 'app' argument when launching this module
 // eg. require('./server')(app);
-module.exports = function (app) {
+// -----------------------------------------------
+const launch = function (app) {
     if (app === "api") {
         // Backend API server
         console.log('Starting app %s', app);
@@ -52,7 +53,7 @@ module.exports = function (app) {
     } else if (app === "web") {
         // Web server
         console.log('Starting app %s', app);
-        const WebSrv = require ('./webback/websrv');
+        const WebSrv = require ('./old/websrv');
         webStart(WebSrv);
     } else {
         console.log('Unknown app %s', app);
@@ -60,5 +61,24 @@ module.exports = function (app) {
     }
 };
 
+// -----------------------------------------------
+// Start of main program
+// -----------------------------------------------
+
+// Skip the first two arguments (ie. "node" and "serverStart.js")
+// Pass the 'app' argument when starting the server module
+var args = process.argv.slice(2);
+var app = args[0];
+
+console.log('Server...')
+
+// Hostname and port
+const host = 'localhost';
+const port = 3010;
+
+// Run the server
+launch(app)
+
+module.exports = launch
 
 

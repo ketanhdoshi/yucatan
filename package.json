@@ -6,9 +6,9 @@
   "main": "server.js",
   "private": true,
   "scripts": {
-    "api": "node serverStart.js api",
-    "web": "node expressStart.js",
-    "dash": "webpack-dashboard -- node expressStart.js",
+    "api": "node server api",
+    "web": "babel-node webback/express.js",
+    "dash": "webpack-dashboard -- babel-node webback/express.js",
     "webp": "webpack --config-name server"
   },
   "dependencies": {
@@ -50,10 +50,10 @@
   },
   "devDependencies": {
     "@babel/core": "^7.12.13",
+    "@babel/node": "^7.13.0",
     "@babel/plugin-transform-runtime": "^7.12.15",
     "@babel/preset-env": "^7.12.13",
     "@babel/preset-react": "^7.12.13",
-    "@babel/register": "^7.12.13",
     "babel-loader": "^8.2.2",
     "babel-preset-es2015": "^6.24.1",
     "css-loader": "^5.0.2",

@@ -3,6 +3,28 @@ import path from "path";
 
 import srvRender from '../built/serverbundle.js';
 
+// -----------------------------------------------
+// We have to run the web server using Babel so that it can dynamically 
+// transpile every code file as it is loaded. There are two equivalent
+// ways to do this:
+//   1) Run "babel-node webback/express.js" from the command-line
+//   2) Run "node expressStart.js". Create a file 'expressStart.js' that 
+//      contains just two lines:
+//          require('@babel/register');
+//          require('./webback/express');
+//
+// These two lines in .babelrc.json are to make sure that we can still use the debugger
+// using our original line numbers in the source code. Otherwise since Babel has
+// transpiled the code, all the line numbers get shifted.
+//
+//       "sourceMaps": "inline",
+//       "retainLines": true
+// 
+// In addition, we could also add the "--nolazy" flag in package.json when 
+// running the web server ie. "babel-node --nolazy webback/express.js"
+// Comments are not allowed in .json files, so putting the note here.
+// -----------------------------------------------
+
 // Server var
 const app = express();
 
@@ -41,12 +63,20 @@ app.listen(port, function listenHandler() {
 function hmr () {
     var webpack = require('webpack');
     var webpackConfig = require('../webpack.config.js');
-    var compiler = webpack(webpackConfig);
+    // Use only the client configuration from the webpack config file to rebuild the 
+    // bundle dynamically on a source code change. Do not use the server 
+    // configuration to rebuild the server bundle. In any case, Webpack HMR has no way to
+    // reload the changed server modules on the server side. Secondly, building two webpack
+    // bundles (client and server) causes the HMR hash numbers to get out of sync
+    // by 1. So the HMR Client Runtime keeps asking the HMR Server for the manifest for
+    // the Next hash rather than the Current hash.
+    var clientConfig = webpackConfig[0];
+    var compiler = webpack(clientConfig);
     
     // Tell express to use the webpack-dev-middleware and use the webpack.config.js
     // configuration file as a base.
     app.use(require("webpack-dev-middleware")(compiler, {
-        publicPath: webpackConfig[0].output.publicPath,
+        publicPath: clientConfig.output.publicPath,
         serverSideRender: true // enable serverSideRender
     }));
 
