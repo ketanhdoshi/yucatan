@@ -1,6 +1,9 @@
 const path = require('path');
 const webpack = require('webpack');
+// Used to extract all CSS to a separate (styles.css) file which is referenced from the
+// placeholder HTML file ie. <link rel="stylesheet" href="/built/styles.css" />
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 // Install Webpack Dashboard plugin just for fun, but there is no way to
 // interact with the UI with the mouse on Windows. I can scroll in the main log
 // pane using Up/Down Arrow keys, but cannot scroll in any of the other panes.
@@ -12,6 +15,7 @@ const config = {
     mode: 'development',
     devtool: 'inline-source-map',
     entry: [
+        // HMR Client Runtime that is injected into the client bundle running in the browser
         'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=4000&overlay=false',
         'client/client.js'
     ],
@@ -31,8 +35,10 @@ const config = {
             exclude: /node_modules/,
             loader: 'babel-loader',
             options: {
-                 // presets: [ 'react-hmre' ]
-                 presets: ["@babel/preset-env"]
+                 presets: ["@babel/preset-env"],
+                 plugins: [
+                    require.resolve('react-refresh/babel'),
+                ]
             }
         },
         {
@@ -71,7 +77,15 @@ const config = {
         ]
     },
   plugins: [
+    // Plugin to enable HMR
     new webpack.HotModuleReplacementPlugin(),
+    // React Fast Refresh plugin
+    new ReactRefreshWebpackPlugin({
+      overlay: {
+        // Integration with webpack-hot-middleware
+        sockIntegration: 'whm',
+      },
+    }),
     new MiniCssExtractPlugin({
       filename: 'styles.css'
     }),
@@ -135,8 +149,10 @@ const serverConfig = {
             options: {
                 importLoaders: 1,
                 modules: {
-                  // Needed so the CSS Modules style class names are included in the 
-                  // server-rendered HTML and can match the style class names on the client
+                  // 'exportOnlyLocals' is needed so the CSS Modules style class names are 
+                  // included in the server-rendered HTML and can match the style class names 
+                  // on the client. Without this flag, the server-render sends plain HTML without
+                  // any associated classnames from the CSS Modeules .
                   exportOnlyLocals: true,
                   localIdentName: '[name]__[local]___[hash:base64:5]'
               }
