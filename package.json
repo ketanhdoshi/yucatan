@@ -6,8 +6,10 @@
   "main": "server.js",
   "private": true,
   "scripts": {
-    "start": "node server.js",
-    "web": "webpack"
+    "api": "node serverStart.js api",
+    "web": "node expressStart.js",
+    "dash": "webpack-dashboard -- node expressStart.js",
+    "webp": "webpack --config-name server"
   },
   "dependencies": {
     "@babel/polyfill": "^7.12.1",
@@ -57,6 +59,7 @@
     "mini-css-extract-plugin": "^1.3.6",
     "webpack": "^5.21.2",
     "webpack-cli": "^4.5.0",
+    "webpack-dashboard": "^3.3.1",
     "webpack-dev-middleware": "^4.1.0",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-node-externals": "^2.5.2"

@@ -1,6 +1,10 @@
 const path = require('path');
 const webpack = require('webpack');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// Install Webpack Dashboard plugin just for fun, but there is no way to
+// interact with the UI with the mouse on Windows. I can scroll in the main log
+// pane using Up/Down Arrow keys, but cannot scroll in any of the other panes.
+const DashboardPlugin = require("webpack-dashboard/plugin");
 const nodeExternals = require('webpack-node-externals');
 
 const config = {
@@ -32,8 +36,9 @@ const config = {
             }
         },
         {
+            // I don't think the 'test' filter matches anything, so remove it
             test: /\.css$/,
-            use: [MiniCssExtractPlugin.loader, 'css-loader']
+            use: [MiniCssExtractPlugin.loader, 'css-xx-loader']
         },
         {
             test: /datepicker\.scss$/,
@@ -70,6 +75,7 @@ const config = {
     new MiniCssExtractPlugin({
       filename: 'styles.css'
     }),
+    new DashboardPlugin(),
   ],
   resolve: {
     modules: [__dirname, "node_modules"]
@@ -79,8 +85,9 @@ const config = {
 const serverConfig = {
   name: 'server',
   mode: 'development',
-  target: 'node',
-  externals: [nodeExternals()],
+  target: 'node', // ignore built-in modules like path, fs, etc.
+  devtool: 'inline-source-map',
+  externals: [nodeExternals()], // ignore all modules in node_modules folder
   entry: [
     'webback/expressRender.js',
   ],
@@ -112,7 +119,8 @@ const serverConfig = {
         test: /scss\\.*\.css$/,
         use: [
           {
-            loader: 'css-loader',
+            // I don't think the 'test' filter matches anything, so remove it
+            loader: 'shit-loader',
             options: {
                 importLoaders: 1
             }
@@ -127,6 +135,9 @@ const serverConfig = {
             options: {
                 importLoaders: 1,
                 modules: {
+                  // Needed so the CSS Modules style class names are included in the 
+                  // server-rendered HTML and can match the style class names on the client
+                  exportOnlyLocals: true,
                   localIdentName: '[name]__[local]___[hash:base64:5]'
               }
             }

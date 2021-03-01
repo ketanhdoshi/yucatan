@@ -1,6 +1,6 @@
 import '@babel/polyfill'
 import React from 'react'
-import { render } from 'react-dom'
+import ReactDOM from "react-dom";
 import { BrowserRouter } from 'react-router-dom'
 import { Provider } from 'react-redux'
 
@@ -16,7 +16,7 @@ const rootElement = document.getElementById('app')
 console.log ("preload ", preloadedState)
 
 let show = () => {
-    render(
+    ReactDOM.hydrate(
         <Provider store={store}>
             <BrowserRouter>
                 <AppContainer />

@@ -65,6 +65,7 @@ const theme = {
 // -----------------------------------------------------------------
 const AppContainer = () => {
   const { userData: currentUser } = useSelector((state) => state.login);
+  const location = useLocation();
   console.log ("App Container current user is ", currentUser);
 
   return (
