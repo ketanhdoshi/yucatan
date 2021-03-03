@@ -63,7 +63,8 @@ export const apiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
         });
         let jwt = res.headers['authorization'];
         let userData = {
-            // info: res.data.message,
+            name: res.data.name,
+            scope: res.data.scope,
             token: jwt
         }
 

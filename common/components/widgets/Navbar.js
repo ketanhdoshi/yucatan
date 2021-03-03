@@ -146,9 +146,19 @@ const NavUser = () => {
     }
 
     return (
-        <NavItem>
-            <NavLink href="#" onClick={LogoutCb}>Logout</NavLink>
-        </NavItem>
+            <div>
+                {currentUser ? (
+                <div>
+                    <NavItem>
+                        <NavLink href="#" onClick={LogoutCb}>{currentUser.name}</NavLink>
+                    </NavItem>
+                    <NavItem>
+                        <NavLink href="#" onClick={LogoutCb}>Logout</NavLink>
+                    </NavItem>
+                    </div>
+                ) : ( <NavItem><NavLink href="#" onClick={LogoutCb}>No User</NavLink></NavItem>)
+                }
+            </div>
     );
 }
 

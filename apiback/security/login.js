@@ -71,9 +71,10 @@ module.exports = {
                         // Create a JWT token and send it in the response
                         const jwt = loginSuccess (userProfile, null);
                         return h.response ({
-                            statusCode: 200,
+                            name: res.name,
+                            scope: res.scope,
                             message: 'Succesful login'
-                        }).header("Authorization", jwt);                
+                        }).code(200).header("Authorization", jwt);                
                     }
                 } catch (error) {
                     return Boom.serverUnavailable('Internal Mongo error', error);
@@ -160,9 +161,10 @@ module.exports = {
                         const jwt = loginSuccess (userProfile, token);
                         console.log ('jwt is ', jwt);
                         return h.response ({
-                            statusCode: 200,
+                            name: res.name,
+                            scope: res.scope,
                             message: 'Succesful login'
-                        }).header("Authorization", jwt);  
+                        }).code(200).header("Authorization", jwt);  
                     } catch (error) {
                         return Boom.serverUnavailable('Internal Mongo error', error);
                     }
