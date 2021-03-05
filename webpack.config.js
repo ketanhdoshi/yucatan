@@ -3,6 +3,7 @@ const webpack = require('webpack');
 // Used to extract all CSS to a separate (styles.css) file which is referenced from the
 // placeholder HTML file ie. <link rel="stylesheet" href="/built/styles.css" />
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+// React Fast Refresh plugin for HMR for React Components
 const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin');
 // Install Webpack Dashboard plugin just for fun, but there is no way to
 // interact with the UI with the mouse on Windows. I can scroll in the main log
@@ -10,6 +11,9 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const nodeExternals = require('webpack-node-externals');
 
+// -----------------------------------------------------------------
+// Webpack configuration for the client-side bundle
+// -----------------------------------------------------------------
 const config = {
     name: 'client',
     mode: 'development',
@@ -17,20 +21,30 @@ const config = {
     entry: [
         // HMR Client Runtime that is injected into the client bundle running in the browser
         'webpack-hot-middleware/client?path=/__webpack_hmr&timeout=4000&overlay=false',
+        // Entry point for the client rendering code
         'client/client.js'
     ],
-    watchOptions: { 
+    watchOptions: {
+      // webpack-dev-middleware watches the file system for changes to source code files
+      // so it can rebuild them for HMR. In Docker containers, the file system is not able
+      // to notify the dev-middleware when this happens. So we have to poll the file system.
       poll: true,
       ignored: /node_modules/,
     },
     output: {
-        path: path.join(__dirname, 'built/'),
-        filename: 'clientbundle.js',
-        publicPath: '/built/'
+      // Output location and file name of the client bundle
+      path: path.join(__dirname, 'built/'),
+      filename: 'clientbundle.js',
+      // URL used by the browser to fetch the client bundle ie. http://localhost:8080/built/clientbundle.js
+      publicPath: '/built/'
     },
     module: {
+        // Rules that define how files of different types will be processed by Webpack loaders
         rules: [
         {
+            // All Javascript files (except third party libraries in node_modules) are transpiled
+            // by babel-loader. It uses the 'env' preset, which provides compatibiity with all browsers
+            // by transpiling our code to an older version of Javascript.
             test: /\.js$/,
             exclude: /node_modules/,
             loader: 'babel-loader',
@@ -42,9 +56,9 @@ const config = {
             }
         },
         {
-            // I don't think the 'test' filter matches anything, so remove it
+            // Plain CSS files
             test: /\.css$/,
-            use: [MiniCssExtractPlugin.loader, 'css-xx-loader']
+            use: [MiniCssExtractPlugin.loader, 'css-loader']
         },
         {
             test: /datepicker\.scss$/,
@@ -73,19 +87,32 @@ const config = {
                 }
               }
             ]
-        }
+        },
+        {
+          // Images are inserted inline into the HTML
+          test: /\.(png|svg|jpg|jpeg|gif)$/i,
+          type: 'asset/inline',
+        },
+        {
+          // Fonts are inserted inline into the CSS
+          test: /\.(woff|woff2|eot|ttf|otf)$/i,
+          type: 'asset/inline',
+        },
         ]
     },
   plugins: [
     // Plugin to enable HMR
     new webpack.HotModuleReplacementPlugin(),
-    // React Fast Refresh plugin
+    // React Fast Refresh plugin (handles HMR for React components)
     new ReactRefreshWebpackPlugin({
       overlay: {
         // Integration with webpack-hot-middleware
         sockIntegration: 'whm',
       },
     }),
+    // Extracts the CSS from all the individual CSS files and combines it into a separate
+    // 'styles.css' file in the output directory. This file is referenced from the 
+    // index.ejs HTML template so it gets fetched and loaded by the browser.
     new MiniCssExtractPlugin({
       filename: 'styles.css'
     }),
@@ -96,6 +123,9 @@ const config = {
   }
 };
 
+// -----------------------------------------------------------------
+// Webpack configuration for the server-side bundle
+// -----------------------------------------------------------------
 const serverConfig = {
   name: 'server',
   mode: 'development',
@@ -103,11 +133,15 @@ const serverConfig = {
   devtool: 'inline-source-map',
   externals: [nodeExternals()], // ignore all modules in node_modules folder
   entry: [
+    // Entry point for the server rendering code
     'webback/expressRender.js',
   ],
   output: {
+    // Output location and file name of the server bundle
     path: path.join(__dirname, 'built/'),
     filename: 'serverbundle.js',
+    // URL used by node.js to import our application code from the server bundle 
+    // for rendering on the server ie. http://localhost:8080/built/serverbundle.js
     publicPath: '/built/',
     libraryTarget: 'commonjs2'
   },
@@ -126,20 +160,7 @@ const serverConfig = {
       },
       {
         test: /\.css$/,
-        exclude: /scss\\.*\.css$/,
-        loader: 'null'
-      },
-      {
-        test: /scss\\.*\.css$/,
-        use: [
-          {
-            // I don't think the 'test' filter matches anything, so remove it
-            loader: 'shit-loader',
-            options: {
-                importLoaders: 1
-            }
-          }
-        ]
+        loader: 'css-loader'
       },
       {
         test: /\.scss$/,
@@ -159,7 +180,17 @@ const serverConfig = {
             }
           }
         ]
-      }
+      },
+      {
+        // Images are inserted inline into the HTML
+        test: /\.(png|svg|jpg|jpeg|gif)$/i,
+        type: 'asset/inline',
+      },
+      {
+        // Fonts are inserted inline into the CSS
+        test: /\.(woff|woff2|eot|ttf|otf)$/i,
+        type: 'asset/inline',
+      },
     ]
   },
   resolve: {

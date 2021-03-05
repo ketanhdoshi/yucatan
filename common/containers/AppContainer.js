@@ -57,6 +57,8 @@ const theme = {
   primary: 'palevioletred',
 };
 
+import AdminLayout from "../admin/layouts/Admin.js";
+
 // -----------------------------------------------------------------
 // Every route in the app must be inside the AppContainer
 // TODO - Implement an isLoggedIn check and go to MainContainer if
@@ -73,6 +75,7 @@ const AppContainer = () => {
         <GlobalStyle />
         <div>
             <Switch>
+                <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
                 <Route path="/home" component={Home}/>
                 <Route path="/login" component={LoginContainer}/>
                 <Route exact path="/">

@@ -24,6 +24,8 @@
     "@hapi/vision": "^6.0.1",
     "axios": "^0.21.1",
     "bcryptjs": "^2.4.3",
+    "bootstrap": "^4.6.0",
+    "chartist": "^0.11.4",
     "ejs": "^3.1.6",
     "express": "^4.17.1",
     "final-form": "^4.20.1",
@@ -37,9 +39,11 @@
     "mongoose-type-url": "^2.1.0",
     "prop-types": "^15.7.2",
     "react": "^17.0.1",
-    "react-bootstrap": "^1.4.3",
+    "react-bootstrap": "^1.5.1",
+    "react-chartist": "^0.14.4",
     "react-dom": "^17.0.1",
     "react-final-form": "^6.5.2",
+    "react-notification-alert": "0.0.13",
     "react-redux": "^7.2.2",
     "react-router": "^5.2.0",
     "react-router-dom": "^5.2.0",
@@ -66,5 +70,8 @@
     "webpack-dev-middleware": "^4.1.0",
     "webpack-hot-middleware": "^2.25.0",
     "webpack-node-externals": "^2.5.2"
+  },
+  "optionalDependencies": {
+    "reactstrap": "^8.9.0"
   }
 }
