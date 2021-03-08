@@ -4,7 +4,7 @@ import { Provider } from 'react-redux'
 import { StaticRouter } from 'react-router'
 
 import configureStore from '../common/store/configureStore'
-import AppContainer from '../common/containers/AppContainer'  
+import AppView from '../common/appscreens/AppView'  
 //import configureStore from '../minimal/store/configureStore'
 //import AppContainer from '../minimal/containers/AppContainer'  
 
@@ -26,7 +26,7 @@ function srvRender(request, res) {
     const html = renderToString(
         <Provider store={store}>
             <StaticRouter location={request.originalUrl} context={context}>
-                <AppContainer />
+                <AppView />
             </StaticRouter>
         </Provider>
     )
