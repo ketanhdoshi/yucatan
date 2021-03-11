@@ -33,7 +33,7 @@ const MainHeader = () => {
     e.preventDefault();
     // Add the 'nav-open' class to the document's <html> tag. This causes the Sidebar
     // to slide in.
-    document.documentElement.classList.toggle(s.navOpen);
+    document.documentElement.classList.toggle("navopen");
 
     // Create an event handler which will cause the Sidebar to slide out when
     // you click on somewhere on the page (outside the Sidebar)
@@ -46,7 +46,7 @@ const MainHeader = () => {
       // is removed from the <html> and this <div> with the event handler is also
       // removed.
       this.parentElement.removeChild(this);
-      document.documentElement.classList.toggle(s.navOpen);
+      document.documentElement.classList.toggle("navopen");
     };
     // Add the <div> tag as a child of the <body>
     document.body.appendChild(node);
@@ -67,7 +67,7 @@ const MainHeader = () => {
         <div className="d-flex justify-content-center align-items-center ml-2 ml-lg-0">
           <Button
             variant="dark"
-            className={s.toggleBtn + " d-lg-none btn-fill d-flex justify-content-center align-items-center rounded-circle p-2"}
+            className={s.sidebarToggle + " d-lg-none btn-fill d-flex justify-content-center align-items-center rounded-circle p-2"}
             onClick={mobileSidebarToggle}
           >
             <i className="fas fa-ellipsis-v"></i>
@@ -76,10 +76,10 @@ const MainHeader = () => {
             {getBrandText()}
           </Navbar.Brand>
         </div>
-        <Navbar.Toggle aria-controls="basic-navbar-nav" className="mr-2">
-          <span className="navbar-toggler-bar burger-lines"></span>
-          <span className="navbar-toggler-bar burger-lines"></span>
-          <span className="navbar-toggler-bar burger-lines"></span>
+        <Navbar.Toggle aria-controls="basic-navbar-nav" className={s.navbarToggle + " mr-2"}>
+          <span className={s.burger}></span>
+          <span className={s.burger}></span>
+          <span className={s.burger}></span>
         </Navbar.Toggle>
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="nav mr-auto" navbar>
