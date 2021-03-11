@@ -1,0 +1,63 @@
+/*
+ * Page: Main Footer
+ * ----------------------
+ */
+
+@import "Config";
+
+.footer{
+    border-top: 1px solid #e7e7e7;
+    background-color: $white-color;
+
+    @media (min-width: 992px) {
+        height: 60px;
+    }
+}
+
+.footerMenu{
+    height: 41px;
+    font-size: $font-size-base;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+
+    @media (min-width: 992px) {
+        float: left;
+    }
+}
+
+.footerItem{
+    margin-left: 20px;
+    float: left;
+}
+
+.footerItemFirst{
+    composes: footerItem;
+    margin-left: 0px;
+}
+
+.footerLink{
+    padding: 10px 0px;
+    margin: 10px 10px 10px 0px;
+    color: $dark-gray;
+    display: block;
+    margin-bottom: 3px;
+
+    &:hover,
+    &:focus{
+        color: $default-states-color;
+    }
+}
+
+.copyright{
+    color: $default-states-color;
+    padding: 10px 15px;
+    margin: 10px 3px;
+    line-height: 20px;
+    font-size: $font-size-base;
+
+    @media (min-width: 992px) {
+        float: right;
+    }
+}

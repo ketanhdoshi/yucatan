@@ -1,0 +1,47 @@
+/*
+ * Page: Main Header
+ * ----------------------
+ */
+
+@import "Config";
+
+.navbar {
+    @include transition($general-transition-time, $transition-linear);
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    font-family: $primary-font;
+    font-weight: $font-weight-normal;
+    margin-bottom: 0;
+    border: $none;
+    font-size: $font-size-navbar;
+    border-radius: 0;
+    min-height: 50px;
+    background-color: $white-navbar;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+}
+
+.toggleBtn {
+    margin: $navbar-margin-btn;
+    font-size: $font-size-base;
+}
+
+.navbarBrand {
+    font-weight: 400;
+    margin: 5px 0px;
+    font-size: 20px;
+    color: $default-color;
+
+    &:hover{
+        color: #5e5e5e;
+    }
+}
+
+.navLink{
+    color: $default-color;
+    padding: $navbar-padding-a;
+    margin: $navbar-margin-a;
+    position: relative;
+    display: inline-flex;
+    line-height: 40px;
+}
+

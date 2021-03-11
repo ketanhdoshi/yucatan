@@ -11,7 +11,8 @@ import { useSelector } from "react-redux";
 import { ThemeProvider, createGlobalStyle }  from 'styled-components';
 
 import MainView from '../layout/lte/MainView'
-import AdminLayout from "../layout/admin/Admin.js";
+import AdminLayout from "../layout/admin/Admin";
+import MainPage from "../layout/main/MainPage";
 import Home from './Home'
 import { LoginView } from './LoginView'
 
@@ -48,6 +49,7 @@ const AppView = () => {
         <div>
             <Switch>
                 <Route path="/admin" render={(props) => <AdminLayout {...props} />} />
+                <Route path="/main" render={(props) => <MainPage {...props} />} />
                 <Route path="/home" component={Home}/>
                 <Route path="/login" component={LoginView}/>
                 <Route exact path="/">

@@ -1,0 +1,119 @@
+/*
+ * App-wide variables
+ * ----------------------
+ */
+
+$none:                       0   !default;
+
+$primary-font:         "Roboto","Helvetica Neue",Arial,sans-serif;
+
+$white-color:                #FFFFFF !default;
+$dark-gray:                  #9A9A9A !default;
+
+
+$transparent-bg:             transparent !default;
+
+$default-color:              #888888 !default;
+$default-bg:                 #888888 !default;
+$default-states-color:       #777777 !default;
+
+$new-blue:            #1DC7EA;
+$new-purple:          #9368E9;
+$new-red:             #FB404B;
+$new-green:           #87CB16;
+$new-orange:          #FFA534;
+$new-dark-blue:       #1F77D0;
+$new-black:           #5e5e5e;
+
+$blue-color-top: 		            #4087ea;
+$blue-color-bottom: 	            #533ce1;
+
+$azure-color-top:   	            #45c0fd;
+$azure-color-bottom:            	#4091ff;
+
+$green-color-top: 	                #a1eb3a;
+$green-color-bottom: 	            #6dc030;
+
+$orange-color-top: 	                #ffb33b;
+$orange-color-bottom: 	            #ff5221;
+
+$red-color-top: 	                #ff3b30;
+$red-color-bottom: 	                #bb0502;
+
+$purple-color-top: 	                #df55e1;
+$purple-color-bottom: 	            #943bea;
+
+$pink-color-top: 		            #ff2a63;
+$pink-color-bottom: 	            #ff2e2e;
+
+$black-color-top:	 	            #787878;
+$black-color-bottom: 	            #343434;
+
+$white-navbar:              rgba(#FFFFFF, .96);
+
+$sidebar-width:        calc(100% - 260px) !default;
+
+$border-thick:               2px !default;
+
+
+$padding-zero:                   0px !default;
+$padding-base-vertical:         8px !default;
+$padding-base-horizontal:      16px !default;
+
+$padding-round-vertical:        9px !default;
+$padding-round-horizontal:     18px !default;
+
+$padding-simple-vertical:      10px !default;
+$padding-simple-horizontal:    18px !default;
+
+$padding-large-vertical:       14px !default;
+$padding-large-horizontal:     30px !default;
+
+$padding-small-vertical:        5px !default;
+$padding-small-horizontal:     10px !default;
+
+$padding-xs-vertical:           1px !default;
+$padding-xs-horizontal:         5px !default;
+
+$padding-label-vertical:        2px !default;
+$padding-label-horizontal:     12px !default;
+
+$margin-large-vertical:        30px !default;
+$margin-base-vertical:         15px !default;
+
+$line-height-general:          1.5 !default;
+
+$font-size-base:               14px !default;
+$font-size-small:              12px !default;
+$font-size-medium:             16px !default;
+$font-size-large:              18px !default;
+$font-size-large-navbar:       20px !default;
+
+$font-size-h1:                 52px !default;
+$font-size-h2:                 36px !default;
+$font-size-h3:                 28px !default;
+$font-size-h4:                 22px !default;
+$font-size-h5:                 16px !default;
+$font-size-h6:                 14px !default;
+$font-paragraph:               16px !default;
+$font-size-navbar:             16px !default;
+$font-size-small:              12px !default;
+
+$font-weight-light:          300 !default;
+$font-weight-normal:         400 !default;
+$font-weight-semi:           500 !default;
+$font-weight-bold:           600 !default;
+
+$transition-linear:         linear !default;
+$transition-bezier:         cubic-bezier(0.34, 1.61, 0.7, 1) !default;
+$transition-ease:           ease 0s;
+$transition-ease-in:        ease-in !default;
+$transition-ease-out:       ease-out !default;
+
+$general-transition-time:  300ms !default;
+$fast-transition-time:     150ms !default;
+$ultra-fast-transition-time:     100ms  !default;
+
+$navbar-padding-a:         10px 15px;
+$navbar-margin-a:          10px  3px;
+$navbar-margin-btn:        15px  3px;

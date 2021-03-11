@@ -1,0 +1,11 @@
+/*
+ * App-wide styles
+ * ----------------------
+ */
+@import "Config";
+
+:global {
+    @import "Typography";
+    @import "Bootstrap";
+}
+
