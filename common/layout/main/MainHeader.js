@@ -85,14 +85,14 @@ const MainHeader = () => {
           <Nav className="nav mr-auto" navbar>
             <Nav.Item>
               <Nav.Link data-toggle="dropdown" href="#pablo" onClick={(e) => e.preventDefault()} className={s.navLink + " m-0"}>
-                <i className="nc-icon nc-palette"></i>
+                <i className={s.navIcon + " nc-icon nc-palette"}></i>
                 <span className="d-lg-none ml-1">Dashboard</span>
               </Nav.Link>
             </Nav.Item>
             <Dropdown as={Nav.Item}>
               <Dropdown.Toggle as={Nav.Link} data-toggle="dropdown" id="dropdown-67443507" variant="default" className={s.navLink + " m-0"}>
-                <i className="nc-icon nc-planet"></i>
-                <span className="notification">5</span>
+                <i className={s.navIcon + " nc-icon nc-planet"}></i>
+                <span className={s.navNotification}>5</span>
                 <span className="d-lg-none ml-1">Notification</span>
               </Dropdown.Toggle>
               <Dropdown.Menu>
@@ -105,7 +105,7 @@ const MainHeader = () => {
             </Dropdown>
             <Nav.Item>
               <Nav.Link className={s.navLink + " m-0"} href="#pablo" onClick={(e) => e.preventDefault()}>
-                <i className="nc-icon nc-zoom-split"></i>
+                <i className={s.navIcon + " nc-icon nc-zoom-split"}></i>
                 <span className="d-lg-block"> Search</span>
               </Nav.Link>
             </Nav.Item>

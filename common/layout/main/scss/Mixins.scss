@@ -37,6 +37,16 @@
     background-size: 150% 150%;
 }
 
+@mixin input-size($padding-vertical, $padding-horizontal, $height){
+  padding: $padding-vertical $padding-horizontal;
+  height: $height;
+}
+
+@mixin box-shadow($shadow...) {
+  -webkit-box-shadow: $shadow; // iOS <4.3 & Android <4.1
+          box-shadow: $shadow;
+}
+
 // Mixin for generating new styles
 /* @mixin btn-styles($btn-color, $btn-states-color) {
     border-color: $btn-color;

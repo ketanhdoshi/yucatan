@@ -3,14 +3,3 @@
  * ----------------------
  */
 
- .btn{
-    border-width: $border-thick;
-    background-color: $transparent-bg;
-    font-weight: $font-weight-normal;
-
-    @include opacity(.8);
-    padding: $padding-base-vertical $padding-base-horizontal;
-
-    // @include btn-styles($default-color, $default-states-color);
-    @include transition($ultra-fast-transition-time, $transition-ease-in);
- }

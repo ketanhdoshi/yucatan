@@ -1,0 +1,111 @@
+/*
+ * Screen: Notifications
+ * ----------------------
+ */
+
+@import "../scss/Config";
+
+.alert{
+    border-radius: $border-radius-base;
+    position: relative;
+
+    border: 0;
+    color: #FFFFFF;
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+.primary{
+    composes: alert;
+    background-color: $blue-navbar;
+}
+.info{
+    composes: alert;
+    background-color: $azure-navbar;
+}
+.success {
+    composes: alert;
+    background-color: $green-navbar;
+}
+.warning {
+    composes: alert;
+    background-color: $orange-navbar;
+}
+.danger {
+    composes: alert;
+    background-color: $red-navbar;
+}
+
+.infoIcon{
+    composes: info;
+    padding-left: 65px;
+}
+
+.alertIcon{
+    display: block;
+    max-width: 89%;
+    font-size: 30px !important;
+    display: block;
+    left: 15px;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+}
+
+.msgClose{
+    display: block;
+    max-width: 89%;
+}
+
+:global .rna-container .alert {
+    border-radius: 4px;
+    padding-left: 65px;
+    animation-name: fadeInDown;
+    -webkit-animation-name: fadeInDown;
+    animation-fill-mode: both;
+    animation-duration: 1s;
+    border: 0;
+    color: #FFFFFF;
+    padding: 10px 15px;
+    padding-left: 65px;
+    font-size: 14px;
+}
+:global .rna-container .alert button.close {
+    color: #000;
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+}
+:global .rna-container .alert button.close span {
+    margin-top: -4px; 
+}
+
+:global .rna-container .alert .close ~ span {
+    display: block;
+    max-width: 89%;
+}
+
+:global .rna-container .alert span[data-notify="icon"] {
+    font-size: 30px;
+    display: block;
+    left: 15px;
+    position: absolute;
+    top: 50%;
+    margin-top: -15px;
+}
+
+:global .rna-container .alert-primary{
+    background-color: $blue-navbar;
+}
+:global .rna-container .alert-info{
+     background-color: $azure-navbar;
+}
+:global .rna-container .alert-success {
+    background-color: $green-navbar;
+}
+:global .rna-container .alert-warning {
+     background-color: $orange-navbar;
+}
+:global .rna-container .alert-danger {
+     background-color: $red-navbar;
+}

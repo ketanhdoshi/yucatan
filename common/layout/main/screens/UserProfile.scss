@@ -1,0 +1,126 @@
+/*
+ * Screen: User Profile
+ * ----------------------
+ */
+
+@import "../scss/Config";
+
+.profileBody{
+    padding: 15px 15px 10px 15px;
+}
+
+.label{
+    font-size: $font-size-small;
+    margin-bottom: 5px;
+    text-transform: uppercase;
+    font-weight: $font-weight-normal;
+    color: $dark-gray;
+}
+
+.disabled {
+    background-color: $white-bg;
+    color: $default-color;
+    cursor: not-allowed;
+}
+
+.formControl {
+    background-color: $white-bg;
+    color: #565656;
+    border: 1px solid $light-gray;
+    border-radius: $border-radius-base;
+    @include input-size($padding-base-vertical, $padding-base-horizontal - 4, $height-base);
+    @include box-shadow(none);
+
+    @include transition($general-transition-time, $transition-linear);
+
+    &:focus{
+        background-color: $white-bg;
+        border: 1px solid $medium-dark-gray;
+        @include box-shadow(none);
+        outline: 0 !important;    
+        color: #333333;   
+    }
+}
+
+.cardUser{
+    border-radius: $border-radius-base;
+    background-color: $white-color;
+    margin-bottom: 30px;
+}
+
+.backgndPhoto{
+    width: 100%;
+    overflow: hidden;
+    height: 110px;
+    border-radius: $border-radius-base $border-radius-base 0 0;
+    position: relative;
+    -webkit-transform-style: preserve-3d;
+    -moz-transform-style: preserve-3d;
+    transform-style: preserve-3d;
+}
+    
+.backgndImg {
+    width: 100%;
+}
+
+.bioBody{
+    padding: 15px 15px 10px 15px;
+}
+
+.bio{
+    font-size: $font-size-small;
+    font-weight: $font-weight-bold;
+    text-transform: uppercase;
+    text-align: center;
+    text-transform: none;
+    margin-top: -70px;
+}
+
+.avatar{
+    width: 124px;
+    height: 124px;
+    border: 5px solid #FFFFFF;
+    position: relative;
+    margin-bottom: 15px;
+    border-color: #EEEEEE;
+
+    overflow: hidden;
+    border-radius: 50%;
+    margin-right: 5px;
+}
+
+.displayName {
+    line-height: 24px;
+    color: $info-color;
+}
+
+.userId {
+    font-size: $font-size-base;
+    color: #333;
+}
+
+.desc {
+    font-size: $font-size-base;
+    color: #333;
+}
+
+.hr{
+    margin: 5px 15px;
+}
+
+.btnIcon {
+    border: $none;
+    font-size: $font-size-medium;
+    padding: $padding-base-vertical;
+    color: $default-color;
+
+    background-color: $transparent-bg;
+    font-weight: $font-weight-normal;
+    @include opacity(.8);
+    @include transition($ultra-fast-transition-time, $transition-ease-in);
+}
+
+.faIcon {
+    width: 18px;
+    text-align: center;
+}

@@ -23,16 +23,29 @@
 .sidebarToggle {
     margin: $navbar-margin-btn;
     font-size: $font-size-base;
+
+    color: $white-color;
+    background-color: $default-color;
+    @include opacity(1);  
+
+    border-width: $border-thick;
+    font-weight: $font-weight-normal;
+
+    padding: $padding-base-vertical $padding-base-horizontal;
+    border-color: $default-color;
+
+    // @include btn-styles($default-color, $default-states-color);
+    @include transition($ultra-fast-transition-time, $transition-ease-in);
 }
 
 .navbarBrand {
     font-weight: 400;
     margin: 5px 0px;
     font-size: 20px;
-    color: $default-color;
+    color: $default-color !important;
 
     &:hover{
-        color: #5e5e5e;
+        color: #5e5e5e !important;
     }
 
     @media (max-width: 991px) {
@@ -58,10 +71,47 @@
 
 .navLink{
     color: $default-color;
-    padding: $navbar-padding-a;
+    padding: $navbar-padding-a !important;
     margin: $navbar-margin-a;
     position: relative;
     display: inline-flex;
     line-height: 40px;
+
+    &:hover{
+        color: $info-color !important;
+    }
+
+    &:after{
+        display: inline-block;
+        width: 0;
+        height: 0;
+        margin-left: 5px;
+        margin-top: 20px;
+        vertical-align: middle;
+        border-top: 4px dashed;
+        border-top: 4px solid\9;
+        border-right: 4px solid transparent;
+        border-left: 4px solid transparent;
+    }
 }
 
+.navIcon{
+    font-weight: 700 !important;
+    margin-top: 10px;
+}
+
+.navNotification{
+    position: absolute;
+    background-color: #FB404B;
+    text-align: center;
+    border-radius: 10px;
+    min-width: 18px;
+    padding: 0 5px;
+    height: 18px;
+    font-size: 12px;
+    color: $white-color;
+    font-weight: bold;
+    line-height: 18px;
+    top: 10px;
+    left: 7px;
+}

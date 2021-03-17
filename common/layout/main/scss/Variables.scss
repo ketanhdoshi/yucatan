@@ -8,14 +8,20 @@ $none:                       0   !default;
 $primary-font:         "Roboto","Helvetica Neue",Arial,sans-serif;
 
 $white-color:                #FFFFFF !default;
+$light-gray:                 #E3E3E3 !default;
 $dark-gray:                  #9A9A9A !default;
-
+$white-bg:                   #FFFFFF !default;
+$smoke-bg:                   #F5F5F5 !default;
+$medium-dark-gray:           #AAAAAA !default;
+$black-color:                #333333 !default;
 
 $transparent-bg:             transparent !default;
 
 $default-color:              #888888 !default;
 $default-bg:                 #888888 !default;
 $default-states-color:       #777777 !default;
+
+$info-color:                 #1DC7EA !default;
 
 $new-blue:            #1DC7EA;
 $new-purple:          #9368E9;
@@ -50,11 +56,16 @@ $black-color-top:	 	            #787878;
 $black-color-bottom: 	            #343434;
 
 $white-navbar:              rgba(#FFFFFF, .96);
+$blue-navbar:               lighten($new-dark-blue, 10%);
+$azure-navbar:              lighten($new-blue, 15%);
+$green-navbar:              lighten($new-green, 10%);
+$orange-navbar:             lighten($new-orange, 10%);
+$red-navbar:                lighten($new-red, 10%);
 
-$sidebar-width:        calc(100% - 260px) !default;
+$height-base:                  40px !default;
 
 $border-thick:               2px !default;
-
+$border-radius-base:         4px !default;
 
 $padding-zero:                   0px !default;
 $padding-base-vertical:         8px !default;
@@ -114,6 +125,7 @@ $general-transition-time:  300ms !default;
 $fast-transition-time:     150ms !default;
 $ultra-fast-transition-time:     100ms  !default;
 
+$sidebar-width:            calc(100% - 260px) !default;
 $navbar-padding-a:         10px 15px;
 $navbar-margin-a:          10px  3px;
 $navbar-margin-btn:        15px  3px;

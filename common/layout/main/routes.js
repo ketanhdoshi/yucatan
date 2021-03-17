@@ -21,6 +21,11 @@ import Maps from "views/Maps.js";
 import Upgrade from "views/Upgrade.js"; */
 
 import Home from "../../appscreens/Home.js";
+import Icons from "./screens/Icons.js";
+import UserProfile from "./screens/UserProfile.js";
+import TableList from "./screens/TableList.js";
+import TextFont from "./screens/TextFont.js";
+import Notifications from "./screens/Notifications.js";
 
 const dashboardRoutes = [
   {
@@ -29,125 +34,57 @@ const dashboardRoutes = [
     name: "Upgrade to PRO",
     icon: "nc-icon nc-alien-33",
     component: Home,
-    layout: "/admin",
+    layout: "/main",
   },
   {
     path: "/dashboard",
     name: "Dashboard",
     icon: "nc-icon nc-chart-pie-35",
     component: Home,
-    layout: "/admin",
-  },
-  {
-    path: "/user",
-    name: "User Profile",
-    icon: "nc-icon nc-circle-09",
-    component: Home,
-    layout: "/admin",
-  },
-  {
-    path: "/table",
-    name: "Table List",
-    icon: "nc-icon nc-notes",
-    component: Home,
-    layout: "/admin",
-  },
-  {
-    path: "/typography",
-    name: "Typography",
-    icon: "nc-icon nc-paper-2",
-    component: Home,
-    layout: "/admin",
-  },
-  {
-    path: "/icons",
-    name: "Icons",
-    icon: "nc-icon nc-atom",
-    component: Home,
-    layout: "/admin",
-  },
-  {
-    path: "/maps",
-    name: "Maps",
-    icon: "nc-icon nc-pin-3",
-    component: Home,
-    layout: "/admin",
-  },
-  {
-    path: "/notifications",
-    name: "Notifications",
-    icon: "nc-icon nc-bell-55",
-    component: Home,
-    layout: "/admin",
-  },
-]
-
-/* 
-import Icons from "./views/Icons.js";
-import Dashboard from "./views/Dashboard.js";
-import Typography from "./views/Typography.js";
-import TableList from "./views/TableList.js";
-import UserProfile from "./views/UserProfile.js";
-import Notifications from "./views/Notifications.js";
-
-const dashboardRoutes = [
-  {
-    upgrade: true,
-    path: "/upgrade",
-    name: "Upgrade to PRO",
-    icon: "nc-icon nc-alien-33",
-    component: Home,
-    layout: "/admin",
-  },
-  {
-    path: "/dashboard",
-    name: "Dashboard",
-    icon: "nc-icon nc-chart-pie-35",
-    component: Dashboard,
-    layout: "/admin",
+    layout: "/main",
   },
   {
     path: "/user",
     name: "User Profile",
     icon: "nc-icon nc-circle-09",
     component: UserProfile,
-    layout: "/admin",
+    layout: "/main",
   },
   {
     path: "/table",
     name: "Table List",
     icon: "nc-icon nc-notes",
     component: TableList,
-    layout: "/admin",
+    layout: "/main",
   },
   {
     path: "/typography",
     name: "Typography",
     icon: "nc-icon nc-paper-2",
-    component: Typography,
-    layout: "/admin",
+    component: TextFont,
+    layout: "/main",
   },
   {
     path: "/icons",
     name: "Icons",
     icon: "nc-icon nc-atom",
     component: Icons,
-    layout: "/admin",
+    layout: "/main",
   },
   {
     path: "/maps",
     name: "Maps",
     icon: "nc-icon nc-pin-3",
     component: Home,
-    layout: "/admin",
+    layout: "/main",
   },
   {
     path: "/notifications",
     name: "Notifications",
     icon: "nc-icon nc-bell-55",
     component: Notifications,
-    layout: "/admin",
+    layout: "/main",
   },
-]; */
+]
 
 export default dashboardRoutes;

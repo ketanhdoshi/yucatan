@@ -1,0 +1,45 @@
+/*
+ * Screen: Text Fonts
+ * ----------------------
+ */
+
+@import "../scss/Config";
+
+.cardCategory {
+    font-size: $font-size-base;
+    font-weight: $font-weight-normal;
+    color: $dark-gray;
+    margin-bottom: 0px;
+}
+
+.cardHeader{
+    padding: 15px 15px 0;
+    background-color: $white-color;
+    border-bottom: none !important;
+}
+
+.cardTitle{
+    margin: $none;
+    color: $black-color;
+    font-weight: $font-weight-light;
+}
+
+.textType {
+    bottom: 10px;
+    color: #9A9A9A;
+    display: block;
+    font-weight: 400;
+    font-size: 14px;
+    line-height: 13px;
+    left: 5px;
+    position: absolute;
+    width: 260px;
+    text-transform: none;
+}
+.textLine {
+    padding-left: 15%;
+    margin-bottom: 35px;
+    position: relative;
+    display: block;
+    width: 100%;
+}

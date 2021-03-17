@@ -50,7 +50,7 @@ class MainFooter extends Component {
             </ul>
             <p className={s.copyright + " text-center"}>
               © {new Date().getFullYear()}{" "}
-              <a href="http://www.creative-tim.com">Creative Tim</a>, made with
+              <a href="http://www.creative-tim.com" className={s.owner}>Creative Tim</a>, made with
               love for a better web
             </p>
           </nav>

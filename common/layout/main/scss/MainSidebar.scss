@@ -142,6 +142,11 @@
     text-align: center;
     font-weight: $font-weight-normal;
     line-height: 30px;
+
+    &:hover{
+        color: $white-color;
+        text-decoration: none;
+    }
 }
 
 .nav{
@@ -182,6 +187,7 @@
         color: $white-color; // Add this temporarily because the global CSS has an 'a:hover' that overrides it
         background: rgba(255, 255, 255, 0.13);
         opacity: 1;
+        text-decoration: none;
     }
 }
 
@@ -195,7 +201,7 @@
 }
 
 .sidebarNavIcon{
-    font-size: 28px;
+    font-size: 28px !important;
     margin-right: 15px;
     width: 30px;
     text-align: center;

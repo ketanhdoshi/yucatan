@@ -1,0 +1,22 @@
+/*
+ * Screen: Tables
+ * ----------------------
+ */
+
+@import "../scss/Config";
+
+.colHeader {
+    padding: 12px 8px;
+    vertical-align: middle;
+     border-bottom-width: 1px;
+    font-size: $font-size-small;
+    text-transform: uppercase;
+    color: $dark-gray;
+    font-weight: $font-weight-normal;
+    padding-bottom: 5px;
+    border-top: none !important;
+    border-bottom: none;
+    text-align: left !important;
+}
+
+

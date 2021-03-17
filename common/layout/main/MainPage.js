@@ -16,6 +16,9 @@
 
 */
 
+// Reimplement nav-open in a React-like way - where nav-open is a state of the component, and maybe gets passed as a prop
+// See where we can use simple react-bootstrap settings without customization, especially in the css. eg. Navbar Toggle doesn't need our own burger-lines and stuff.
+
 import React from "react";
 import { useLocation, Link, Route, Switch } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
@@ -25,11 +28,8 @@ import MainFooter from "./MainFooter"
 import MainSidebar from "./MainSidebar";
 import routes from "./routes.js";
 
-/*
-import "./assets/css/light-bootstrap-dashboard-react.css";
-import "./assets/css/demo.css"; */
-
 import sidebarImage from "./img/sidebar-3.jpg";
+import './scss/NucleoFont.css'
 import './scss/AppGlobal.scss'
 import s from './scss/MainPage.scss'
 
@@ -65,51 +65,13 @@ const MainPage = () => {
           <Link to="/home">Home</Link>
           <Button variant="primary">Main Button</Button>
           <div className={s.content}>
-            {/* <Switch>{getRoutes(routes)}</Switch> */}
+            <Switch>{getRoutes(routes)}</Switch>
           </div>
           <MainFooter />
         </div>
       </div>
     </>
   );  
-/*   const [image, setImage] = React.useState(sidebarImage);
-  const [color, setColor] = React.useState("black");
-  const [hasImage, setHasImage] = React.useState(true);
-  const location = useLocation();
-  const mainPanel = React.useRef(null);
-  const getRoutes = (routes) => {
-    return routes.map((prop, key) => {
-      if (prop.layout === "/admin") {
-        return (
-          <Route
-            path={prop.layout + prop.path}
-            render={(props) => <prop.component {...props} />}
-            key={key}
-          />
-        );
-      } else {
-        return null;
-      }
-    });
-  };
-
-  return (
-    <>
-      <div className={s.wrapper}>
-        <Sidebar color={color} image={hasImage ? image : ""} routes={routes} />
-        <div className="main-panel" ref={mainPanel}>
-          <AdminNavbar />
-          <h1>Admin Layout</h1>
-          <Link to="/home">Home</Link>
-          <Button variant="primary">Primary</Button>
-          <div className="content">
-            <Switch>{getRoutes(routes)}</Switch>
-          </div>
-          <Footer />
-        </div>
-      </div>
-    </>
-  ); */
 }
 
 /* 

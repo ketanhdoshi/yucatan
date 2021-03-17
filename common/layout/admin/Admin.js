@@ -28,8 +28,8 @@ import Footer from "./Footer";
 import Sidebar from "./Sidebar";
 import routes from "./routes.js";
 
-import "./assets/css/light-bootstrap-dashboard-react.css";
-import "./assets/css/demo.css";
+// import "./assets/css/light-bootstrap-dashboard-react.css";
+// import "./assets/css/demo.css";
 import sidebarImage from "./assets/img/sidebar-3.jpg";
 
 const Admin = () => {
