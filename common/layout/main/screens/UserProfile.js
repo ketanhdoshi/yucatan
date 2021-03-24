@@ -1,5 +1,5 @@
 import React from "react";
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 import {Badge, Button, Card, Form, Navbar, Nav, Container, Row, Col,
 } from "react-bootstrap";
@@ -7,7 +7,30 @@ import {Badge, Button, Card, Form, Navbar, Nav, Container, Row, Col,
 import userBackground from "../img/userBackground.jpeg";
 import userPhoto from "../img/userPhoto.jpg"
 
-import s from './UserProfile.scss'
+// import s from './UserProfile.scss'
+
+const opacityMixin = (opacity) => css`
+  opacity: ${opacity};
+  filter: alpha(opacity=${opacity * 100});
+`;
+
+const transitionMixin = (time, type) => css`
+  -webkit-transition: all ${time} ${type};
+  -moz-transition: all ${time} ${type};
+  -o-transition: all ${time} ${type};
+  -ms-transition: all ${time} ${type};
+  transition: all ${time} ${type};
+`;
+
+const inputSizeMixin = (paddingVertical, paddingHorizontal, height) => css`
+  padding: ${paddingVertical} ${paddingHorizontal};
+  height: ${height};
+`;
+
+const boxShadowMixin = (shadow) => css`
+  -webkit-box-shadow: ${shadow}; // iOS <4.3 & Android <4.1
+  box-shadow: ${shadow};
+`;
 
 const ProfileBody = styled(Card.Body)`
   padding: 15px 15px 10px 15px;
@@ -26,10 +49,9 @@ const StyledControl = styled(Form.Control)`
   color: #565656;
   border: 1px solid ${props => props.theme.colour.lightGray};
   border-radius: ${props => props.theme.layout.borderRadiusBase};
-  // @include input-size($padding-base-vertical, $padding-base-horizontal - 4, $height-base);
-  // @include box-shadow(none);
-
-  // @include transition($general-transition-time, $transition-linear);
+  ${(props) => inputSizeMixin(props.theme.layout.paddingBaseVertical, props.theme.layout.paddingBaseHorizontalMinus4, props.theme.layout.heightBase)};
+  ${(props) => boxShadowMixin("none")};
+  ${(props) => transitionMixin(props.theme.effect.generalTransitionTime, props.theme.effect.transitionLinear)};
 
   &[disabled] {
     background-color: #F5F5F5;
@@ -40,7 +62,7 @@ const StyledControl = styled(Form.Control)`
   &:focus{
     background-color: ${props => props.theme.colour.whiteBg};
     border: 1px solid ${props => props.theme.colour.mediumDarkGray};
-    // @include box-shadow(none);
+    ${(props) => boxShadowMixin('none')};
     outline: 0 !important;    
     color: #333333;   
   }
@@ -136,8 +158,8 @@ const ButtonFa = styled(Button)`
 
   background-color: ${props => props.theme.colour.transparentBg};
   font-weight: ${props => props.theme.font.fontWeightNormal};
-  // @include opacity(.8);
-  // @include transition($ultra-fast-transition-time, $transition-ease-in);
+  ${() => opacityMixin(0.8)};
+  ${(props) => transitionMixin(props.theme.effect.ultraFastTransitionTime, props.theme.effect.transitionEaseIn)};
 
   > i {
     width: 18px;
@@ -300,7 +322,8 @@ function User() {
               <UserBio photo={userPhoto} displayName="Mike Andrew" userId="michael24"
                     // Wrap with JSX braces since it is HTML with embedded <br> tags and not a plain string
                     desc={<>Lamborghini Mercy <br></br>Your chick she so thirsty <br></br>I'm in that two seat Lambo</>}/>
-              <hr className={s.hr}></hr>
+              {/* Use Styled Component's css prop. No need to define a new component for a single property */}
+              <hr css={`margin: 5px 15px;`}></hr>
               <SocialIcons />
             </CardUser>
           </Col>

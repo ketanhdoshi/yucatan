@@ -64,8 +64,17 @@ const theme = {
     fontWeightLight:   300,
   },
   layout: {
-    paddingBaseVertical:  '8px',
-    borderRadiusBase:  '4px',
+    heightBase:             '40px',
+    paddingBaseVertical:    '8px',
+    paddingBaseHorizontal:  '16px',
+    paddingBaseHorizontalMinus4:  '12px',
+    borderRadiusBase:       '4px',
+  },
+  effect: {
+    transitionEaseIn:         'ease-in',
+    transitionLinear:         'linear',
+    generalTransitionTime:    '300ms',
+    ultraFastTransitionTime:  '100ms',
   },
   none:                 0,
 };

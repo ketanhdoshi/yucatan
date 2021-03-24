@@ -11,6 +11,9 @@ const ReactRefreshWebpackPlugin = require('@pmmmwh/react-refresh-webpack-plugin'
 const DashboardPlugin = require("webpack-dashboard/plugin");
 const nodeExternals = require('webpack-node-externals');
 
+// Development or Production settings - should be taken from env variable
+const isDev = true;
+
 // -----------------------------------------------------------------
 // Webpack configuration for the client-side bundle
 // -----------------------------------------------------------------
@@ -56,16 +59,21 @@ const config = {
             }
         },
         {
-            // Plain CSS files
+            // Plain CSS files are processed by css-loader first.
+            // Then, Inject styles inline with style-loader during development
+            //       Extract separate styles.css file during production
             test: /\.css$/,
-            use: [MiniCssExtractPlugin.loader, 'css-loader']
+            use: [
+              isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
+              'css-loader'
+            ]
         },
         {
             test: /datepicker\.scss$/,
            use: [
-              MiniCssExtractPlugin.loader, 
+              MiniCssExtractPlugin.loader,
               {
-                loader: 'css-loader',
+                loader: 'shit-css-loader',
                 options: { 
                     importLoaders: 1 
                 },
@@ -73,15 +81,20 @@ const config = {
             ]
         },
         {
+            // Rule applies to all SCSS files (except those excluded)
             test: /\.scss$/,
             exclude: /datepicker\.scss$/,
             use: [
-              MiniCssExtractPlugin.loader, 
+              // Inject styles inline with style-loader during development
+              // Extract separate styles.css file during production
+              isDev ? 'style-loader' : MiniCssExtractPlugin.loader,
               {
                 loader: 'css-loader',
                 options: {
                     importLoaders: 1,
+                    // Produce code for CSS Modules
                     modules: {
+                      // Format of generated class names
                       localIdentName: '[name]__[local]___[hash:base64:5]'
                   }
                 }
