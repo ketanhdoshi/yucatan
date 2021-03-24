@@ -109,3 +109,81 @@
 :global .rna-container .alert-danger {
      background-color: $red-navbar;
 }
+
+.modal {
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1050;
+    width: 100%;
+    height: 100%;
+    outline: 0;
+}
+
+:global(.modal-dialog) {
+    max-width: 255px;
+    margin: 0 auto;
+    transform: translate(0, 30%);
+}
+
+.modalHeader {
+    border-bottom: none;
+    padding-top: 24px;
+    padding-right: 24px;
+    padding-bottom: 0;
+    padding-left: 24px;
+}
+
+.modalProfile {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    text-align: center;
+    line-height: 5.7;
+    box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.3);
+}
+
+.modalIcon {
+    font-size: 32px !important;
+    padding-top: 24px;
+}
+
+.modalBody{
+    padding-top: 24px;
+    padding-right: 24px;
+    padding-bottom: 16px;
+    padding-left: 24px;
+    line-height: 1.9;
+}
+
+.modalFooter{
+    padding-top: 0;
+    border-top: none;
+    padding-right: 24px;
+    padding-bottom: 16px;
+    padding-left: 24px;
+    justify-content: space-between;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    border-bottom-right-radius: calc(.3rem - 1px);
+    border-bottom-left-radius: calc(.3rem - 1px);
+}
+
+.modalBtn{
+    margin: 0;
+    padding-left: 16px;
+    padding-right: 16px;
+    width: auto;
+    background-color: transparent;
+    font-weight: 400;
+    opacity: .8;
+    color: #888;
+
+    &:hover,
+    &focus{
+        text-decoration: none;
+    }
+}

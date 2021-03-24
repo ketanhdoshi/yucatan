@@ -1,25 +1,46 @@
 import React from "react";
+import styled from 'styled-components';
 
 // react-bootstrap components
 import {Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
 import {CardView} from './CardView'
-import s from './TextFont.scss'
 
-const TextLine=({tag, type, children}) => {
+const TextType = styled.span`
+  bottom: 10px;
+  color: #9A9A9A;
+  display: block;
+  font-weight: 400;
+  font-size: 14px;
+  line-height: 13px;
+  left: 5px;
+  position: absolute;
+  width: 260px;
+  text-transform: none;
+`;
+
+const TextLine = styled.div`
+  padding-left: 15%;
+  margin-bottom: 35px;
+  position: relative;
+  display: block;
+  width: 100%;
+`;
+
+const TextItem=({tag, type, children}) => {
   // Pass in the name of a HTML tag as a string eg. tag="h1"
   // Here we convert that to a HTML tag and render it.
   // Dynamic HTML tag types can be used at runtime if first assigned to a capitalised 
   // variable first. This is because User Defined JSX Components Must BE Capitalized.
-  const TextTag = `${tag}`
+  const TextTag = tag ? `${tag}` : `div`
   return (
-    <div className={s.textLine}>
+    <TextLine>
       <TextTag>
-        <span className={s.textType}>{type}</span>
+        <TextType>{type}</TextType>
         {children}
       </TextTag>
-    </div>
+    </TextLine>
   );
 }
 
@@ -36,16 +57,16 @@ function TextFont() {
           <Col md="12">
           < CardView title="Light Bootstrap Table Heading" 
                     subTitle="Created using Montserrat Font Family">
-              <TextLine tag="h1" type="Header 1">The Life of Light Bootstrap Dashboard React</TextLine> 
-              <TextLine tag="h2" type="Header 2">The Life of Light Bootstrap Dashboard React</TextLine>
-              <TextLine tag="h3" type="Header 3">The Life of Light Bootstrap Dashboard React</TextLine>
-              <TextLine tag="h4" type="Header 4">The Life of Light Bootstrap Dashboard React</TextLine>
-              <TextLine tag="h5" type="Header 5">The Life of Light Bootstrap Dashboard React</TextLine>
-              <TextLine tag="h6" type="Header 6">The Life of Light Bootstrap Dashboard React</TextLine>
-              <TextLine tag="p" type="Paragraph">
+              <TextItem tag="h1" type="Header 1">The Life of Light Bootstrap Dashboard React</TextItem> 
+              <TextItem tag="h2" type="Header 2">The Life of Light Bootstrap Dashboard React</TextItem>
+              <TextItem tag="h3" type="Header 3">The Life of Light Bootstrap Dashboard React</TextItem>
+              <TextItem tag="h4" type="Header 4">The Life of Light Bootstrap Dashboard React</TextItem>
+              <TextItem tag="h5" type="Header 5">The Life of Light Bootstrap Dashboard React</TextItem>
+              <TextItem tag="h6" type="Header 6">The Life of Light Bootstrap Dashboard React</TextItem>
+              <TextItem tag="p" type="Paragraph">
                   {para}
-              </TextLine>
-              <TextLine type="Quote">
+              </TextItem>
+              <TextItem type="Quote">
                 <blockquote>
                   <p className="blockquote blockquote-primary">
                     {para}
@@ -54,29 +75,29 @@ function TextFont() {
                     <small>- Noaa</small>
                   </p>
                 </blockquote>
-              </TextLine>
-              <TextLine type="Muted Text">
+              </TextItem>
+              <TextItem type="Muted Text">
                 <p className="text-muted">{msg}</p>
-              </TextLine>
-              <TextLine type="Primary Text">
+              </TextItem>
+              <TextItem type="Primary Text">
                 <p className="text-primary">{msg}</p>
-              </TextLine>
-              <TextLine type="Info Text">
+              </TextItem>
+              <TextItem type="Info Text">
                 <p className="text-info">{msg}</p>
-              </TextLine>
-              <TextLine type="Success Text">
+              </TextItem>
+              <TextItem type="Success Text">
                 <p className="text-success">{msg}</p>
-              </TextLine>
-              <TextLine type="Warning Text">
+              </TextItem>
+              <TextItem type="Warning Text">
                 <p className="text-warning">{msg}</p>
-              </TextLine>
-              <TextLine type="Danger Text">
+              </TextItem>
+              <TextItem type="Danger Text">
                 <p className="text-danger">{msg}</p>
-              </TextLine>
-              <TextLine tag="h2" type="Small Tag">
+              </TextItem>
+              <TextItem tag="h2" type="Small Tag">
                   Header with small subtitle <br></br>
                   <small>Use "small" tag for the headers</small>
-              </TextLine>
+              </TextItem>
             </CardView>
           </Col>
         </Row>

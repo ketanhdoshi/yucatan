@@ -48,6 +48,19 @@
     }
 }
 
+:global(#bodyClick) {
+    position: absolute;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
+    top: 0;
+    left: auto;
+    right: 250px;
+    content: "";
+    z-index: 9999;
+    overflow-x: hidden;
+}
+
 .content{
     padding: 30px 15px;
     min-height: calc(100% - 123px);

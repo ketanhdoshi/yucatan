@@ -21,7 +21,7 @@ import Maps from "views/Maps.js";
 import Upgrade from "views/Upgrade.js"; */
 
 import Home from "../../appscreens/Home.js";
-import Icons from "./screens/Icons.js";
+import {Icons} from "./screens/Icons.js";
 import UserProfile from "./screens/UserProfile.js";
 import TableList from "./screens/TableList.js";
 import TextFont from "./screens/TextFont.js";

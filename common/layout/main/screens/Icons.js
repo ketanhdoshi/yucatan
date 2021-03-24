@@ -1,13 +1,46 @@
 import React from "react";
+import styled from 'styled-components';
 
 // react-bootstrap components
 import {Badge, Button, Card, Navbar, Nav, Container, Row, Col,
 } from "react-bootstrap";
 
 import {CardView} from './CardView'
-import s from './Icons.scss'
+// import s from './Icons.scss'
+
+const Detail = styled.div`
+  text-align: center;
+  padding: 45px 0px 30px;
+  border: 1px solid #e5e5e5;
+  border-radius: 6px;
+  margin: 15px 0;
+`;
+
+export const NucleoIcon = styled.i.attrs(props => ({
+  className: props.name,
+}))`
+  display: inline-block;
+  font: normal normal normal 14px/1 'nucleo-icons';
+  font-size: 32px;
+  speak: none;
+  text-transform: none;
+  /* Better Font Rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+`;
 
 const IconCard = ({name}) => {
+  return (
+    <Col lg="2" md="3" sm="4" xs="6">
+      <Detail>
+        <NucleoIcon name={name} />
+        <p>{name}</p>
+      </Detail>
+    </Col>
+  );
+}
+
+/* const IconCard = ({name}) => {
   return (
     <Col className="font-icon-list" lg="2" md="3" sm="4" xs="6">
       <div className={s.iconDetail}>
@@ -16,7 +49,7 @@ const IconCard = ({name}) => {
       </div>
     </Col>
   );
-}
+} */
 
 const IconList = ({icons}) => {
   return (
@@ -30,7 +63,7 @@ const IconList = ({icons}) => {
   );
 }
 
-function Icons() {
+export const Icons = () => {
   return (
     <>
       <Container fluid>
@@ -66,4 +99,3 @@ function Icons() {
   );
 }
 
-export default Icons;

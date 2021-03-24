@@ -5,25 +5,6 @@
 
 @import "../scss/Config";
 
-.cardCategory {
-    font-size: $font-size-base;
-    font-weight: $font-weight-normal;
-    color: $dark-gray;
-    margin-bottom: 0px;
-}
-
-.cardHeader{
-    padding: 15px 15px 0;
-    background-color: $white-color;
-    border-bottom: none !important;
-}
-
-.cardTitle{
-    margin: $none;
-    color: $black-color;
-    font-weight: $font-weight-light;
-}
-
 .textType {
     bottom: 10px;
     color: #9A9A9A;

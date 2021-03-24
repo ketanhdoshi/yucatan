@@ -1,14 +1,155 @@
 import React from "react";
+import styled from 'styled-components';
 
 // react plugin and its CSS styles for creating notifications
 import NotificationAlert from "react-notification-alert";
-import "react-notification-alert/dist/animate.css";
+
+// We want to import 'animate.css' from the 'react-notification-alert' package
+// But for some reason when that file is in the node_modules folder Webpack gives
+// an error when we start the web server. So as a workaround we copy that file 
+// into our space. The correct fix is to modify the Webpack config that is 
+// causing node_modules to behave differently.
+// import "react-notification-alert/dist/animate.css";
+import "./rnaAnimate.css";
 
 // react-bootstrap components
 import {Alert, Modal, Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
-import s from './Notifications.scss'
+import {CardView} from './CardView'
+import {NucleoIcon} from './Icons'
+// import s from './Notifications.scss'
+
+const ModalButton = styled(Button).attrs(() => ({
+  className:  "btn-simple"
+}))`
+  margin: 0;
+  padding-left: 16px;
+  padding-right: 16px;
+  width: auto;
+  background-color: transparent;
+  font-weight: 400;
+  opacity: .8;
+  color: #888;
+
+  &:hover,
+  &:focus{
+      text-decoration: none;
+  }
+`;
+
+const Footer = styled.div`
+  padding-top: 0;
+  border-top: none;
+  padding-right: 24px;
+  padding-bottom: 16px;
+  padding-left: 24px;
+  justify-content: space-between;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  border-bottom-right-radius: calc(.3rem - 1px);
+  border-bottom-left-radius: calc(.3rem - 1px);
+`;
+
+const StyledBody = styled(Modal.Body).attrs(() => ({
+  className:  "text-center"
+}))`
+  padding-top: 24px;
+  padding-right: 24px;
+  padding-bottom: 16px;
+  padding-left: 24px;
+  line-height: 1.9;
+`;
+
+const StyledHeader = styled(Modal.Header).attrs(() => ({
+  className:  "justify-content-center"
+}))`
+  border-bottom: none;
+  padding-top: 24px;
+  padding-right: 24px;
+  padding-bottom: 0;
+  padding-left: 24px;
+`;
+
+const StyledModal = styled(Modal).attrs(() => ({
+  className:  "modal-mini modal-primary"
+}))`
+  overflow-x: hidden;
+  overflow-y: auto;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1050;
+  width: 100%;
+  height: 100%;
+  outline: 0;
+`;
+
+const Profile = styled.div`
+  width: 80px;
+  height: 80px;
+  border-radius: 50%;
+  text-align: center;
+  line-height: 5.7;
+  box-shadow: 0px 5px 20px 0px rgba(0, 0, 0, 0.3);
+`;
+
+const ModalIcon = styled(NucleoIcon)`
+  padding-top: 24px;
+`;
+
+const AlertIcon = styled(NucleoIcon)`
+  display: block;
+  max-width: 89%;
+  font-size: 30px !important;
+  display: block;
+  left: 15px;
+  position: absolute;
+  top: 50%;
+  margin-top: -15px;
+`;
+
+const AlertMsg = styled.span`
+  display: block;
+  max-width: 89%;
+`;
+
+const alertBackgnd = (props) => {
+  switch(props.variant) {
+    case "info":
+      return props.theme.colour.azureNavbar;
+      break;
+    case "primary":
+      return props.theme.colour.blueNavbar;
+        break;
+    case "success":
+      return props.theme.colour.greenNavbar;
+      break;
+    case "warning":
+      return props.theme.colour.orangeNavbar;
+      break;
+    case "danger":
+      return props.theme.colour.redNavbar;
+      break;
+    default:
+      return props.theme.colour.azureNavbar;
+      break;
+  }
+}
+
+const StyledAlert = styled(Alert)`
+  border-radius: $border-radius-base;
+  position: relative;
+
+  border: 0;
+  color: #FFFFFF;
+  padding: 10px 15px;
+  font-size: 14px;
+
+  background-color: ${props => alertBackgnd(props)};
+  ${props => props.icon && 'padding-left: 65px;'}
+`;
 
 function Notifications() {
   const [showModal, setShowModal] = React.useState(false);
@@ -60,7 +201,19 @@ function Notifications() {
         <NotificationAlert ref={notificationAlertRef} />
       </div>
       <Container fluid>
-        <Card>
+        < CardView title="Notifications" 
+                    subTitle={<>Handcrafted by our friend and colleague{" "}
+                      <a href="https://github.com/EINazare" rel="noopener noreferrer" target="_blank">
+                        Nazare Emanuel-Ioan
+                      </a>
+                      . Please checkout the{" "}
+                      <a href="https://github.com/creativetimofficial/react-notification-alert" rel="noopener noreferrer" target="_blank">
+                        full documentation.
+                      </a>
+                    </>}
+        >
+
+{/*         <Card>
           <Card.Header>
             <Card.Title as="h4">Notifications</Card.Title>
             <p className="card-category">
@@ -74,66 +227,80 @@ function Notifications() {
               </a>
             </p>
           </Card.Header>
-          <Card.Body>
+          <Card.Body> */}
+
             <Row>
               <Col md="6">
                 <h5>
                   <small>Notifications Style</small>
                 </h5>
-                <Alert variant="info" className={s.info}>
+                <StyledAlert variant="info">
                   <span>This is a plain notification</span>
-                </Alert>
-                <Alert variant="info" className={s.info} dismissible>
-                  <span className={s.msgClose}>This is a notification with close button.</span>
-                </Alert>
-                <Alert variant="info" className={s.infoIcon} dismissible>
-                  <span data-notify="icon" className={s.alertIcon + " nc-icon nc-bell-55"}></span>
-                  <span className={s.msgClose}> This is a notification with close button and icon.</span>
-                </Alert>
-                <Alert variant="info" className={s.infoIcon} dismissible>
-                  <span data-notify="icon" className={s.alertIcon + " nc-icon nc-bell-55"}></span>
+                </StyledAlert>
+                <StyledAlert variant="info" dismissible>
+                  <AlertMsg>This is a notification with close button.</AlertMsg>
+                </StyledAlert>
+                {/* With a boolean 'icon' prop, just passing 'icon' by itself or 'icon={true}' results 
+                    in a React warning - Received "true" for a non-boolean attribute. This is because
+                    of the way Styled Components passes props. So putting the '+' before the 'true' converts
+                    the boolean to a 0/1 numeric value and prevents the error.  */}
+                <StyledAlert variant="info" icon={+true} dismissible>
+                  <AlertIcon as="span" data-notify="icon" name="nc-bell-55" />
+                  <AlertMsg>This is a notification with close button and icon.</AlertMsg>
+                  {/* <span data-notify="icon" className={s.alertIcon + " nc-icon nc-bell-55"}></span> */}
+                  {/* <span className={s.msgClose}> This is a notification with close button and icon.</span> */}
+                </StyledAlert>
+                <StyledAlert variant="info" icon={+true} dismissible>
+                  <AlertIcon as="span" data-notify="icon" name="nc-bell-55" />
+                  <AlertMsg>
+                    This is a notification with close button and icon and have
+                    many lines. You can see that the icon and the close button
+                    are always vertically aligned. This is a beautiful
+                    notification. So you don't have to worry about the style.
+                  </AlertMsg>
+                  {/* <span data-notify="icon" className={s.alertIcon + " nc-icon nc-bell-55"}></span>
                   <span className={s.msgClose}>
                     This is a notification with close button and icon and have
                     many lines. You can see that the icon and the close button
                     are always vertically aligned. This is a beautiful
                     notification. So you don't have to worry about the style.
-                  </span>
-                </Alert>
+                  </span> */}
+                </StyledAlert>
               </Col>
               <Col md="6">
                 <h5>
                   <small>Notification States</small>
                 </h5>
-                <Alert variant="primary" className={s.primary} dismissible>
-                  <span className={s.msgClose}>
+                <StyledAlert variant="primary" dismissible>
+                  <AlertMsg>
                     <b>Primary -</b>
                     This is a regular notification made with ".alert-primary"
-                  </span>
-                </Alert>
-                <Alert variant="info" className={s.info} dismissible>
-                  <span className={s.msgClose}>
+                  </AlertMsg>
+                </StyledAlert>
+                <StyledAlert variant="info" dismissible>
+                  <AlertMsg>
                     <b>Info -</b>
                     This is a regular notification made with ".alert-info"
-                  </span>
-                </Alert>
-                <Alert variant="success" className={s.success} dismissible>
-                  <span className={s.msgClose}>
+                  </AlertMsg>
+                </StyledAlert>
+                <StyledAlert variant="success" dismissible>
+                  <AlertMsg>
                     <b>Success -</b>
                     This is a regular notification made with ".alert-success"
-                  </span>
-                </Alert>
-                <Alert variant="warning" className={s.warning} dismissible>
-                  <span className={s.msgClose}>
+                  </AlertMsg>
+                </StyledAlert>
+                <StyledAlert variant="warning" dismissible>
+                  <AlertMsg>
                     <b>Warning -</b>
                     This is a regular notification made with ".alert-warning"
-                  </span>
-                </Alert>
-                <Alert variant="danger" className={s.danger} dismissible>
-                  <span className={s.msgClose}>
+                  </AlertMsg>
+                </StyledAlert>
+                <StyledAlert variant="danger" dismissible>
+                  <AlertMsg>
                     <b>Danger -</b>
                     This is a regular notification made with ".alert-danger"
-                  </span>
-                </Alert>
+                  </AlertMsg>
+                </StyledAlert>
               </Col>
             </Row>
             <br></br>
@@ -149,36 +316,24 @@ function Notifications() {
               </Row>
               <Row className="justify-content-center">
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("tl")} variant="default">
-                    Top Left
-                  </Button>
+                  <Button block onClick={() => notify("tl")} variant="default">Top Left</Button>
                 </Col>
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("tc")} variant="default">
-                    Top Center
-                  </Button>
+                  <Button block onClick={() => notify("tc")} variant="default">Top Center</Button>
                 </Col>
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("tr")} variant="default">
-                    Top Right
-                  </Button>
+                  <Button block onClick={() => notify("tr")} variant="default">Top Right</Button>
                 </Col>
               </Row>
               <Row className="justify-content-center">
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("bl")} variant="default">
-                    Bottom Left
-                  </Button>
+                  <Button block onClick={() => notify("bl")} variant="default">Bottom Left</Button>
                 </Col>
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("bc")} variant="default">
-                    Bottom Center
-                  </Button>
+                  <Button block onClick={() => notify("bc")} variant="default">Bottom Center</Button>
                 </Col>
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("br")} variant="default">
-                    Bottom Right
-                  </Button>
+                  <Button block onClick={() => notify("br")} variant="default">Bottom Right</Button>
                 </Col>
               </Row>
             </div>
@@ -194,41 +349,32 @@ function Notifications() {
                 </Button>
               </Col>
             </Row>
-          </Card.Body>
-        </Card>
+          </CardView>
+          {/* </Card.Body>
+        </Card> */}
         {/* Mini Modal */}
-        <Modal
-          className="modal-mini modal-primary"
+        <StyledModal
+          // className={s.modal + " modal-mini modal-primary"}
           show={showModal}
           onHide={() => setShowModal(false)}
         >
-          <Modal.Header className="justify-content-center">
-            <div className="modal-profile">
-              <i className="nc-icon nc-bulb-63"></i>
-            </div>
-          </Modal.Header>
-          <Modal.Body className="text-center">
+          {/* <Modal.Header className={s.modalHeader + " justify-content-center"}> */}
+          <StyledHeader>
+            <Profile>
+              <ModalIcon name="nc-bulb-63" />
+              {/* <i className={s.modalIcon + " nc-icon nc-bulb-63"}></i> */}
+            </Profile>
+          </StyledHeader>
+          <StyledBody>
             <p>Always have an access to your profile</p>
-          </Modal.Body>
-          <div className="modal-footer">
-            <Button
-              className="btn-simple"
-              type="button"
-              variant="link"
-              onClick={() => setShowModal(false)}
-            >
-              Back
-            </Button>
-            <Button
-              className="btn-simple"
-              type="button"
-              variant="link"
-              onClick={() => setShowModal(false)}
-            >
-              Close
-            </Button>
-          </div>
-        </Modal>
+          </StyledBody>
+          <Footer>
+            {/* className={s.modalBtn + " btn-simple"} */}
+            <ModalButton type="button" variant="link" onClick={() => setShowModal(false)}>Back</ModalButton>
+            {/* className={s.modalBtn + " btn-simple"} */}
+            <ModalButton type="button" variant="link" onClick={() => setShowModal(false)}>Close</ModalButton>
+          </Footer>
+        </StyledModal>
         {/* End Modal */}
       </Container>
     </>

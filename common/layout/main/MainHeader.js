@@ -27,7 +27,8 @@ const MainHeader = () => {
   const location = useLocation();
 
   // Slide the Sidebar in and out on mobile devices when the '3-dot' Toggle button
-  // in the Navbar is clicked
+  // in the Navbar is clicked. Another function based on useEffect() in the MainPage 
+  // component works in partnership with this one.
   const mobileSidebarToggle = (e) => {
     // Disable all other click event handlers
     e.preventDefault();

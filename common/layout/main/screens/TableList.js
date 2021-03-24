@@ -1,11 +1,26 @@
 import React from "react";
+import styled from 'styled-components';
 
 // react-bootstrap components
 import {Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
 import {CardView} from './CardView'
-import s from './TableList.scss'
+// import s from './TableList.scss'
+
+const ColHeader = styled.th`
+  padding: 12px 8px;
+  vertical-align: middle;
+  border-bottom-width: 1px;
+  font-size: ${props => props.theme.font.fontSizeSmall};
+  text-transform: uppercase;
+  color: ${props => props.theme.colour.darkGray};
+  font-weight: ${props => props.theme.font.fontWeightNormal};
+  padding-bottom: 5px;
+  border-top: none !important;
+  border-bottom: none;
+  text-align: left !important;
+`;
 
 const TableRow = ({values}) => {
   const tdItems = values.map((value, index) =>
@@ -28,7 +43,8 @@ const TableHeader = ({columns}) => {
     <tr>
       {
         columns.map((column, index) => 
-          <th key={index} className={s.colHeader}>{column}</th>
+          <ColHeader key={index}>{column}</ColHeader>
+          // <th key={index} className={s.colHeader}>{column}</th>
         )
       }
     </tr>
@@ -73,7 +89,7 @@ function TableList() {
             </CardView>
           </Col>
           <Col md="12">
-            <CardView title="Table on Plain Background" subTitle="Plain Table subtitle" plain>
+            <CardView title="Table on Plain Background" subTitle="Plain Table subtitle" plain="true">
               <TableView
                 columns={["ID", "Name", "Salary", "Country", "City"]}
                 rows={[

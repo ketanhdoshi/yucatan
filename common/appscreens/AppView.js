@@ -28,8 +28,46 @@ const GlobalStyle = createGlobalStyle`
     }
 `;
 
+// Polished is an add-on for Styled Components and provides a lot of Sass-style mixins
+// and helper functions in Javascript
+import { lighten } from 'polished'
+const base = {
+  newBlue:           '#1DC7EA',
+  newDarkBlue:       '#1F77D0',
+  newGreen:          '#87CB16',
+  newRed:            '#FB404B',
+  newOrange:         '#FFA534',
+};
 const theme = {
-  primary: 'palevioletred',
+  primary:           'palevioletred',
+  colour: {
+    darkGray:          '#9A9A9A',
+    mediumDarkGray:    '#AAAAAA',
+    lightGray:         '#E3E3E3',
+    whiteColour:       '#FFFFFF',
+    blackColor:        '#333333',
+    infoColour:        '#1DC7EA',
+    defaultColour:     '#888888',
+    transparentBg:     'transparent',
+    whiteBg:           '#FFFFFF',
+    azureNavbar:       lighten(0.15, base.newBlue),
+    blueNavbar:        lighten(0.1, base.newDarkBlue),
+    greenNavbar:       lighten(0.1, base.newGreen),
+    orangeNavbar:      lighten(0.1, base.newOrange),
+    redNavbar:         lighten(0.1, base.newRed),
+  },
+  font: {
+    fontSizeBase:      '14px',
+    fontSizeMedium:    '16px',
+    fontSizeSmall:     '12px',
+    fontWeightNormal:  400,
+    fontWeightLight:   300,
+  },
+  layout: {
+    paddingBaseVertical:  '8px',
+    borderRadiusBase:  '4px',
+  },
+  none:                 0,
 };
 
 // -----------------------------------------------------------------
