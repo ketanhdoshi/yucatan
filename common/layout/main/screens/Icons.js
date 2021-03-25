@@ -6,7 +6,6 @@ import {Badge, Button, Card, Navbar, Nav, Container, Row, Col,
 } from "react-bootstrap";
 
 import {CardView} from './CardView'
-// import s from './Icons.scss'
 
 const Detail = styled.div`
   text-align: center;
@@ -39,17 +38,6 @@ const IconCard = ({name}) => {
     </Col>
   );
 }
-
-/* const IconCard = ({name}) => {
-  return (
-    <Col className="font-icon-list" lg="2" md="3" sm="4" xs="6">
-      <div className={s.iconDetail}>
-        <i className={s.icon + " nc-icon " + name}></i>
-        <p>{name}</p>
-      </div>
-    </Col>
-  );
-} */
 
 const IconList = ({icons}) => {
   return (

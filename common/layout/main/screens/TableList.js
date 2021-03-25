@@ -6,7 +6,6 @@ import {Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
 import {CardView} from './CardView'
-// import s from './TableList.scss'
 
 const ColHeader = styled.th`
   padding: 12px 8px;
@@ -44,7 +43,6 @@ const TableHeader = ({columns}) => {
       {
         columns.map((column, index) => 
           <ColHeader key={index}>{column}</ColHeader>
-          // <th key={index} className={s.colHeader}>{column}</th>
         )
       }
     </tr>

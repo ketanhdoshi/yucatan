@@ -18,7 +18,6 @@ import {Alert, Modal, Badge, Button, Card, Navbar, Nav, Table, Container, Row, C
 
 import {CardView} from './CardView'
 import {NucleoIcon} from './Icons'
-// import s from './Notifications.scss'
 
 const ModalButton = styled(Button).attrs(() => ({
   className:  "btn-simple"
@@ -212,23 +211,6 @@ function Notifications() {
                       </a>
                     </>}
         >
-
-{/*         <Card>
-          <Card.Header>
-            <Card.Title as="h4">Notifications</Card.Title>
-            <p className="card-category">
-              Handcrafted by our friend and colleague{" "}
-              <a href="https://github.com/EINazare" rel="noopener noreferrer" target="_blank">
-                Nazare Emanuel-Ioan
-              </a>
-              . Please checkout the{" "}
-              <a href="https://github.com/creativetimofficial/react-notification-alert" rel="noopener noreferrer" target="_blank">
-                full documentation.
-              </a>
-            </p>
-          </Card.Header>
-          <Card.Body> */}
-
             <Row>
               <Col md="6">
                 <h5>
@@ -247,8 +229,6 @@ function Notifications() {
                 <StyledAlert variant="info" icon={+true} dismissible>
                   <AlertIcon as="span" data-notify="icon" name="nc-bell-55" />
                   <AlertMsg>This is a notification with close button and icon.</AlertMsg>
-                  {/* <span data-notify="icon" className={s.alertIcon + " nc-icon nc-bell-55"}></span> */}
-                  {/* <span className={s.msgClose}> This is a notification with close button and icon.</span> */}
                 </StyledAlert>
                 <StyledAlert variant="info" icon={+true} dismissible>
                   <AlertIcon as="span" data-notify="icon" name="nc-bell-55" />
@@ -258,13 +238,6 @@ function Notifications() {
                     are always vertically aligned. This is a beautiful
                     notification. So you don't have to worry about the style.
                   </AlertMsg>
-                  {/* <span data-notify="icon" className={s.alertIcon + " nc-icon nc-bell-55"}></span>
-                  <span className={s.msgClose}>
-                    This is a notification with close button and icon and have
-                    many lines. You can see that the icon and the close button
-                    are always vertically aligned. This is a beautiful
-                    notification. So you don't have to worry about the style.
-                  </span> */}
                 </StyledAlert>
               </Col>
               <Col md="6">
@@ -350,28 +323,22 @@ function Notifications() {
               </Col>
             </Row>
           </CardView>
-          {/* </Card.Body>
-        </Card> */}
+
         {/* Mini Modal */}
         <StyledModal
-          // className={s.modal + " modal-mini modal-primary"}
           show={showModal}
           onHide={() => setShowModal(false)}
         >
-          {/* <Modal.Header className={s.modalHeader + " justify-content-center"}> */}
           <StyledHeader>
             <Profile>
               <ModalIcon name="nc-bulb-63" />
-              {/* <i className={s.modalIcon + " nc-icon nc-bulb-63"}></i> */}
             </Profile>
           </StyledHeader>
           <StyledBody>
             <p>Always have an access to your profile</p>
           </StyledBody>
           <Footer>
-            {/* className={s.modalBtn + " btn-simple"} */}
             <ModalButton type="button" variant="link" onClick={() => setShowModal(false)}>Back</ModalButton>
-            {/* className={s.modalBtn + " btn-simple"} */}
             <ModalButton type="button" variant="link" onClick={() => setShowModal(false)}>Close</ModalButton>
           </Footer>
         </StyledModal>

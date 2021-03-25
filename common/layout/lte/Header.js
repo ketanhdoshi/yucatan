@@ -25,7 +25,7 @@ const navDef={
                 {title: 'Separated link', href: '#'}
             ]
         },
-        {title: 'Events', href: '#'},
+        {title: 'Main', href: '/main'},
     ],
     iconMenu: [
         {icon: 'fa-instagram', href: '#'}, 

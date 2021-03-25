@@ -7,8 +7,6 @@ import {Badge, Button, Card, Form, Navbar, Nav, Container, Row, Col,
 import userBackground from "../img/userBackground.jpeg";
 import userPhoto from "../img/userPhoto.jpg"
 
-// import s from './UserProfile.scss'
-
 const opacityMixin = (opacity) => css`
   opacity: ${opacity};
   filter: alpha(opacity=${opacity * 100});
@@ -50,7 +48,7 @@ const StyledControl = styled(Form.Control)`
   border: 1px solid ${props => props.theme.colour.lightGray};
   border-radius: ${props => props.theme.layout.borderRadiusBase};
   ${(props) => inputSizeMixin(props.theme.layout.paddingBaseVertical, props.theme.layout.paddingBaseHorizontalMinus4, props.theme.layout.heightBase)};
-  ${(props) => boxShadowMixin("none")};
+  ${boxShadowMixin("none")};
   ${(props) => transitionMixin(props.theme.effect.generalTransitionTime, props.theme.effect.transitionLinear)};
 
   &[disabled] {
@@ -62,7 +60,7 @@ const StyledControl = styled(Form.Control)`
   &:focus{
     background-color: ${props => props.theme.colour.whiteBg};
     border: 1px solid ${props => props.theme.colour.mediumDarkGray};
-    ${(props) => boxShadowMixin('none')};
+    ${boxShadowMixin('none')};
     outline: 0 !important;    
     color: #333333;   
   }
@@ -158,7 +156,7 @@ const ButtonFa = styled(Button)`
 
   background-color: ${props => props.theme.colour.transparentBg};
   font-weight: ${props => props.theme.font.fontWeightNormal};
-  ${() => opacityMixin(0.8)};
+  ${opacityMixin(0.8)};
   ${(props) => transitionMixin(props.theme.effect.ultraFastTransitionTime, props.theme.effect.transitionEaseIn)};
 
   > i {

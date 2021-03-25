@@ -21,6 +21,15 @@ import Maps from "views/Maps.js";
 import Upgrade from "views/Upgrade.js"; */
 
 import Home from "../../appscreens/Home.js";
+import PropertiesView from "../../appscreens/PropertiesView.js";
+import MatchesView from "../../appscreens/MatchesView.js";
+import ShortlistView from "../../appscreens/ShortlistView.js";
+import Dashboard1 from "../../appscreens/Dashboard1.js";
+import Dashboard2 from "../../appscreens/Dashboard2.js";
+import PaymentView from "../../appscreens/PaymentView.js";
+import UiButtonView from "../../appscreens/UiButtonView.js";
+import UiFormView from "../../appscreens/UiFormView.js";
+import UiGeneralView from "../../appscreens/UiGeneralView.js";
 import {Icons} from "./screens/Icons.js";
 import UserProfile from "./screens/UserProfile.js";
 import TableList from "./screens/TableList.js";
@@ -85,6 +94,75 @@ const dashboardRoutes = [
     component: Notifications,
     layout: "/main",
   },
+  {
+    path: "/ui/button",
+    name: "UiButton",
+    icon: "nc-icon nc-chart-pie-36",
+    component: UiButtonView,
+    layout: "/main",
+  },
+  {
+    path: "/ui/form",
+    name: "UiForm",
+    icon: "nc-icon nc-controller-modern",
+    component: UiFormView,
+    layout: "/main",
+  },
+  {
+    path: "/ui/general",
+    name: "UiGeneral",
+    icon: "nc-icon nc-headphones-2",
+    component: UiGeneralView,
+    layout: "/main",
+  },
+  {
+    path: "/properties",
+    name: "Properties",
+    icon: "nc-icon nc-bank",
+    component: PropertiesView,
+    layout: "/main",
+  },
+  {
+    path: "/matches",
+    name: "Matches",
+    icon: "nc-icon nc-bulb-63",
+    component: MatchesView,
+    layout: "/main",
+    redirect: true
+  },
+  {
+    path: "/dashboard1",
+    name: "Dashboard 1",
+    icon: "nc-icon nc-battery-81",
+    component: Dashboard1,
+    layout: "/main",
+    redirect: true
+  },
+  {
+    path: "/dashboard2",
+    name: "Dashboard 2",
+    icon: "nc-icon nc-backpack",
+    component: Dashboard2,
+    layout: "/main",
+    redirect: true
+  },
+  {
+    path: "/payment",
+    name: "Payment",
+    icon: "nc-icon nc-apple",
+    component: PaymentView,
+    layout: "/main",
+    redirect: true
+  },
+  {
+    path: "/shortlist",
+    name: "Shortlist",
+    icon: "nc-icon nc-cctv",
+    component: ShortlistView,
+    layout: "/main",
+    redirect: true
+  },
+
 ]
 
 export default dashboardRoutes;
