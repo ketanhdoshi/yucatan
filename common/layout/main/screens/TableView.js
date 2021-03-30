@@ -6,74 +6,16 @@ import {Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
 import {CardView} from './CardView'
+import SimpleTable from "../../../widgets/SimpleTable.js"
 
-const ColHeader = styled.th`
-  padding: 12px 8px;
-  vertical-align: middle;
-  border-bottom-width: 1px;
-  font-size: ${props => props.theme.font.fontSizeSmall};
-  text-transform: uppercase;
-  color: ${props => props.theme.colour.darkGray};
-  font-weight: ${props => props.theme.font.fontWeightNormal};
-  padding-bottom: 5px;
-  border-top: none !important;
-  border-bottom: none;
-  text-align: left !important;
-`;
-
-const TableRow = ({values}) => {
-  const tdItems = values.map((value, index) =>
-    <td key={index}>{value}</td>
-  );
-
-  return (
-    <tr>
-      {
-        values.map((value, index) =>
-          <td key={index}>{value}</td>
-        )
-      }
-    </tr>
-  );
-}
-
-const TableHeader = ({columns}) => {
-  return (
-    <tr>
-      {
-        columns.map((column, index) => 
-          <ColHeader key={index}>{column}</ColHeader>
-        )
-      }
-    </tr>
-  );
-}
-
-const TableView = ({columns, rows, striped}) => {
-  return (
-    <Table responsive striped hover>
-      <thead>
-        <TableHeader columns={columns}/>
-      </thead>
-      <tbody>
-        {
-          rows.map((row, index) => 
-            <TableRow key={index} values={row}/>
-          )
-        }
-      </tbody>
-    </Table>
-  );
-}
-
-function TableList() {
+function TableView() {
   return (
     <>
       <Container fluid>
         <Row>
           <Col md="12">
             <CardView title="Striped Table with Hover" subTitle="Striped Table subtitle">
-              <TableView
+              <SimpleTable
                 columns={["ID", "Name", "Salary", "Country", "City"]}
                 rows={[
                   ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
@@ -88,7 +30,7 @@ function TableList() {
           </Col>
           <Col md="12">
             <CardView title="Table on Plain Background" subTitle="Plain Table subtitle" plain="true">
-              <TableView
+              <SimpleTable
                 columns={["ID", "Name", "Salary", "Country", "City"]}
                 rows={[
                   ["1", "Dakota Rice", "$36,738", "Niger", "Oud-Turnhout"],
@@ -107,4 +49,4 @@ function TableList() {
   );
 }
 
-export default TableList;
+export default TableView;

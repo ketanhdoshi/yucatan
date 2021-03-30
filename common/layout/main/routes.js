@@ -32,7 +32,7 @@ import UiFormView from "../../appscreens/UiFormView.js";
 import UiGeneralView from "../../appscreens/UiGeneralView.js";
 import {Icons} from "./screens/Icons.js";
 import UserProfile from "./screens/UserProfile.js";
-import TableList from "./screens/TableList.js";
+import TableView from "./screens/TableView.js";
 import TextFont from "./screens/TextFont.js";
 import Notifications from "./screens/Notifications.js";
 
@@ -61,9 +61,9 @@ const dashboardRoutes = [
   },
   {
     path: "/table",
-    name: "Table List",
+    name: "Table View",
     icon: "nc-icon nc-notes",
-    component: TableList,
+    component: TableView,
     layout: "/main",
   },
   {
