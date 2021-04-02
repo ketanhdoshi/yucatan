@@ -29,7 +29,7 @@ import ContentHeader from './ContentHeader'
 
 import App from '../../appscreens/App'
 import Home from '../../appscreens/Home'
-import PropertiesView from '../../appscreens/PropertiesView'
+import PropertiesView from '../../features/properties/PropertiesView'
 import MatchesView from '../../appscreens/MatchesView'
 import ShortlistView from '../../appscreens/ShortlistView'
 import Dashboard1 from '../../appscreens/Dashboard1'

@@ -9,13 +9,11 @@ import {Form, Col, Button} from "react-bootstrap";
 import { Form as FinalForm, Field } from 'react-final-form'
 
 // Action helpers
-import { 
-    getPropertiesReqAction, 
-} from '../actions/action.js'
+import { listProperties, updateProperty } from './propertiesSlice'
 
-import s from '../scss/PropertiesView.scss';
-import {CardView} from '../layout/main/screens/CardView'
-import SimpleTable from "../widgets/SimpleTable.js"
+import s from './PropertiesView.scss';
+import {CardView} from '../../layout/main/screens/CardView'
+import SimpleTable from "../../widgets/SimpleTable.js"
 
 const RbFormControlAdapter = ({ input, type, ...rest }) => (
     <Form.Control {...input} type={type} {...rest} />
@@ -30,25 +28,18 @@ const RbFormSelectAdapter = ({ input, ...rest }) => (
 )
 
 const PropForm = ({propItem}) => {
+    const dispatch = useDispatch();
     const onSubmit = async values => {
         console.log ('Doing Props')
-        const creds = {
-          houseType: values.houseType,
-          price: values.price
-        }
-        // localLoginReqAction (creds, dispatch)
+        let {_id, __v, ...chgProperty } = values
+        dispatch(updateProperty({_id, chgProperty}))
         window.alert(JSON.stringify(values, 0, 2))
     } 
 
     return (
         <FinalForm
             onSubmit={onSubmit}
-            initialValues={{ 
-                houseType: propItem.houseType, roomType: propItem.roomType, price: propItem.price, rooms: propItem.rooms,
-                locality: propItem.address? propItem.address.locality: "",
-                region: propItem.address? propItem.address.region: "",
-                country: propItem.address? propItem.address.country: "",
-            }}
+            initialValues={propItem}
             render={({ handleSubmit, form, submitting, pristine, values }) => (            
                 <Form onSubmit={handleSubmit}>
                     <Form.Row>
@@ -76,12 +67,12 @@ const PropForm = ({propItem}) => {
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridLocality">
                             <Form.Label>Locality</Form.Label>
-                            <Field name="locality" component={RbFormControlAdapter} type="text" placeholder="Enter locality"/>
+                            <Field name="address.locality" component={RbFormControlAdapter} type="text" placeholder="Enter locality"/>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridRegion">
                         <Form.Label>Region</Form.Label>
-                        <Field name="region" component={RbFormSelectAdapter}>
+                        <Field name="address.region" component={RbFormSelectAdapter}>
                             <option value="Rajasthan">🐷 Rajasthan</option>
                             <option value="Pune">🍄 Pune</option>
                             <option value="Delhi">🧀 Delhi</option>
@@ -93,7 +84,7 @@ const PropForm = ({propItem}) => {
 
                         <Form.Group as={Col} controlId="formGridContry">
                             <Form.Label>Country</Form.Label>
-                            <Field name="country" component={RbFormControlAdapter} type="text" placeholder="Enter country"/>
+                            <Field name="address.country" component={RbFormControlAdapter} type="text" placeholder="Enter country"/>
                         </Form.Group>
                     </Form.Row>
 
@@ -117,8 +108,8 @@ const PropertiesView = () => {
     const [selectedRow, setSelectedRow] = useState(0);
 
     const dispatch = useDispatch();
-    const onClickCb = async values => {
-        getPropertiesReqAction (dispatch)
+    const onClickCb = async () => {
+        dispatch(listProperties())
     }
     const rowClickCb = (i, e) => {
         setSelectedRow(i);
@@ -140,18 +131,18 @@ const PropertiesView = () => {
     return (
         <div>
             Properties
-            <p>{properties.api}</p>
-            {properties.list &&
+            <p>{properties.status}</p>
+            {properties.items.length &&
                 <>
                 <CardView title="Property List" subTitle="Best Properties">
                     <SimpleTable
                         columns={["House Type", "Locality", "Region", "Country", "Room Type", "Rooms", "Price", "Desc"]}
-                        rows={flattenProperties(properties.list)}
+                        rows={flattenProperties(properties.items)}
                         onClickCb={rowClickCb}
                     />
                 </CardView>
                 <CardView title="Property Detail" subTitle="Edit Property">
-                    <PropForm propItem={properties.list[selectedRow]} />
+                    <PropForm propItem={properties.items[selectedRow]} />
                 </CardView>
              {/*    <ul className="list-group">
                     {properties.list.map(item =>

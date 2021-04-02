@@ -1,6 +1,6 @@
 import { combineReducers } from 'redux'
 import counter from './counter'
-import properties from './properties'
+import properties from '../features/properties/propertiesSlice'
 import matches from './matches'
 import posts from './posts'
 import login from './login'

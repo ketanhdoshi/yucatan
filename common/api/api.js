@@ -46,7 +46,7 @@ const authHeader = () => {
     } else {
       return {};
     }
-  }
+}
 
 // -----------------------------------------------------------------
 // Login Local
@@ -98,10 +98,62 @@ export const apiLogout = async () => {
 // -----------------------------------------------------------------
 // Get list of Properties
 // -----------------------------------------------------------------
+export const apiListProperties = async () => {
+    const res = await axios.get(apiUrl + '/property', { headers: authHeader()});
+    return res.data.res;
+}
+
 export const apiGetProperties = async (successCB, errorCB, dispatch) => {
     
     try {
         const res = await axios.get(apiUrl + '/property', { headers: authHeader()});
+        let data = res.data.res;
+        console.log ("data is ", data);
+        successCB (dispatch, data)
+    } catch (err) {
+        console.error(err);
+        errorCB (dispatch, err);
+    }
+}
+
+// -----------------------------------------------------------------
+// Create Property
+// -----------------------------------------------------------------
+export const apiCreateProperty = async (newProperty) => {
+    const res = await axios({
+        method: 'post',
+        url: apiUrl + '/property',
+        data: newProperty,
+        headers: authHeader(),
+    });
+    return res.data.res;
+}
+
+// -----------------------------------------------------------------
+// Update Property
+// -----------------------------------------------------------------
+export const apiUpdateProperty = async ({_id, chgProperty}) => {
+    // let {_id, chgProperty} = updateData
+    console.log("api", _id, chgProperty)
+    const res = await axios({
+        method: 'put',
+        url: apiUrl + '/property/' + _id,
+        data: chgProperty,
+        headers: authHeader(),
+    });
+    return res.data.res;
+}
+
+export const apiSetProperty = async (chgProperty, successCB, errorCB, dispatch) => {
+    
+    try {
+        const res = await axios({
+            method: 'put',
+            url: apiUrl + '/property/' + chgProperty.id,
+            data: chgProperty,
+            headers: authHeader(),
+        });
+
         let data = res.data.res;
         console.log ("data is ", data);
         successCB (dispatch, data)

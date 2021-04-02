@@ -1,10 +1,11 @@
 import { createStore, applyMiddleware } from 'redux'
+import { configureStore } from '@reduxjs/toolkit'
 // For Redux DevTools
 import { devToolsEnhancer } from 'redux-devtools-extension';
 //import thunk from 'redux-thunk'
 import rootReducer from '../reducers'
 
-const configureStore = (preloadedState) => {
+/* const configureStore = (preloadedState) => {
   const store = createStore(
     rootReducer,
     // preloadedState, // Comment out since we're using devToolsEnhancer
@@ -15,4 +16,13 @@ const configureStore = (preloadedState) => {
   return store
 }
 
-export default configureStore
+export default configureStore */
+
+
+const store = (preloadedState) => {
+  return configureStore({
+    reducer: rootReducer
+  })
+}
+
+export default store

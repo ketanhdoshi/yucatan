@@ -21,7 +21,7 @@ import Maps from "views/Maps.js";
 import Upgrade from "views/Upgrade.js"; */
 
 import Home from "../../appscreens/Home.js";
-import PropertiesView from "../../appscreens/PropertiesView.js";
+import PropertiesView from "../../features/properties/PropertiesView.js";
 import MatchesView from "../../appscreens/MatchesView.js";
 import ShortlistView from "../../appscreens/ShortlistView.js";
 import Dashboard1 from "../../appscreens/Dashboard1.js";
