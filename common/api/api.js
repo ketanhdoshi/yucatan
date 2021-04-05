@@ -120,6 +120,7 @@ export const apiGetProperties = async (successCB, errorCB, dispatch) => {
 // Create Property
 // -----------------------------------------------------------------
 export const apiCreateProperty = async (newProperty) => {
+    console.log("Create Property API", newProperty)
     const res = await axios({
         method: 'post',
         url: apiUrl + '/property',
@@ -133,8 +134,7 @@ export const apiCreateProperty = async (newProperty) => {
 // Update Property
 // -----------------------------------------------------------------
 export const apiUpdateProperty = async ({_id, chgProperty}) => {
-    // let {_id, chgProperty} = updateData
-    console.log("api", _id, chgProperty)
+    console.log("Update Property API", _id, chgProperty)
     const res = await axios({
         method: 'put',
         url: apiUrl + '/property/' + _id,

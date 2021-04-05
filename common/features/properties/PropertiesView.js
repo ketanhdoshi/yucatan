@@ -9,14 +9,14 @@ import {Form, Col, Button} from "react-bootstrap";
 import { Form as FinalForm, Field } from 'react-final-form'
 
 // Action helpers
-import { listProperties, updateProperty } from './propertiesSlice'
+import { listProperties, createProperty, updateProperty } from './propertiesSlice'
 
 import s from './PropertiesView.scss';
 import {CardView} from '../../layout/main/screens/CardView'
 import SimpleTable from "../../widgets/SimpleTable.js"
 
-const RbFormControlAdapter = ({ input, type, ...rest }) => (
-    <Form.Control {...input} type={type} {...rest} />
+const RbFormControlAdapter = ({ input, ...rest }) => (
+    <Form.Control {...input} {...rest} />
 )
 
 const RbFormCheckAdapter = ({ input, label, ...rest }) => (
@@ -30,10 +30,18 @@ const RbFormSelectAdapter = ({ input, ...rest }) => (
 const PropForm = ({propItem}) => {
     const dispatch = useDispatch();
     const onSubmit = async values => {
-        console.log ('Doing Props')
-        let {_id, __v, ...chgProperty } = values
-        dispatch(updateProperty({_id, chgProperty}))
-        window.alert(JSON.stringify(values, 0, 2))
+        // Remove the '_id' and '__v' fields out of the 'values' so that
+        // we can pass the remaining fields to the API for saving
+        let {_id, __v, ...propValues } = values
+        if (_id === "") {
+            // Create new property
+            propValues.owner = "506f6e67612050616e646974"
+            propValues.description = "This is auto filled in"
+            dispatch(createProperty(propValues))
+        } else {
+            // Update existing property
+            dispatch(updateProperty({_id, chgProperty: propValues}))
+        }
     } 
 
     return (
@@ -55,12 +63,12 @@ const PropForm = ({propItem}) => {
 
                         <Form.Group as={Col} controlId="formGridRooms">
                             <Form.Label>Rooms</Form.Label>
-                            <Field name="rooms" component={RbFormControlAdapter} type="text" placeholder="Enter rooms"/>
+                            <Field name="rooms" component={RbFormControlAdapter} type="number" placeholder="Enter rooms"/>
                         </Form.Group>
  
                          <Form.Group as={Col} controlId="formGridPrice">
                             <Form.Label>Price</Form.Label>
-                            <Field name="price" component={RbFormControlAdapter} type="text" placeholder="Enter price"/>
+                            <Field name="price" component={RbFormControlAdapter} type="number" placeholder="Enter price"/>
                         </Form.Group>
                     </Form.Row>
 
@@ -111,6 +119,23 @@ const PropertiesView = () => {
     const onClickCb = async () => {
         dispatch(listProperties())
     }
+    const newPropCb = () => {
+        setSelectedRow(-1);
+    }
+    const emptyProp = () => {
+        return {
+            _id: "",
+            __v: "",
+            address: {locality: "", region: "", country: ""},
+            amenities: [],
+            description: "",
+            houseType: "",
+            photos: [],
+            price: 0,
+            roomType: "",
+            rooms: 0
+        }
+    }
     const rowClickCb = (i, e) => {
         setSelectedRow(i);
     }
@@ -131,7 +156,7 @@ const PropertiesView = () => {
     return (
         <div>
             Properties
-            <p>{properties.status}</p>
+            <p>{properties.status}{properties.status == "failed" ? properties.error: null}</p>
             {properties.items.length &&
                 <>
                 <CardView title="Property List" subTitle="Best Properties">
@@ -142,7 +167,8 @@ const PropertiesView = () => {
                     />
                 </CardView>
                 <CardView title="Property Detail" subTitle="Edit Property">
-                    <PropForm propItem={properties.items[selectedRow]} />
+                    <Button onClick={newPropCb}>New Property</Button>
+                    <PropForm propItem={selectedRow >= 0 ? properties.items[selectedRow] : emptyProp()} />
                 </CardView>
              {/*    <ul className="list-group">
                     {properties.list.map(item =>
@@ -155,7 +181,7 @@ const PropertiesView = () => {
                 </>
             }
 
-        <button type="button" onClick={onClickCb}>Get Properties!</button>
+        <Button onClick={onClickCb}>Get Properties!</Button>
     </div>
     )
 }

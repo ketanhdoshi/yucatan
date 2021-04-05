@@ -24,28 +24,36 @@ const propertiesSlice = createSlice({
 
     },
     extraReducers: {
-      [listProperties.pending]: (state, action) => {
+        [listProperties.pending]: (state, action) => {
             state.status = 'loading'
-      },
-      [listProperties.fulfilled]: (state, action) => {
+        },
+        [listProperties.fulfilled]: (state, action) => {
             state.status = 'succeeded'
             // Add any fetched properties to the array
             state.items = state.items.concat(action.payload)
-      },
-      [listProperties.rejected]: (state, action) => {
+        },
+        [listProperties.rejected]: (state, action) => {
             state.status = 'failed'
-            state.error = action.payload
-      },
-      [createProperty.fulfilled]: (state, action) => {
+            state.error = action.error.message
+        },
+        [createProperty.fulfilled]: (state, action) => {
             state.items.push(action.payload)
-      },
-      [updateProperty.fulfilled]: (state, action) => {
+        },
+        [updateProperty.pending]: (state, action) => {
+            state.status = 'loading'
+        },
+        [updateProperty.fulfilled]: (state, action) => {
+            state.status = 'succeeded'
             const { id } = action.payload
             const itemIndex = state.items.findIndex(item => item.id === id )
             if (itemIndex) {
                 state.items[itemIndex] = {...action.payload}
             }
         },
+        [updateProperty.rejected]: (state, action) => {
+            state.status = 'failed'
+            state.error = action.error.message
+        }
     },
 })
   
