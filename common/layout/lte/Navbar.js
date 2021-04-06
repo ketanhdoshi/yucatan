@@ -129,7 +129,8 @@ const RouterLink = ({href, children}) => (
 )
 
 import { useDispatch, useSelector } from "react-redux"
-import { logoutReqAction } from '../../actions/action.js'
+// import { logoutReqAction } from '../../actions/action.js'
+import { getLogout } from '../../features/login/loginSlice'
 import { useHistory } from "react-router-dom";
 
 const NavUser = () => {
@@ -140,7 +141,8 @@ const NavUser = () => {
     const LogoutCb = () => {
         console.log ("Logout user data is ", currentUser);
         if (currentUser) {
-          logoutReqAction (dispatch);
+          dispatch(getLogout())
+          // logoutReqAction (dispatch);
           history.push("/");
         }
     }

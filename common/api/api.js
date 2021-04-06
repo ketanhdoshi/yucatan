@@ -51,7 +51,32 @@ const authHeader = () => {
 // -----------------------------------------------------------------
 // Login Local
 // -----------------------------------------------------------------
-export const apiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
+export const apiLoginLocal = async (creds) => {
+    console.log ("calling api");
+
+    // Alternate way to send axios requests instead of axios.post(). This way
+    // allows you to sent additional options like Request Headers.
+    const res = await axios({
+        method: 'post',
+        url: apiUrl + '/login/local',
+        data: creds,
+    });
+    let jwt = res.headers['authorization'];
+    console.log ("jwt is ", jwt, res);
+
+    let userData = {
+        name: res.data.name,
+        scope: res.data.scope,
+        token: jwt
+    }
+
+    // Save the user data in Local Storage
+    setUserToken(userData)
+
+    return userData
+}
+
+export const oldapiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
     console.log ("calling api");
     try {
         // Alternate way to send axios requests instead of axios.post(). This way
@@ -83,6 +108,16 @@ export const apiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
 // Logout
 // -----------------------------------------------------------------
 export const apiLogout = async () => {
+    // Before removing the token, get the authorization header as we will need it for the API call. 
+    let auth = authHeader();
+    // Remvove the user data from Local Storage
+    removeUserToken();
+    // Call the Logout API. We don't really care about the success or failure
+    const res = await axios.get(apiUrl + '/logout', { headers: auth});
+    return res.data.res;
+}
+
+export const oldapiLogout = async () => {
     try {
         // Before removing the token, get the authorization header as we will need it for the API call. 
         let auth = authHeader();
@@ -104,7 +139,6 @@ export const apiListProperties = async () => {
 }
 
 export const apiGetProperties = async (successCB, errorCB, dispatch) => {
-    
     try {
         const res = await axios.get(apiUrl + '/property', { headers: authHeader()});
         let data = res.data.res;

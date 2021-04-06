@@ -4,13 +4,15 @@
 import React from 'react'
 import { render } from 'react-dom'
 import { useDispatch, useSelector } from "react-redux"
-import { Redirect } from 'react-router-dom';
+import { Redirect, useHistory } from 'react-router-dom';
 import { Form, Field } from 'react-final-form'
 
 // Action helpers
-import { localLoginReqAction,
+/* import { localLoginReqAction,
          logoutReqAction 
-} from '../actions/action.js'
+} from '../actions/action.js' */
+import { getLoginLocal } from '../features/login/loginSlice'
+
 
 import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE} from '../widgets/SocialButton'
 import s from '../scss/LoginView.scss'
@@ -37,7 +39,8 @@ export const LoginView = () => {
       username: values.username,
       password: values.password
     }
-    localLoginReqAction (creds, dispatch)
+    dispatch(getLoginLocal(creds))
+    // localLoginReqAction (creds, dispatch)
     window.alert(JSON.stringify(values, 0, 2))
   }  
 
@@ -110,13 +113,38 @@ export const LoginView = () => {
   );
 }
 
-export const LogoutCb = () => {
+/* export const Logout = () => {
+  const { userData: currentUser } = useSelector((state) => state.login);
+  const dispatch = useDispatch();
+  const history = useHistory();
+
+  const LogoutCb = () => {
+    console.log ("Logout user data is ", currentUser);
+    if (currentUser) {
+      logoutReqAction (dispatch);
+      history.push("/");
+    }
+  }
+
+  return ( 
+    <NavItem>
+      <NavLink href="#" onClick={LogoutCb}>No User</NavLink>
+    </NavItem>
+  )
+}
+
+
+const OldLogoutCb = () => {
   const userData = useSelector((state) => state.login);
+
   if (userData) {
     const dispatch = useDispatch();
+    const history = useHistory();
+
     logoutReqAction (dispatch);
+    history.push("/");
   }
 
   // Redirect to the home page if we're already logged in
   // return <Redirect to="/" />;
-}
+} */

@@ -6,6 +6,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // -----------------------------------------------------------------
 
 import { apiListProperties, apiCreateProperty, apiUpdateProperty } from '../../api/api'
+import {getLogout } from '../login/loginSlice'
 
 const initialState = {
     items: [],
@@ -53,7 +54,10 @@ const propertiesSlice = createSlice({
         [updateProperty.rejected]: (state, action) => {
             state.status = 'failed'
             state.error = action.error.message
-        }
+        },
+        [getLogout.fulfilled]: (state, action) => {
+            state.items = []
+        },
     },
 })
   
