@@ -36,39 +36,78 @@ const PropForm = ({propItem}) => {
         if (_id === "") {
             // Create new property
             propValues.owner = "506f6e67612050616e646974"
-            propValues.description = "This is auto filled in"
             dispatch(createProperty(propValues))
         } else {
             // Update existing property
             dispatch(updateProperty({_id, chgProperty: propValues}))
         }
-    } 
+    }
+
+    // React Final Form's validation functions return 'undefined' if the field value is valid
+    const required = value => (value ? undefined : 'Required')
+    const mustBeNumber = value => (isNaN(value) ? 'Must be a number' : undefined)
+    const minValue = min => value => isNaN(value) || value >= min ? undefined : `Should be >= ${min}`
+    const maxValue = max => value => isNaN(value) || value <= max ? undefined : `Should be <= ${max}`
+    const composeValidators = (...validators) => value =>
+                validators.reduce((error, validator) => error || validator(value), undefined)
 
     return (
         <FinalForm
             onSubmit={onSubmit}
             initialValues={propItem}
-            render={({ handleSubmit, form, submitting, pristine, values }) => (            
+            render={({ handleSubmit, form, submitting, pristine, values }) => (
                 <Form onSubmit={handleSubmit}>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridHouseType">
                             <Form.Label>House Type</Form.Label>
-                            <Field name="houseType" component={RbFormControlAdapter} type="text" placeholder="Enter house type"/>
+                            <Field name="houseType" component={RbFormSelectAdapter}>
+                                {/* When creating a new property, the field value of houseType starts off 
+                                    as blank. So the Select control's dropdown should shou a blank value initially. So
+                                    we have to insert a blank option into the Select control initially.
+                                    But this field is Required so blank is not a valid value when submitting. So once
+                                    you choose something from the dropdown and fill in some value, we remove the 
+                                    blank option from the dropdown so that you cannot choose a blank value after that */}
+                                {values.houseType === "" ? <option /> : null}
+                                <option value="Apartment">Apartment</option>
+                                <option value="Bungalow">Bungalow</option>
+                                <option value="Castle">Castle</option>
+                                <option value="Loft">Loft</option>
+                                <option value="Tent">Tent</option>
+                            </Field>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridRoomType">
                             <Form.Label>Room Type</Form.Label>
-                            <Field name="roomType" component={RbFormControlAdapter} type="text" placeholder="Enter room type"/>
+                            <Field name="roomType" component={RbFormSelectAdapter}>
+                                {values.roomType === "" ? <option /> : null}
+                                <option value="Entire House">Entire House</option>
+                                <option value="Private Room">Private Room</option>
+                                <option value="Shared Room">Shared Room</option>
+                            </Field>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridRooms">
-                            <Form.Label>Rooms</Form.Label>
-                            <Field name="rooms" component={RbFormControlAdapter} type="number" placeholder="Enter rooms"/>
+                            <Field name="rooms" validate={composeValidators(required, mustBeNumber, minValue(0), maxValue(20))}>
+                                {({ input, meta }) => (
+                                    <>
+                                        <Form.Label>Rooms</Form.Label>
+                                        <Form.Control {...input} type="number" placeholder="Enter rooms" />
+                                        {meta.error && meta.touched && <span>{meta.error}</span>}
+                                    </>
+                                )}
+                            </Field>
                         </Form.Group>
  
                          <Form.Group as={Col} controlId="formGridPrice">
-                            <Form.Label>Price</Form.Label>
-                            <Field name="price" component={RbFormControlAdapter} type="number" placeholder="Enter price"/>
+                            <Field name="price" validate={composeValidators(required, mustBeNumber, minValue(0))}>
+                                {({ input, meta }) => (
+                                    <>
+                                        <Form.Label>Price</Form.Label>
+                                        <Form.Control {...input} type="number" placeholder="Enter price" />
+                                        {meta.error && meta.touched && <span>{meta.error}</span>}
+                                    </>
+                                )}
+                            </Field>
                         </Form.Group>
                     </Form.Row>
 
@@ -79,20 +118,48 @@ const PropForm = ({propItem}) => {
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridRegion">
-                        <Form.Label>Region</Form.Label>
-                        <Field name="address.region" component={RbFormSelectAdapter}>
-                            <option value="Rajasthan">🐷 Rajasthan</option>
-                            <option value="Pune">🍄 Pune</option>
-                            <option value="Delhi">🧀 Delhi</option>
-                            <option value="Maharashtra">🐓 Maharashtra</option>
-                            <option value="tuna">🐟 Tuna</option>
-                            <option value="pineapple">🍍 Pineapple</option>
-                        </Field>
+                            <Form.Label>Region</Form.Label>
+                            <Field name="address.region" component={RbFormControlAdapter} type="text" placeholder="Enter Region"/>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridContry">
-                            <Form.Label>Country</Form.Label>
-                            <Field name="address.country" component={RbFormControlAdapter} type="text" placeholder="Enter country"/>
+                            <Field name="address.country" validate={required}>
+                                {({ input, meta }) => (
+                                    <>
+                                        <Form.Label>Country</Form.Label>
+                                        <Form.Control {...input} type="text" placeholder="Enter country" />
+                                        {meta.error && meta.touched && <span>{meta.error}</span>}
+                                    </>
+                                )}
+                            </Field>
+                        </Form.Group>
+                    </Form.Row>
+
+                    <Form.Row>
+                        <Form.Group as={Col} controlId="formGridDescription">
+                            <Field name="description" validate={required}>
+                                {({ input, meta }) => (
+                                    <>
+                                        <Form.Label>Description</Form.Label>
+                                        <Form.Control {...input} type="text" placeholder="Enter description" />
+                                        {meta.error && meta.touched && <span>{meta.error}</span>}
+                                    </>
+                                )}
+                            </Field>
+                        </Form.Group>
+
+                        <Form.Group as={Col} controlId="formGridAmenities">
+                            <Form.Label>Amenities</Form.Label>
+                            {/* React Final Form requires you to explicitly put the 'type=select' even though
+                            this is a HTML select element. Otherwise it complains with a warning */}
+                            <Field name="amenities" component={RbFormSelectAdapter} multiple type="select">
+                                <option value="AC">AC</option>
+                                <option value="Garden">Garden</option>
+                                <option value="Internet">Internet</option>
+                                <option value="Wifi">Wifi</option>
+                                <option value="Pool">Pool</option>
+                                <option value="Washer">Washer</option>
+                            </Field>
                         </Form.Group>
                     </Form.Row>
 
@@ -141,9 +208,9 @@ const PropertiesView = () => {
             description: "",
             houseType: "",
             photos: [],
-            price: 0,
+            price: "",
             roomType: "",
-            rooms: 0
+            rooms: ""
         }
     }
     const rowClickCb = (i, e) => {
@@ -178,20 +245,11 @@ const PropertiesView = () => {
                 </CardView>
                 <CardView title="Property Detail" subTitle="Edit Property">
                     <Button onClick={newPropCb}>New Property</Button>
+                    <Button onClick={deletePropCb}>Delete Property</Button>
                     <PropForm propItem={selectedRow >= 0 ? properties.items[selectedRow] : emptyProp()} />
                 </CardView>
-             {/*    <ul className="list-group">
-                    {properties.list.map(item =>
-                        <li key={item._id} className="list-group-item" className={s.root}>
-                            <span className="badge">{item.houseType}</span>
-                            {item.description}
-                        </li>
-                    )}
-                </ul> */}
                 </>
             }
-
-        <Button onClick={deletePropCb}>Delete Property</Button>
     </div>
     )
 }
