@@ -137,10 +137,11 @@ module.exports = {
                     const property = new PropertyModel(request.payload);
 
                     // Save data into database
-                    await property.save();
+                    const res = await property.save();
                     return { 
                         statusCode: 201, 
-                        message: 'Property Saved Successfully' 
+                        message: 'Property Saved Successfully',
+                        res
                     };
                 } catch (error) {
                     return Boom.serverUnavailable('Internal MongoDB error', error);
@@ -233,7 +234,8 @@ module.exports = {
                     );
                     return {
                         statusCode: 200,
-                        message: 'Property Deleted Successfully'
+                        message: 'Property Deleted Successfully',
+                        res
                     };
                 } catch (error) {
                     return Boom.serverUnavailable('Internal MongoDB error', error);

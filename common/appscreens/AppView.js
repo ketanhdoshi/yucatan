@@ -14,7 +14,7 @@ import MainView from '../layout/lte/MainView'
 import AdminLayout from "../layout/admin/Admin";
 import MainPage from "../layout/main/MainPage";
 import Home from './Home'
-import { LoginView } from './LoginView'
+import { LoginView } from '../features/login/LoginView'
 
 /* TODO - temporarily hardcoded only for testing */
 const GlobalStyle = createGlobalStyle`

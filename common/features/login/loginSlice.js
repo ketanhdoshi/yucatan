@@ -38,6 +38,8 @@ const loginSlice = createSlice({
         },
         [getLogout.fulfilled]: (state, action) => {
             state.userData = null
+            state.status = 'idle'
+            state.error = null
         },
     },
 })

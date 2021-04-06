@@ -30,9 +30,9 @@ import {
 
 // Import the API calls
 import { 
-    apiLoginLocal,
-    apiLogout,
-    apiGetProperties,
+    // apiLoginLocal,
+    // apiLogout,
+    // apiGetProperties,
     apiGetUsers, 
     apiGetPost,
 } from '../api/api'

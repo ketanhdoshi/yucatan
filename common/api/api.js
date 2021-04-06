@@ -76,7 +76,7 @@ export const apiLoginLocal = async (creds) => {
     return userData
 }
 
-export const oldapiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
+/* export const oldapiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
     console.log ("calling api");
     try {
         // Alternate way to send axios requests instead of axios.post(). This way
@@ -102,7 +102,7 @@ export const oldapiLoginLocal = async (creds, successCB, errorCB, dispatch) => {
         console.error(err);
         errorCB (dispatch, err);
     }
-}
+} */
 
 // -----------------------------------------------------------------
 // Logout
@@ -117,7 +117,7 @@ export const apiLogout = async () => {
     return res.data.res;
 }
 
-export const oldapiLogout = async () => {
+/* export const oldapiLogout = async () => {
     try {
         // Before removing the token, get the authorization header as we will need it for the API call. 
         let auth = authHeader();
@@ -128,7 +128,7 @@ export const oldapiLogout = async () => {
     } catch (err) {
         console.error(err);
     }
-}
+} */
 
 // -----------------------------------------------------------------
 // Get list of Properties
@@ -138,7 +138,7 @@ export const apiListProperties = async () => {
     return res.data.res;
 }
 
-export const apiGetProperties = async (successCB, errorCB, dispatch) => {
+/* export const apiGetProperties = async (successCB, errorCB, dispatch) => {
     try {
         const res = await axios.get(apiUrl + '/property', { headers: authHeader()});
         let data = res.data.res;
@@ -148,7 +148,7 @@ export const apiGetProperties = async (successCB, errorCB, dispatch) => {
         console.error(err);
         errorCB (dispatch, err);
     }
-}
+} */
 
 // -----------------------------------------------------------------
 // Create Property
@@ -178,7 +178,7 @@ export const apiUpdateProperty = async ({_id, chgProperty}) => {
     return res.data.res;
 }
 
-export const apiSetProperty = async (chgProperty, successCB, errorCB, dispatch) => {
+/* export const apiSetProperty = async (chgProperty, successCB, errorCB, dispatch) => {
     
     try {
         const res = await axios({
@@ -195,6 +195,19 @@ export const apiSetProperty = async (chgProperty, successCB, errorCB, dispatch) 
         console.error(err);
         errorCB (dispatch, err);
     }
+} */
+
+// -----------------------------------------------------------------
+// Delete Property
+// -----------------------------------------------------------------
+export const apiDeleteProperty = async (_id) => {
+    console.log("Delete Property API", _id)
+    const res = await axios({
+        method: 'delete',
+        url: apiUrl + '/property/' + _id,
+        headers: authHeader(),
+    });
+    return res.data.res;
 }
 
 // -----------------------------------------------------------------

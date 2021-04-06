@@ -1,7 +1,7 @@
 // -----------------------------------------------------------------
 // Properties page
 // -----------------------------------------------------------------
-import React, {useState} from 'react'
+import React, {useState, useEffect} from 'react'
 import { useSelector, useDispatch } from "react-redux";
 // react-bootstrap components
 import {Form, Col, Button} from "react-bootstrap";
@@ -9,7 +9,7 @@ import {Form, Col, Button} from "react-bootstrap";
 import { Form as FinalForm, Field } from 'react-final-form'
 
 // Action helpers
-import { listProperties, createProperty, updateProperty } from './propertiesSlice'
+import { listProperties, createProperty, updateProperty, deleteProperty } from './propertiesSlice'
 
 import s from './PropertiesView.scss';
 import {CardView} from '../../layout/main/screens/CardView'
@@ -113,11 +113,21 @@ const PropForm = ({propItem}) => {
 
 const PropertiesView = () => {
     const properties = useSelector((state) => state.properties);
+    const propStatus = properties.status;
     const [selectedRow, setSelectedRow] = useState(0);
 
     const dispatch = useDispatch();
-    const onClickCb = async () => {
-        dispatch(listProperties())
+    useEffect(() => {
+        if (propStatus === 'idle') {
+            dispatch(listProperties())
+        }
+    }, [propStatus, dispatch])
+
+    const deletePropCb = async () => {
+        if (selectedRow >= 0) {
+            let _id = properties.items[selectedRow]._id
+            dispatch(deleteProperty(_id))
+        }
     }
     const newPropCb = () => {
         setSelectedRow(-1);
@@ -181,7 +191,7 @@ const PropertiesView = () => {
                 </>
             }
 
-        <Button onClick={onClickCb}>Get Properties!</Button>
+        <Button onClick={deletePropCb}>Delete Property</Button>
     </div>
     )
 }

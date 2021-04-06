@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // 3 action types for REQ, SUCCESS and ERROR
 // -----------------------------------------------------------------
 
-import { apiListProperties, apiCreateProperty, apiUpdateProperty } from '../../api/api'
+import { apiListProperties, apiCreateProperty, apiUpdateProperty, apiDeleteProperty } from '../../api/api'
 import {getLogout } from '../login/loginSlice'
 
 const initialState = {
@@ -17,6 +17,7 @@ const initialState = {
 export const listProperties = createAsyncThunk('properties/list', apiListProperties)
 export const createProperty = createAsyncThunk('properties/create', apiCreateProperty)
 export const updateProperty = createAsyncThunk('properties/update', apiUpdateProperty)
+export const deleteProperty = createAsyncThunk('properties/delete', apiDeleteProperty)
 
 const propertiesSlice = createSlice({
     name: 'properties',
@@ -37,17 +38,25 @@ const propertiesSlice = createSlice({
             state.status = 'failed'
             state.error = action.error.message
         },
+        [createProperty.pending]: (state, action) => {
+            state.status = 'loading'
+        },
         [createProperty.fulfilled]: (state, action) => {
+            state.status = 'succeeded'
             state.items.push(action.payload)
+        },
+        [createProperty.rejected]: (state, action) => {
+            state.status = 'failed'
+            state.error = action.error.message
         },
         [updateProperty.pending]: (state, action) => {
             state.status = 'loading'
         },
         [updateProperty.fulfilled]: (state, action) => {
             state.status = 'succeeded'
-            const { id } = action.payload
-            const itemIndex = state.items.findIndex(item => item.id === id )
-            if (itemIndex) {
+            const { _id } = action.payload
+            const itemIndex = state.items.findIndex(item => item._id === _id )
+            if (itemIndex >= 0) {
                 state.items[itemIndex] = {...action.payload}
             }
         },
@@ -55,8 +64,25 @@ const propertiesSlice = createSlice({
             state.status = 'failed'
             state.error = action.error.message
         },
+        [deleteProperty.pending]: (state, action) => {
+            state.status = 'loading'
+        },
+        [deleteProperty.fulfilled]: (state, action) => {
+            state.status = 'succeeded'
+            const { _id } = action.payload
+            const itemIndex = state.items.findIndex(item => item._id === _id )
+            if (itemIndex >= 0) {
+                delete state.items[itemIndex]
+            }
+        },
+        [deleteProperty.rejected]: (state, action) => {
+            state.status = 'failed'
+            state.error = action.error.message
+        },
         [getLogout.fulfilled]: (state, action) => {
             state.items = []
+            state.status = 'idle'
+            state.error = null
         },
     },
 })

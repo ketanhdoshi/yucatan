@@ -11,11 +11,11 @@ import { Form, Field } from 'react-final-form'
 /* import { localLoginReqAction,
          logoutReqAction 
 } from '../actions/action.js' */
-import { getLoginLocal } from '../features/login/loginSlice'
+import { getLoginLocal } from './loginSlice'
 
 
-import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE} from '../widgets/SocialButton'
-import s from '../scss/LoginView.scss'
+import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE} from '../../widgets/SocialButton'
+import s from './LoginView.scss'
 
 const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
 
