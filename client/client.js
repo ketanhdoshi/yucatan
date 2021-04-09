@@ -28,7 +28,9 @@ let show = () => {
 
 if (module.hot) {
     console.log ('in hot');
-    // Whenever a new version of App.js is available
+    // Accept the Hot Module reload of code for my React components. This has to be done
+    // in addition to accepting the code for the Redux components (which happens inside
+    // the configureStore)
     module.hot.accept('../common/appscreens/AppView.js', function () {
         // Require the new version and render it instead
         setTimeout(show);

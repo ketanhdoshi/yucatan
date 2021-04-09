@@ -213,7 +213,15 @@ export const apiDeleteProperty = async (_id) => {
 // -----------------------------------------------------------------
 // Get list of Users
 // -----------------------------------------------------------------
-export const apiGetUsers = (successCB, dispatch) => {
+export const apiListUsers = async () => {
+    const res = await axios.get(apiUrl + '/user', { headers: authHeader()});
+    return res.data.res;
+}
+
+// -----------------------------------------------------------------
+// Get list of Users from a Mock Rest API
+// -----------------------------------------------------------------
+export const apiGetMockUsers = (successCB, dispatch) => {
     axios.get('http://jsonplaceholder.typicode.com/users')
         .then(res => {
             return res.data;
@@ -228,9 +236,9 @@ export const apiGetUsers = (successCB, dispatch) => {
 }
 
 // -----------------------------------------------------------------
-// Get list of Posts
+// Get list of Posts from a Mock Rest API
 // -----------------------------------------------------------------
-export const apiGetPost = (postNo, successCB, dispatch) => {
+export const apiGetMockPost = (postNo, successCB, dispatch) => {
     axios.get('http://jsonplaceholder.typicode.com/posts/' + postNo)
         .then(res => {
             return res.data;

@@ -19,10 +19,22 @@ import rootReducer from '../reducers'
 export default configureStore */
 
 
-const store = (preloadedState) => {
-  return configureStore({
+const configureAppStore = (preloadedState) => {
+  // Redux Toolkit's configureStore() by default handles applying of async middleware
+  // and enabling the Redux Devtools extension
+  const store = configureStore({
     reducer: rootReducer
   })
+
+  if (module.hot) {
+    // Accept the Hot Module reload of code for my Redux reducers. This has to be done
+    // in addition to accepting the code for the React components (which is done inside
+    // the client.js )
+    console.log ('in configure store hot');
+    module.hot.accept('../reducers', () => store.replaceReducer(rootReducer))
+  }
+
+  return store
 }
 
-export default store
+export default configureAppStore

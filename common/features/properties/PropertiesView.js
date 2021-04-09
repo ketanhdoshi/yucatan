@@ -10,6 +10,7 @@ import { Form as FinalForm, Field } from 'react-final-form'
 
 // Action helpers
 import { listProperties, createProperty, updateProperty, deleteProperty } from './propertiesSlice'
+import { listUsers } from '../users/usersSlice'
 
 import s from './PropertiesView.scss';
 import {CardView} from '../../layout/main/screens/CardView'
@@ -27,7 +28,7 @@ const RbFormSelectAdapter = ({ input, ...rest }) => (
     <Form.Control as="select" {...input} {...rest} />
 )
 
-const PropForm = ({propItem}) => {
+const PropForm = ({propItem, users}) => {
     const dispatch = useDispatch();
     const onSubmit = async values => {
         // Remove the '_id' and '__v' fields out of the 'values' so that
@@ -35,13 +36,18 @@ const PropForm = ({propItem}) => {
         let {_id, __v, ...propValues } = values
         if (_id === "") {
             // Create new property
-            propValues.owner = "506f6e67612050616e646974"
             dispatch(createProperty(propValues))
         } else {
             // Update existing property
             dispatch(updateProperty({_id, chgProperty: propValues}))
         }
     }
+
+    const usersOptions = users.map(user => (
+        <option key={user._id} value={user._id}>
+          {user.name}
+        </option>
+      ))
 
     // React Final Form's validation functions return 'undefined' if the field value is valid
     const required = value => (value ? undefined : 'Required')
@@ -148,6 +154,13 @@ const PropForm = ({propItem}) => {
                             </Field>
                         </Form.Group>
 
+                        <Form.Group as={Col} controlId="formGridOwner">
+                            <Form.Label>Owner</Form.Label>
+                            <Field name="owner" component={RbFormSelectAdapter}>
+                                {usersOptions}
+                            </Field>
+                        </Form.Group>
+
                         <Form.Group as={Col} controlId="formGridAmenities">
                             <Form.Label>Amenities</Form.Label>
                             {/* React Final Form requires you to explicitly put the 'type=select' even though
@@ -179,20 +192,30 @@ const PropForm = ({propItem}) => {
 }
 
 const PropertiesView = () => {
-    const properties = useSelector((state) => state.properties);
+    const properties = useSelector(state => state.properties);
     const propStatus = properties.status;
+    const users = useSelector(state => state.users.items);
     const [selectedRow, setSelectedRow] = useState(0);
 
     const dispatch = useDispatch();
+    // Fetch the list of properties when the component is mounted, if the
+    // API request has not been initiated previously.
     useEffect(() => {
         if (propStatus === 'idle') {
             dispatch(listProperties())
         }
     }, [propStatus, dispatch])
 
+    useEffect(() => {
+        if (users.length == 0) {
+            dispatch(listUsers())
+        }
+    }, [dispatch])
+
     const deletePropCb = async () => {
         if (selectedRow >= 0) {
             let _id = properties.items[selectedRow]._id
+            setSelectedRow(0);
             dispatch(deleteProperty(_id))
         }
     }
@@ -246,7 +269,7 @@ const PropertiesView = () => {
                 <CardView title="Property Detail" subTitle="Edit Property">
                     <Button onClick={newPropCb}>New Property</Button>
                     <Button onClick={deletePropCb}>Delete Property</Button>
-                    <PropForm propItem={selectedRow >= 0 ? properties.items[selectedRow] : emptyProp()} />
+                    <PropForm propItem={selectedRow >= 0 ? properties.items[selectedRow] : emptyProp()} users={users}/>
                 </CardView>
                 </>
             }

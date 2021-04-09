@@ -33,8 +33,8 @@ import {
     // apiLoginLocal,
     // apiLogout,
     // apiGetProperties,
-    apiGetUsers, 
-    apiGetPost,
+    apiGetMockUsers, 
+    apiGetMockPost,
 } from '../api/api'
 
 // -----------------------------------------------------------------
@@ -127,7 +127,7 @@ export const getMatchesReqAction = (dispatch, pageNo) => {
     console.log ("get matches request")
     
     // Call the API to get list of Matches
-    apiGetUsers (getMatchesSuccessAction, dispatch)
+    apiGetMockUsers (getMatchesSuccessAction, dispatch)
     
     // Call the Dispatcher with an action object of type GET_MATCHES_REQ
     dispatch (getMatchesReq (pageNo))
@@ -148,7 +148,7 @@ export const getMatchesSuccessAction = (dispatch, userList) => {
 // -----------------------------------------------------------------
 export const getPostReqAction = (dispatch, postNo) => {
     console.log ("get post request")
-    apiGetPost (postNo, getPostSuccessAction, dispatch)
+    apiGetMockPost (postNo, getPostSuccessAction, dispatch)
     dispatch (getPostReq (postNo))
 }
 
