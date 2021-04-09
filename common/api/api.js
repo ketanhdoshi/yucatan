@@ -221,6 +221,12 @@ export const apiListUsers = async () => {
 // -----------------------------------------------------------------
 // Get list of Users from a Mock Rest API
 // -----------------------------------------------------------------
+export const apiListMockUsers = async () => {
+    const res = await axios.get('http://jsonplaceholder.typicode.com/users');
+    console.log("mock", res.data)
+    return res.data;
+}
+
 export const apiGetMockUsers = (successCB, dispatch) => {
     axios.get('http://jsonplaceholder.typicode.com/users')
         .then(res => {
@@ -238,6 +244,12 @@ export const apiGetMockUsers = (successCB, dispatch) => {
 // -----------------------------------------------------------------
 // Get list of Posts from a Mock Rest API
 // -----------------------------------------------------------------
+export const apiListMockPosts = async () => {
+    const res = await axios.get('http://jsonplaceholder.typicode.com/posts');
+    console.log("mock", res.data)
+    return res.data;
+}
+
 export const apiGetMockPost = (postNo, successCB, dispatch) => {
     axios.get('http://jsonplaceholder.typicode.com/posts/' + postNo)
         .then(res => {

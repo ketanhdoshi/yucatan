@@ -27,7 +27,7 @@ let show = () => {
 };
 
 if (module.hot) {
-    console.log ('in hot');
+    console.log ('in client hot');
     // Accept the Hot Module reload of code for my React components. This has to be done
     // in addition to accepting the code for the Redux components (which happens inside
     // the configureStore)

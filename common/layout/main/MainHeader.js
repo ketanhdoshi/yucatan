@@ -25,12 +25,11 @@ import s from './scss/MainHeader.scss'
 
 
 import { useDispatch, useSelector } from "react-redux"
-// import { logoutReqAction } from '../../actions/action.js'
-import { getLogout } from '../../features/login/loginSlice'
+import { getLogout, selectLoginUser } from '../../features/login/loginSlice'
 import { useHistory } from "react-router-dom";
 
 const NavUser = () => {
-    const { userData: currentUser } = useSelector((state) => state.login);
+    const currentUser = useSelector(selectLoginUser);
     const dispatch = useDispatch();
     const history = useHistory();
 
@@ -178,6 +177,7 @@ const MainHeader = () => {
                 <Dropdown.Item href="#pablo" onClick={(e) => e.preventDefault()}><NavLink to="/main/dashboard2">Dashboard 2</NavLink></Dropdown.Item>
                 <div className="divider"></div>
                 <Dropdown.Item href="#pablo" onClick={(e) => e.preventDefault()}><NavLink to="/main/shortlist">Shortlist</NavLink></Dropdown.Item> 
+                <Dropdown.Item href="#pablo" onClick={(e) => e.preventDefault()}><NavLink to="/main/posts">Posts</NavLink></Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
             <NavUser />

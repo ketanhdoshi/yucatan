@@ -43,5 +43,7 @@ const loginSlice = createSlice({
         },
     },
 })
-  
+
+export const selectLoginUser = (state) => state.login.userData
+
 export default loginSlice.reducer

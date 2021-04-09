@@ -30,14 +30,14 @@ import ContentHeader from './ContentHeader'
 import App from '../../appscreens/App'
 import Home from '../../appscreens/Home'
 import PropertiesView from '../../features/properties/PropertiesView'
-import MatchesView from '../../appscreens/MatchesView'
+import MatchesView from '../../features/matches/MatchesView'
 import ShortlistView from '../../appscreens/ShortlistView'
 import Dashboard1 from '../../appscreens/Dashboard1'
 import Dashboard2 from '../../appscreens/Dashboard2'
 import UiButtonView from '../../appscreens/UiButtonView'
 import UiGeneralView from '../../appscreens/UiGeneralView'
 import UiFormView from '../../appscreens/UiFormView'
-import PaymentView from '../../appscreens/PaymentView'
+import PostView from '../../features/posts/PostView'
 import GoogleMaps from '../../widgets/GoogleMaps'
 // import CalendarView from '../components/widgets/CalendarView'
 import ModalView from '../../../old/oldcomp/ModalView'
@@ -73,7 +73,7 @@ const Content = () => (
         <Route path="/matches" component={MatchesView}/>
         <Route path="/properties" component={PropertiesView}/>
         <Route path="/shortlist" component={ShortlistView}/>
-        <Route path="/payment" component={PaymentView}/>
+        <Route path="/posts" component={PostView}/>
         <Route path="/modals" component={ModalView}/>
     </Switch>
 )

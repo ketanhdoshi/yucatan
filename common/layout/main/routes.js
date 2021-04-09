@@ -22,11 +22,11 @@ import Upgrade from "views/Upgrade.js"; */
 
 import Home from "../../appscreens/Home.js";
 import PropertiesView from "../../features/properties/PropertiesView.js";
-import MatchesView from "../../appscreens/MatchesView.js";
+import MatchesView from "../../features/matches/MatchesView.js";
 import ShortlistView from "../../appscreens/ShortlistView.js";
 import Dashboard1 from "../../appscreens/Dashboard1.js";
 import Dashboard2 from "../../appscreens/Dashboard2.js";
-import PaymentView from "../../appscreens/PaymentView.js";
+import PostView from "../../features/posts/PostView.js";
 import UiButtonView from "../../appscreens/UiButtonView.js";
 import UiFormView from "../../appscreens/UiFormView.js";
 import UiGeneralView from "../../appscreens/UiGeneralView.js";
@@ -147,10 +147,10 @@ const dashboardRoutes = [
     redirect: true
   },
   {
-    path: "/payment",
-    name: "Payment",
+    path: "/posts",
+    name: "Posts",
     icon: "nc-icon nc-apple",
-    component: PaymentView,
+    component: PostView,
     layout: "/main",
     redirect: true
   },

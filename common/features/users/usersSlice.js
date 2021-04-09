@@ -42,5 +42,9 @@ const usersSlice = createSlice({
         },
     },
 })
-  
+
+export const selectAllUsers = (state) => state.users.items
+export const selectUsersStatus = (state) => state.users.status
+export const selectUsersError = (state) => state.users.error
+
 export default usersSlice.reducer

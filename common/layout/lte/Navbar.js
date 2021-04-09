@@ -129,12 +129,11 @@ const RouterLink = ({href, children}) => (
 )
 
 import { useDispatch, useSelector } from "react-redux"
-// import { logoutReqAction } from '../../actions/action.js'
-import { getLogout } from '../../features/login/loginSlice'
+import { getLogout, selectLoginUser } from '../../features/login/loginSlice'
 import { useHistory } from "react-router-dom";
 
 const NavUser = () => {
-    const { userData: currentUser } = useSelector((state) => state.login);
+    const currentUser = useSelector(selectLoginUser);
     const dispatch = useDispatch();
     const history = useHistory();
 

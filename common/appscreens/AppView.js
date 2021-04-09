@@ -15,6 +15,7 @@ import AdminLayout from "../layout/admin/Admin";
 import MainPage from "../layout/main/MainPage";
 import Home from './Home'
 import { LoginView } from '../features/login/LoginView'
+import { selectLoginUser } from '../features/login/loginSlice'
 
 /* TODO - temporarily hardcoded only for testing */
 const GlobalStyle = createGlobalStyle`
@@ -86,7 +87,7 @@ const theme = {
 //  !!!!!!!!! Does the GlobalStyle go inside the div???
 // -----------------------------------------------------------------
 const AppView = () => {
-  const { userData: currentUser } = useSelector((state) => state.login);
+  const currentUser = useSelector(selectLoginUser);
   const location = useLocation();
   console.log ("App View current user is ", currentUser);
 

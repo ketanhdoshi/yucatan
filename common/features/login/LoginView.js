@@ -11,7 +11,7 @@ import { Form, Field } from 'react-final-form'
 /* import { localLoginReqAction,
          logoutReqAction 
 } from '../actions/action.js' */
-import { getLoginLocal } from './loginSlice'
+import { getLoginLocal, selectLoginUser } from './loginSlice'
 
 
 import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE} from '../../widgets/SocialButton'
@@ -26,7 +26,7 @@ const onSubmitOld = async values => {
 
 export const LoginView = () => {
   // Redirect to the home page if we're already logged in
-  const { userData: currentUser } = useSelector((state) => state.login);
+  const currentUser = useSelector(selectLoginUser);
   console.log ("Login View, user data is ", currentUser);
   if (currentUser) {
     return <Redirect to="/" />;

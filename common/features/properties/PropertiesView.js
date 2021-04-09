@@ -9,8 +9,11 @@ import {Form, Col, Button} from "react-bootstrap";
 import { Form as FinalForm, Field } from 'react-final-form'
 
 // Action helpers
-import { listProperties, createProperty, updateProperty, deleteProperty } from './propertiesSlice'
-import { listUsers } from '../users/usersSlice'
+import { 
+    listProperties, createProperty, updateProperty, deleteProperty, 
+    selectAllProperties, selectPropertiesStatus, selectPropertiesError 
+} from './propertiesSlice'
+import { listUsers, selectAllUsers } from '../users/usersSlice'
 
 import s from './PropertiesView.scss';
 import {CardView} from '../../layout/main/screens/CardView'
@@ -192,19 +195,20 @@ const PropForm = ({propItem, users}) => {
 }
 
 const PropertiesView = () => {
-    const properties = useSelector(state => state.properties);
-    const propStatus = properties.status;
-    const users = useSelector(state => state.users.items);
+    const properties = useSelector(selectAllProperties);
+    const propertiesStatus = useSelector(selectPropertiesStatus);
+    const propertiesError = useSelector(selectPropertiesError);
+    const users = useSelector(selectAllUsers);
     const [selectedRow, setSelectedRow] = useState(0);
 
     const dispatch = useDispatch();
     // Fetch the list of properties when the component is mounted, if the
     // API request has not been initiated previously.
     useEffect(() => {
-        if (propStatus === 'idle') {
+        if (propertiesStatus === 'idle') {
             dispatch(listProperties())
         }
-    }, [propStatus, dispatch])
+    }, [propertiesStatus, dispatch])
 
     useEffect(() => {
         if (users.length == 0) {
@@ -214,7 +218,7 @@ const PropertiesView = () => {
 
     const deletePropCb = async () => {
         if (selectedRow >= 0) {
-            let _id = properties.items[selectedRow]._id
+            let _id = properties[selectedRow]._id
             setSelectedRow(0);
             dispatch(deleteProperty(_id))
         }
@@ -256,20 +260,20 @@ const PropertiesView = () => {
     return (
         <div>
             Properties
-            <p>{properties.status}{properties.status == "failed" ? properties.error: null}</p>
-            {properties.items.length &&
+            <p>{propertiesStatus}{propertiesStatus == "failed" ? propertiesError: null}</p>
+            {properties.length &&
                 <>
                 <CardView title="Property List" subTitle="Best Properties">
                     <SimpleTable
                         columns={["House Type", "Locality", "Region", "Country", "Room Type", "Rooms", "Price", "Desc"]}
-                        rows={flattenProperties(properties.items)}
+                        rows={flattenProperties(properties)}
                         onClickCb={rowClickCb}
                     />
                 </CardView>
                 <CardView title="Property Detail" subTitle="Edit Property">
                     <Button onClick={newPropCb}>New Property</Button>
                     <Button onClick={deletePropCb}>Delete Property</Button>
-                    <PropForm propItem={selectedRow >= 0 ? properties.items[selectedRow] : emptyProp()} users={users}/>
+                    <PropForm propItem={selectedRow >= 0 ? properties[selectedRow] : emptyProp()} users={users}/>
                 </CardView>
                 </>
             }
