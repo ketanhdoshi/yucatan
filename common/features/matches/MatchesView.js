@@ -6,7 +6,7 @@ import React, {useEffect} from 'react'
 import { useSelector, useDispatch } from "react-redux";
 
 import { listMatches, selectAllMatches, selectMatchesStatus, selectMatchesError } from '../matches/matchesSlice'
-import s from '../../scss/MatchesView.scss';
+import s from './MatchesView.scss';
 
 const MatchesView = () => {
   const matches = useSelector(selectAllMatches);
