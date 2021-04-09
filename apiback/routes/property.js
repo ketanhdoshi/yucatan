@@ -192,7 +192,10 @@ module.exports = {
                     // Find the property by ID in the db and update it
                     const res = await PropertyModel.findOneAndUpdate(
                         {_id: request.params.id},
-                        request.payload // values to be updated
+                        request.payload, // values to be updated
+                        {
+                            new: true,   //option to return updated value in result
+                        }
                     );
                     return {
                         statusCode: 200,
