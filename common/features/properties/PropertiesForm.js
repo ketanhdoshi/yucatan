@@ -8,20 +8,11 @@ import {Form, Col, Button} from "react-bootstrap";
 // Rename React-Final-Form's Form component so it doesn't clash with React-Bootstrap's Form
 import { Form as FinalForm, Field } from 'react-final-form'
 
-// Action helpers
 import { createProperty, updateProperty } from './propertiesSlice'
-
-const RbFormControlAdapter = ({ input, ...rest }) => (
-    <Form.Control {...input} {...rest} />
-)
-
-const RbFormCheckAdapter = ({ input, label, ...rest }) => (
-    <Form.Check {...input} type="checkbox" label={label} {...rest} />
-)
-
-const RbFormSelectAdapter = ({ input, ...rest }) => (
-    <Form.Control as="select" {...input} {...rest} />
-)
+import { 
+    RbFormControlAdapter, RbFormCheckAdapter, RbFormSelectAdapter,
+    StyledLabel, StyledControl
+} from '../../widgets/RbFormAdapter'
 
 const PropertiesForm = ({propItem, users}) => {
     const dispatch = useDispatch();
@@ -60,7 +51,7 @@ const PropertiesForm = ({propItem, users}) => {
                 <Form onSubmit={handleSubmit}>
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridHouseType">
-                            <Form.Label>House Type</Form.Label>
+                            <StyledLabel>House Type</StyledLabel>
                             <Field name="houseType" component={RbFormSelectAdapter}>
                                 {/* When creating a new property, the field value of houseType starts off 
                                     as blank. So the Select control's dropdown should shou a blank value initially. So
@@ -78,7 +69,7 @@ const PropertiesForm = ({propItem, users}) => {
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridRoomType">
-                            <Form.Label>Room Type</Form.Label>
+                            <StyledLabel>Room Type</StyledLabel>
                             <Field name="roomType" component={RbFormSelectAdapter}>
                                 {values.roomType === "" ? <option /> : null}
                                 <option value="Entire House">Entire House</option>
@@ -91,8 +82,8 @@ const PropertiesForm = ({propItem, users}) => {
                             <Field name="rooms" validate={composeValidators(required, mustBeNumber, minValue(0), maxValue(20))}>
                                 {({ input, meta }) => (
                                     <>
-                                        <Form.Label>Rooms</Form.Label>
-                                        <Form.Control {...input} type="number" placeholder="Enter rooms" />
+                                        <StyledLabel>Rooms</StyledLabel>
+                                        <StyledControl {...input} type="number" placeholder="Enter rooms" />
                                         {meta.error && meta.touched && <span>{meta.error}</span>}
                                     </>
                                 )}
@@ -103,8 +94,8 @@ const PropertiesForm = ({propItem, users}) => {
                             <Field name="price" validate={composeValidators(required, mustBeNumber, minValue(0))}>
                                 {({ input, meta }) => (
                                     <>
-                                        <Form.Label>Price</Form.Label>
-                                        <Form.Control {...input} type="number" placeholder="Enter price" />
+                                        <StyledLabel>Price</StyledLabel>
+                                        <StyledControl {...input} type="number" placeholder="Enter price" />
                                         {meta.error && meta.touched && <span>{meta.error}</span>}
                                     </>
                                 )}
@@ -114,12 +105,12 @@ const PropertiesForm = ({propItem, users}) => {
 
                     <Form.Row>
                         <Form.Group as={Col} controlId="formGridLocality">
-                            <Form.Label>Locality</Form.Label>
+                            <StyledLabel>Locality</StyledLabel>
                             <Field name="address.locality" component={RbFormControlAdapter} type="text" placeholder="Enter locality"/>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridRegion">
-                            <Form.Label>Region</Form.Label>
+                            <StyledLabel>Region</StyledLabel>
                             <Field name="address.region" component={RbFormControlAdapter} type="text" placeholder="Enter Region"/>
                         </Form.Group>
 
@@ -127,8 +118,8 @@ const PropertiesForm = ({propItem, users}) => {
                             <Field name="address.country" validate={required}>
                                 {({ input, meta }) => (
                                     <>
-                                        <Form.Label>Country</Form.Label>
-                                        <Form.Control {...input} type="text" placeholder="Enter country" />
+                                        <StyledLabel>Country</StyledLabel>
+                                        <StyledControl {...input} type="text" placeholder="Enter country" />
                                         {meta.error && meta.touched && <span>{meta.error}</span>}
                                     </>
                                 )}
@@ -141,8 +132,8 @@ const PropertiesForm = ({propItem, users}) => {
                             <Field name="description" validate={required}>
                                 {({ input, meta }) => (
                                     <>
-                                        <Form.Label>Description</Form.Label>
-                                        <Form.Control {...input} type="text" placeholder="Enter description" />
+                                        <StyledLabel>Description</StyledLabel>
+                                        <StyledControl {...input} type="text" placeholder="Enter description" />
                                         {meta.error && meta.touched && <span>{meta.error}</span>}
                                     </>
                                 )}
@@ -150,14 +141,14 @@ const PropertiesForm = ({propItem, users}) => {
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridOwner">
-                            <Form.Label>Owner</Form.Label>
+                            <StyledLabel>Owner</StyledLabel>
                             <Field name="owner" component={RbFormSelectAdapter}>
                                 {usersOptions}
                             </Field>
                         </Form.Group>
 
                         <Form.Group as={Col} controlId="formGridAmenities">
-                            <Form.Label>Amenities</Form.Label>
+                            <StyledLabel>Amenities</StyledLabel>
                             {/* React Final Form requires you to explicitly put the 'type=select' even though
                             this is a HTML select element. Otherwise it complains with a warning */}
                             <Field name="amenities" component={RbFormSelectAdapter} multiple type="select">

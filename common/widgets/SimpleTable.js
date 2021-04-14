@@ -24,7 +24,7 @@ const TableRow = ({values, id, onClickCb}) => {
   ); */
 
   return (
-    <tr onClick={onClickCb.bind(this, id)}>
+    <tr onClick={onClickCb ? onClickCb.bind(this, id) : null}>
       {
         values.map((value, index) =>
           <td key={index}>{value}</td>

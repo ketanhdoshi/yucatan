@@ -1,28 +1,21 @@
 // -----------------------------------------------------------------
-// Container component for Login page
+// Login page
 // -----------------------------------------------------------------
 import React from 'react'
-import { render } from 'react-dom'
+// import { render } from 'react-dom'
 import { useDispatch, useSelector } from "react-redux"
 import { Redirect, useHistory } from 'react-router-dom';
-import { Form, Field } from 'react-final-form'
 
-// Action helpers
-/* import { localLoginReqAction,
-         logoutReqAction 
-} from '../actions/action.js' */
+// react-bootstrap components
+import {Form, Col, Button} from "react-bootstrap";
+// Rename React-Final-Form's Form component so it doesn't clash with React-Bootstrap's Form
+import { Form as FinalForm, Field } from 'react-final-form'
+
 import { getLoginLocal, selectLoginUser } from './loginSlice'
-
+import { RbFormControlAdapter, StyledLabel, StyledControl } from '../../widgets/RbFormAdapter'
 
 import SocialButton, {SOCIAL_FACEBOOK, SOCIAL_GOOGLE} from '../../widgets/SocialButton'
 import s from './LoginView.scss'
-
-const sleep = ms => new Promise(resolve => setTimeout(resolve, ms))
-
-const onSubmitOld = async values => {
-  await sleep(300)
-  window.alert(JSON.stringify(values, 0, 2))
-}
 
 export const LoginView = () => {
   // Redirect to the home page if we're already logged in
@@ -40,9 +33,10 @@ export const LoginView = () => {
       password: values.password
     }
     dispatch(getLoginLocal(creds))
-    // localLoginReqAction (creds, dispatch)
-    window.alert(JSON.stringify(values, 0, 2))
-  }  
+  }
+
+  // React Final Form's validation functions return 'undefined' if the field value is valid
+  const required = value => (value ? undefined : 'Required')
 
   return (
     <div className={s.loginPage}>  
@@ -52,33 +46,63 @@ export const LoginView = () => {
           </div>  {/* /.loginLogo */} 
           <div className={s.loginBoxBody}>
               <p className={s.loginBoxMsg}>Sign in to start your session</p>
-              <Form
+              <FinalForm
                 onSubmit={onSubmit}
                 initialValues={{ username: 'arbidman', remember: true }}
-                render={({ handleSubmit, form, submitting, pristine, values }) => (            
-                  <form onSubmit={handleSubmit}>
-                    <div className="form-group has-feedback">
+                render={({ handleSubmit, form, submitting, pristine, values }) => (    
+                  <Form onSubmit={handleSubmit}> 
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridUsername">
+                        <Field name="username" validate={required}>
+                          {({ input, meta }) => (
+                              <>
+                                <StyledLabel>Username</StyledLabel>
+                                <StyledControl {...input} type="text" placeholder="Enter username" />
+                                {meta.error && meta.touched && <span>{meta.error}</span>}
+                              </>
+                          )}
+                        </Field>
+                      </Form.Group>
+                    </Form.Row>
+                    <Form.Row>
+                      <Form.Group as={Col} controlId="formGridPassword">
+                        <Field name="password" validate={required}>
+                          {({ input, meta }) => (
+                              <>
+                                <StyledLabel>Password</StyledLabel>
+                                <StyledControl {...input} type="text" placeholder="Enter password" />
+                                {meta.error && meta.touched && <span>{meta.error}</span>}
+                              </>
+                          )}
+                        </Field>
+                      </Form.Group>
+                    </Form.Row>
+                    <Button variant="primary" type="submit" disabled={submitting || pristine}>
+                        Sign In
+                    </Button>
+
+{/*                     <div className="form-group has-feedback">
                       <Field name="username" component="input" type="text" placeholder="Username" className="form-control"/>
                       <span className="glyphicon glyphicon-envelope form-control-feedback"></span>
                     </div>
                     <div className="form-group has-feedback">
                       <Field name="password" component="input" type="password" placeholder="Password" className="form-control"/>
                       <span className="glyphicon glyphicon-lock form-control-feedback"></span>
-                    </div>
-                    <div className="row">
+                    </div> */}
+{/*                     <div className="row">
                         <div className="col-xs-8">
                             <div className="checkbox icheck">
                                 <label>Remember Me</label>
                                 <Field name="remember" component="input" type="checkbox" />
                             </div>
-                        </div> {/* /.col */}
+                        </div>
                         <div className="col-xs-4">
                             <button type="submit" className="btn btn-primary btn-block btn-flat" disabled={submitting || pristine}>
                                 Sign In Now
                             </button>
-                        </div> {/* /.col */}
-                      </div>
-                    <div>
+                        </div>
+                      </div> */}
+{/*                     <div>
                       <label>First Name</label>
                       <Field
                         name="firstName"
@@ -86,8 +110,8 @@ export const LoginView = () => {
                         type="text"
                         placeholder="First Name"
                       />
-                    </div>
-                    <div className="buttons">
+                    </div> */}
+{/*                     <div className="buttons">
                       <button
                         type="button"
                         onClick={form.reset}
@@ -95,9 +119,9 @@ export const LoginView = () => {
                       >
                         Reset
                       </button>
-                    </div>
-                    <pre>{JSON.stringify(values, 0, 2)}</pre>
-                  </form>
+                    </div> */}
+                    
+                  </Form>
                 )}
               />
               <div className={s.socialAuthLinks + " text-center"}>
@@ -132,19 +156,4 @@ export const LoginView = () => {
     </NavItem>
   )
 }
-
-
-const OldLogoutCb = () => {
-  const userData = useSelector((state) => state.login);
-
-  if (userData) {
-    const dispatch = useDispatch();
-    const history = useHistory();
-
-    logoutReqAction (dispatch);
-    history.push("/");
-  }
-
-  // Redirect to the home page if we're already logged in
-  // return <Redirect to="/" />;
-} */
+ */
