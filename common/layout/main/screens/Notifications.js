@@ -16,7 +16,7 @@ import "./rnaAnimate.css";
 import {Alert, Modal, Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
-import {CardView} from './CardView'
+import {CardView} from '../../../widgets/CardView'
 import {NucleoIcon} from './Icons'
 
 const ModalButton = styled(Button).attrs(() => ({

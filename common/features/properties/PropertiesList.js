@@ -6,7 +6,7 @@ import React, {useState} from 'react'
 // react-bootstrap components
 import {Form, Col, Button} from "react-bootstrap";
 
-import {CardView} from '../../layout/main/screens/CardView'
+import {CardView} from '../../widgets/CardView'
 import SimpleTable from "../../widgets/SimpleTable.js"
 
 const PropertiesList = ({properties, selectedId, onSelectCb}) => {

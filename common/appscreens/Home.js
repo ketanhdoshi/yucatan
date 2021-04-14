@@ -13,7 +13,6 @@ const Home = () => (
             <Col>1 of 1
                 <section className={s.home}>
                     <Link to="/login">Login</Link>
-                    <Link to="/admin">Admin</Link>
                     <Link to="/main">Main</Link>
                     <p>New Content 1</p>
                     <p>Main Content 2</p>

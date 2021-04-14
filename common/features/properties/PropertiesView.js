@@ -14,7 +14,7 @@ import {
 import { listUsers, selectAllUsers } from '../users/usersSlice'
 
 import s from './PropertiesView.scss';
-import {CardView} from '../../layout/main/screens/CardView'
+import {CardView} from '../../widgets/CardView'
 import PropertiesList from './PropertiesList';
 import PropertiesForm from './PropertiesForm';
 

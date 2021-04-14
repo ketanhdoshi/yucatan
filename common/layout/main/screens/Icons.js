@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import {Badge, Button, Card, Navbar, Nav, Container, Row, Col,
 } from "react-bootstrap";
 
-import {CardView} from './CardView'
+import {CardView} from '../../../widgets/CardView'
 
 const Detail = styled.div`
   text-align: center;
