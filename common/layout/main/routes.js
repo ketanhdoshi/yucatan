@@ -34,7 +34,7 @@ import {IconView} from "../../appscreens/IconView";
 import UserProfile from "./screens/UserProfile.js";
 import TableView from "../../appscreens/TableView.js";
 import TextFont from "../../appscreens/TextFont.js";
-import Notifications from "./screens/Notifications.js";
+import NotificationView from "../../appscreens/NotificationView.js";
 
 const dashboardRoutes = [
   {
@@ -91,7 +91,7 @@ const dashboardRoutes = [
     path: "/notifications",
     name: "Notifications",
     icon: "nc-icon nc-bell-55",
-    component: Notifications,
+    component: NotificationView,
     layout: "/main",
   },
   {
