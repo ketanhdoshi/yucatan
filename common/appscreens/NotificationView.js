@@ -14,8 +14,6 @@ import {NucleoIcon} from '../widgets/NucleoIcon'
 import {AlertBox, RnaContainer, rnaNotify, newNotify, newNotifyCustom } from '../widgets/Notification'
 import ModalBox from '../widgets/ModalBox'
 
-import s from '../layout/main/screens/Notifications.scss'
-
 const AlertView = () => {
   return (
     <React.Fragment>

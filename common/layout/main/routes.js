@@ -54,7 +54,7 @@ const dashboardRoutes = [
   },
   {
     path: "/user",
-    name: "User Profile",
+    name: "User View",
     icon: "nc-icon nc-circle-09",
     component: UserProfile,
     layout: "/main",
