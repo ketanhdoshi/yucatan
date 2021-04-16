@@ -4,11 +4,11 @@ import styled, {css} from 'styled-components';
 import {Badge, Button, Card, Form, Navbar, Nav, Container, Row, Col,
 } from "react-bootstrap";
 
-import userBackground from "../img/userBackground.jpeg";
-import userPhoto from "../img/userPhoto.jpg"
+import userBackground from "../layout/main/img/userBackground.jpeg";
+import userPhoto from "../layout/main/img//userPhoto.jpg"
 
-import { StyledLabel, StyledControl } from '../../../widgets/RbFormAdapter'
-import UserCard from '../../../widgets/UserCard'
+import { StyledLabel, StyledControl } from '../widgets/RbFormAdapter'
+import UserCard from '../widgets/UserCard'
 
 const ProfileBody = styled(Card.Body)`
   padding: 15px 15px 10px 15px;

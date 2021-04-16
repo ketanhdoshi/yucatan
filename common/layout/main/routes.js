@@ -31,7 +31,7 @@ import UiButtonView from "../../appscreens/UiButtonView.js";
 import UiFormView from "../../appscreens/UiFormView.js";
 import UiGeneralView from "../../appscreens/UiGeneralView.js";
 import {IconView} from "../../appscreens/IconView";
-import UserProfile from "./screens/UserProfile.js";
+import UserView from "../../appscreens/UserView.js";
 import TableView from "../../appscreens/TableView.js";
 import TextFont from "../../appscreens/TextFont.js";
 import NotificationView from "../../appscreens/NotificationView.js";
@@ -56,7 +56,7 @@ const dashboardRoutes = [
     path: "/user",
     name: "User View",
     icon: "nc-icon nc-circle-09",
-    component: UserProfile,
+    component: UserView,
     layout: "/main",
   },
   {
