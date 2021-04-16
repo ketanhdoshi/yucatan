@@ -1,5 +1,5 @@
 import React from "react";
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 
 // react plugin and its CSS styles for creating notifications
 import NotificationAlert from "react-notification-alert";
@@ -12,12 +12,19 @@ import NotificationAlert from "react-notification-alert";
 // import "react-notification-alert/dist/animate.css";
 import "./rnaAnimate.css";
 
+import ReactNotification, {store} from 'react-notifications-component'
+// import 'react-notifications-component/dist/theme.css'
+import './animate.min.css'
+import './theme.css'
+
 // react-bootstrap components
 import {Alert, Modal, Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
 import {CardView} from '../../../widgets/CardView'
-import {NucleoIcon} from './Icons'
+import {NucleoIcon} from '../../../widgets/NucleoIcon'
+
+import s from './Notifications.scss'
 
 const ModalButton = styled(Button).attrs(() => ({
   className:  "btn-simple"
@@ -138,7 +145,7 @@ const alertBackgnd = (props) => {
 }
 
 const StyledAlert = styled(Alert)`
-  border-radius: $border-radius-base;
+  border-radius: ${props => props.theme.layout.borderRadiusBase};
   position: relative;
 
   border: 0;
@@ -148,7 +155,109 @@ const StyledAlert = styled(Alert)`
 
   background-color: ${props => alertBackgnd(props)};
   ${props => props.icon && 'padding-left: 65px;'}
+
+  ${props => props.notification && css`
+    & button.close {
+      color: #000;
+      display: flex;
+      justify-content: center;
+      align-items: center; 
+    }
+    & button.close span {
+      margin-top: -4px; 
+    }
+
+    & .close ~ span {
+      display: block;
+      max-width: 89%;
+    }
+  `}
 `;
+
+const AlertBox = ({icon, children, ...rest}) => {
+  return (
+    <StyledAlert icon={icon} {...rest}>
+      {icon && <AlertIcon as="span" data-notify="icon" name={icon} />}
+      <AlertMsg>{children}</AlertMsg>
+    </StyledAlert>
+  )
+}
+
+const ModalBox = ({icon, children, show, hideCb}) => {
+  return (
+    <StyledModal show={show} onHide={hideCb}>
+      <StyledHeader>
+        <Profile>
+          <ModalIcon name={icon} />
+        </Profile>
+      </StyledHeader>
+      <StyledBody>
+        {children}
+      </StyledBody>
+      <Footer>
+        <ModalButton type="button" variant="link" onClick={hideCb}>Back</ModalButton>
+        <ModalButton type="button" variant="link" onClick={hideCb}>Close</ModalButton>
+      </Footer>
+    </StyledModal>
+  )
+}
+
+function OldNotifications() {
+  const notify = (place) => {
+    store.addNotification({
+      title: "Wonderful!",
+      message: "teodosii@react-notifications-component",
+      type: "success",
+      insert: "top",
+      container: "top-left",
+      animationIn: ["animate__animated", "animate__jackInTheBox"],
+      animationOut: ["animate__animated", "animate__flipOutY"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+        showIcon: true,
+        click: true,
+        touch: true
+      }
+    });  
+  }
+
+  return (
+
+    <>
+      {/* Create a parent node for the notification alerts. ALl the notifications get created dynamically
+          under this node. We use descendant classes of this parent class to assign CSS styles */}
+      <ReactNotification />
+      <Container fluid>
+        <CardView title="Notifications" 
+                    subTitle={<>Handcrafted by our friend and colleague{" "}
+                      <a href="https://github.com/EINazare" rel="noopener noreferrer" target="_blank">
+                        Nazare Emanuel-Ioan
+                      </a>
+                      . Please checkout the{" "}
+                      <a href="https://github.com/creativetimofficial/react-notification-alert" rel="noopener noreferrer" target="_blank">
+                        full documentation.
+                      </a>
+                    </>}
+        >
+                <Row>
+                  <Col className="offset-md-3 text-center" md="6">
+                    <Card.Title as="h4">Notifications Places</Card.Title>
+                    <p className="card-category">
+                      <small>Click to view notifications</small>
+                    </p>
+                  </Col>
+                </Row>
+                <Row className="justify-content-center">
+                  <Col lg="3" md="3">
+                    <Button block onClick={() => notify("tl")} variant="default">Top Left</Button>
+                  </Col>
+                </Row>
+        </CardView>
+      </Container>
+    </>
+  );
+}
 
 function Notifications() {
   const [showModal, setShowModal] = React.useState(false);
@@ -192,6 +301,81 @@ function Notifications() {
     };
     notificationAlertRef.current.notificationAlert(options);
   };
+  const newNotify = (place) => {
+    store.addNotification({
+      title: "Wonderful!",
+      message: "teodosii@react-notifications-component",
+      type: "success",
+      insert: "top",
+      container: "top-left",
+      animationIn: ["animate__animated", "animate__jackInTheBox"],
+      animationOut: ["animate__animated", "animate__flipOutY"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+        showIcon: true,
+        click: true,
+        touch: true
+      }
+    });  
+  }
+  const newNotifyRna = (place) => {
+    store.addNotification({
+      title: "Wonderful!",
+      message: "teodosii@react-notifications-component",
+      type: "success",
+      content: (
+        <div className="rna-container">
+          <Alert icon="nc-bell-55" variant="success" dismissible>
+            <AlertIcon as="span" data-notify="icon" name="nc-bell-55" />
+            <AlertMsg>
+              <b>Success -</b>
+              My Custom Toast Notification
+            </AlertMsg>
+          </Alert>
+        </div>
+      ),
+      insert: "top",
+      container: "top-left",
+      animationIn: ["animate__animated", "animate__jackInTheBox"],
+      animationOut: ["animate__animated", "animate__flipOutY"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+        showIcon: true,
+        click: true,
+        touch: true
+      }
+    });  
+  }
+  const newNotifyCustom = (place) => {
+    store.addNotification({
+      title: "Wonderful!",
+      message: "teodosii@react-notifications-component",
+      type: "success",
+      content: (
+        <StyledAlert icon="nc-scissors" variant="success" dismissible notification="true">
+          <AlertIcon as="span" data-notify="icon" name="nc-scissors" />
+          <AlertMsg>
+            <b>Success -</b>
+            My Custom Toast Notification
+          </AlertMsg>
+        </StyledAlert>
+      ),
+      insert: "top",
+      container: "top-left",
+      animationIn: ["animate__animated", "animate__jackInTheBox"],
+      animationOut: ["animate__animated", "animate__flipOutY"],
+      dismiss: {
+        duration: 3000,
+        onScreen: true,
+        showIcon: true,
+        click: true,
+        touch: true
+      }
+    });  
+  }
+
   return (
     <>
       {/* Create a parent node for the notification alerts. ALl the notifications get created dynamically
@@ -199,8 +383,9 @@ function Notifications() {
       <div className="rna-container">
         <NotificationAlert ref={notificationAlertRef} />
       </div>
+      <ReactNotification />
       <Container fluid>
-        < CardView title="Notifications" 
+        <CardView title="Notifications" 
                     subTitle={<>Handcrafted by our friend and colleague{" "}
                       <a href="https://github.com/EINazare" rel="noopener noreferrer" target="_blank">
                         Nazare Emanuel-Ioan
@@ -216,64 +401,50 @@ function Notifications() {
                 <h5>
                   <small>Notifications Style</small>
                 </h5>
-                <StyledAlert variant="info">
-                  <span>This is a plain notification</span>
-                </StyledAlert>
-                <StyledAlert variant="info" dismissible>
-                  <AlertMsg>This is a notification with close button.</AlertMsg>
-                </StyledAlert>
+                <AlertBox variant="info">
+                  This is a plain notification
+                </AlertBox>
+                <AlertBox variant="info" dismissible>
+                  This is a notification with close button.
+                </AlertBox>
                 {/* With a boolean 'icon' prop, just passing 'icon' by itself or 'icon={true}' results 
                     in a React warning - Received "true" for a non-boolean attribute. This is because
                     of the way Styled Components passes props. So putting the '+' before the 'true' converts
                     the boolean to a 0/1 numeric value and prevents the error.  */}
-                <StyledAlert variant="info" icon={+true} dismissible>
-                  <AlertIcon as="span" data-notify="icon" name="nc-bell-55" />
-                  <AlertMsg>This is a notification with close button and icon.</AlertMsg>
-                </StyledAlert>
-                <StyledAlert variant="info" icon={+true} dismissible>
-                  <AlertIcon as="span" data-notify="icon" name="nc-bell-55" />
-                  <AlertMsg>
+                <AlertBox variant="info" icon="nc-bell-55" dismissible>
+                  This is a notification with close button and icon.
+                </AlertBox>
+                <AlertBox variant="info" icon="nc-bell-55" dismissible>
                     This is a notification with close button and icon and have
                     many lines. You can see that the icon and the close button
                     are always vertically aligned. This is a beautiful
                     notification. So you don't have to worry about the style.
-                  </AlertMsg>
-                </StyledAlert>
+                </AlertBox>
               </Col>
               <Col md="6">
                 <h5>
                   <small>Notification States</small>
                 </h5>
-                <StyledAlert variant="primary" dismissible>
-                  <AlertMsg>
+                <AlertBox variant="primary" dismissible>
                     <b>Primary -</b>
                     This is a regular notification made with ".alert-primary"
-                  </AlertMsg>
-                </StyledAlert>
-                <StyledAlert variant="info" dismissible>
-                  <AlertMsg>
+                </AlertBox>
+                <AlertBox variant="info" dismissible>
                     <b>Info -</b>
                     This is a regular notification made with ".alert-info"
-                  </AlertMsg>
-                </StyledAlert>
-                <StyledAlert variant="success" dismissible>
-                  <AlertMsg>
+                </AlertBox>
+                <AlertBox variant="success" dismissible>
                     <b>Success -</b>
                     This is a regular notification made with ".alert-success"
-                  </AlertMsg>
-                </StyledAlert>
-                <StyledAlert variant="warning" dismissible>
-                  <AlertMsg>
+                </AlertBox>
+                <AlertBox variant="warning" dismissible>
                     <b>Warning -</b>
                     This is a regular notification made with ".alert-warning"
-                  </AlertMsg>
-                </StyledAlert>
-                <StyledAlert variant="danger" dismissible>
-                  <AlertMsg>
+                </AlertBox>
+                <AlertBox variant="danger" dismissible>
                     <b>Danger -</b>
                     This is a regular notification made with ".alert-danger"
-                  </AlertMsg>
-                </StyledAlert>
+                </AlertBox>
               </Col>
             </Row>
             <br></br>
@@ -300,13 +471,13 @@ function Notifications() {
               </Row>
               <Row className="justify-content-center">
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("bl")} variant="default">Bottom Left</Button>
+                  <Button block onClick={() => newNotifyRna("bl")} variant="default">New Notify Rna</Button>
                 </Col>
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("bc")} variant="default">Bottom Center</Button>
+                  <Button block onClick={() => newNotifyCustom("bc")} variant="default">New Notify Custom</Button>
                 </Col>
                 <Col lg="3" md="3">
-                  <Button block onClick={() => notify("br")} variant="default">Bottom Right</Button>
+                  <Button block onClick={() => newNotify("br")} variant="default">New Notify</Button>
                 </Col>
               </Row>
             </div>
@@ -325,7 +496,10 @@ function Notifications() {
           </CardView>
 
         {/* Mini Modal */}
-        <StyledModal
+          <ModalBox icon="nc-atom" show={showModal} hideCb={() => setShowModal(false)}>
+            <p>Always access to your profile</p>
+          </ModalBox>
+{/*         <StyledModal
           show={showModal}
           onHide={() => setShowModal(false)}
         >
@@ -341,7 +515,7 @@ function Notifications() {
             <ModalButton type="button" variant="link" onClick={() => setShowModal(false)}>Back</ModalButton>
             <ModalButton type="button" variant="link" onClick={() => setShowModal(false)}>Close</ModalButton>
           </Footer>
-        </StyledModal>
+        </StyledModal> */}
         {/* End Modal */}
       </Container>
     </>

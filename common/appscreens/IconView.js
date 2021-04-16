@@ -5,7 +5,8 @@ import styled from 'styled-components';
 import {Badge, Button, Card, Navbar, Nav, Container, Row, Col,
 } from "react-bootstrap";
 
-import {CardView} from '../../../widgets/CardView'
+import {CardView} from '../widgets/CardView'
+import {NucleoIcon} from '../widgets/NucleoIcon'
 
 const Detail = styled.div`
   text-align: center;
@@ -13,19 +14,6 @@ const Detail = styled.div`
   border: 1px solid #e5e5e5;
   border-radius: 6px;
   margin: 15px 0;
-`;
-
-export const NucleoIcon = styled.i.attrs(props => ({
-  className: props.name,
-}))`
-  display: inline-block;
-  font: normal normal normal 14px/1 'nucleo-icons';
-  font-size: 32px;
-  speak: none;
-  text-transform: none;
-  /* Better Font Rendering */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
 `;
 
 const IconCard = ({name}) => {
@@ -51,7 +39,7 @@ const IconList = ({icons}) => {
   );
 }
 
-export const Icons = () => {
+export const IconView = () => {
   return (
     <>
       <Container fluid>

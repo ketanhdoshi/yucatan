@@ -5,8 +5,8 @@ import styled from 'styled-components';
 import {Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
-import {CardView} from '../../../widgets/CardView'
-import SimpleTable from "../../../widgets/SimpleTable.js"
+import {CardView} from '../widgets/CardView'
+import SimpleTable from "../widgets/SimpleTable.js"
 
 function TableView() {
   return (

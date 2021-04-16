@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import {Badge, Button, Card, Navbar, Nav, Table, Container, Row, Col,
 } from "react-bootstrap";
 
-import {CardView} from '../../../widgets/CardView'
+import {CardView} from '../widgets/CardView'
 
 const TextType = styled.span`
   bottom: 10px;

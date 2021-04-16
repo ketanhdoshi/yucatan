@@ -30,10 +30,10 @@ import PostView from "../../features/posts/PostView.js";
 import UiButtonView from "../../appscreens/UiButtonView.js";
 import UiFormView from "../../appscreens/UiFormView.js";
 import UiGeneralView from "../../appscreens/UiGeneralView.js";
-import {Icons} from "./screens/Icons.js";
+import {IconView} from "../../appscreens/IconView";
 import UserProfile from "./screens/UserProfile.js";
-import TableView from "./screens/TableView.js";
-import TextFont from "./screens/TextFont.js";
+import TableView from "../../appscreens/TableView.js";
+import TextFont from "../../appscreens/TextFont.js";
 import Notifications from "./screens/Notifications.js";
 
 const dashboardRoutes = [
@@ -77,7 +77,7 @@ const dashboardRoutes = [
     path: "/icons",
     name: "Icons",
     icon: "nc-icon nc-atom",
-    component: Icons,
+    component: IconView,
     layout: "/main",
   },
   {
