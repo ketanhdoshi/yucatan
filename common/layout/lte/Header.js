@@ -13,9 +13,9 @@ const navDef={
     },
     navMenu: [
         {title: 'Home', href: '#', active: true}, 
-        {title: 'Short list', href: '/shortlist'},
-        {title: 'Properties', href: '/properties'},
-        {title: 'Matches', href: '/matches'},
+        {title: 'Short list', href: '/lte/shortlist'},
+        {title: 'Properties', href: '/lte/properties'},
+        {title: 'Matches', href: '/lte/matches'},
         {title: 'Drop Menu', href: '#', 
             submenu: [
                 {title: 'Action', href: '#'},

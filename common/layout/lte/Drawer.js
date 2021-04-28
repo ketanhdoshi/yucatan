@@ -305,15 +305,15 @@ const Drawer = ({mode, id}) => {
             <ul className="nav flex-column">
                 <li className="nav-item" data-parent={"#" + id}>
                     <DrawerMenuItem mode={mode} icon="fa-heart"
-                            title="Modals" href="/modals" badge1="4" />
+                            title="Modals" href="/lte/modals" badge1="4" />
                 </li>
                 <li className="nav-item" data-parent={"#" + id}>
                     <DrawerMenuItem mode={mode} icon="fa-heart"
-                            title="Payment" href="/payment" />
+                            title="Payment" href="/lte/payment" />
                 </li>
                 <li className="nav-item" data-parent={"#" + id}>
                     <DrawerMenuItem mode={mode} icon="fa-heart"
-                            title="Shortlist" href="/shortlist" badge1="6" badge2="12" />
+                            title="Shortlist" href="/lte/shortlist" badge1="6" badge2="12" />
                 </li>
                 <li className="nav-item" data-parent={"#" + id}>
                     <DrawerMenuItem mode={mode} icon="fa-list"
@@ -322,11 +322,11 @@ const Drawer = ({mode, id}) => {
                         <ul className="flex-column nav">
                             <li className="nav-item">
                                 <DrawerMenuItem mode={mode} icon="fa-circle-o"
-                                    title="Dashboard 1" href="/dashboard1" parentId="#submenu2" />
+                                    title="Dashboard 1" href="/lte/dashboard1" parentId="#submenu2" />
                             </li>
                             <li className="nav-item">
                                 <DrawerMenuItem mode={mode} icon="fa-circle-o"
-                                    title="Dashboard 2" href="/dashboard2" parentId="#submenu2" />
+                                    title="Dashboard 2" href="/lte/dashboard2" parentId="#submenu2" />
                             </li>
                         </ul>
                     </SubMenu>
@@ -338,15 +338,15 @@ const Drawer = ({mode, id}) => {
                         <ul className="flex-column nav">
                             <li className="nav-item">
                                 <DrawerMenuItem mode={mode} icon="fa-circle-o"
-                                    title="Button" href="/ui/button" parentId="#submenu3" />
+                                    title="Button" href="/lte/ui/button" parentId="#submenu3" />
                             </li>
                             <li className="nav-item">
                                 <DrawerMenuItem mode={mode} icon="fa-circle-o"
-                                    title="General" href="/ui/general" parentId="#submenu3" />
+                                    title="General" href="/lte/ui/general" parentId="#submenu3" />
                             </li>
                             <li className="nav-item">
                                 <DrawerMenuItem mode={mode} icon="fa-circle-o"
-                                    title="Form" href="/ui/form" parentId="#submenu3" />
+                                    title="Form" href="/lte/ui/form" parentId="#submenu3" />
                             </li>
                         </ul>
                     </SubMenu>
@@ -358,7 +358,7 @@ const Drawer = ({mode, id}) => {
                         <ul className="flex-column nav">
                             <li className="nav-item">
                                 <DrawerMenuItem mode={mode} icon="fa-circle-o"
-                                    title="Google Maps" href="/googlemaps" parentId="#submenu4" />
+                                    title="Google Maps" href="/lte/googlemaps" parentId="#submenu4" />
                             </li>
                         </ul>
                     </SubMenu>
@@ -370,7 +370,7 @@ const Drawer = ({mode, id}) => {
                         <ul className="flex-column nav">
                             <li className="nav-item">
                                 <DrawerMenuItem mode={mode} icon="fa-circle-o"
-                                    title="BS View" href="/bsview" parentId="#submenu5" />
+                                    title="BS View" href="/lte/bsview" parentId="#submenu5" />
                             </li>
                         </ul>
                     </SubMenu>

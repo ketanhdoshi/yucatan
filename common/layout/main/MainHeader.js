@@ -171,6 +171,7 @@ const MainHeader = () => {
                 <span className="no-icon">Dropdown</span>
               </Dropdown.Toggle>
               <Dropdown.Menu aria-labelledby="navbarDropdownMenuLink">
+                <Dropdown.Item href="#pablo" onClick={(e) => e.preventDefault()}><NavLink to="/lte">LTE</NavLink></Dropdown.Item>
                 <Dropdown.Item href="#pablo" onClick={(e) => e.preventDefault()}><NavLink to="/main/properties">Properties</NavLink></Dropdown.Item>
                 <Dropdown.Item href="#pablo" onClick={(e) => e.preventDefault()}><NavLink to="/main/matches">Matches</NavLink></Dropdown.Item>
                 <Dropdown.Item href="#pablo" onClick={(e) => e.preventDefault()}><NavLink to="/main/dashboard1">Dashboard 1</NavLink></Dropdown.Item>

@@ -62,19 +62,19 @@ const SidebarRight = () => (
 const Content = () => (
     <Switch>
         <Route path="/home" component={Home}/>
-        <Route path="/dashboard1" component={Dashboard1}/>
-        <Route path="/dashboard2" component={Dashboard2}/>
-        <Route path="/ui/button" component={UiButtonView}/>
-        <Route path="/ui/general" component={UiGeneralView}/>
-        <Route path="/ui/form" component={UiFormView}/>
-        <Route path="/googlemaps" component={GoogleMaps}/>                    
+        <Route path="/lte/dashboard1" component={Dashboard1}/>
+        <Route path="/lte/dashboard2" component={Dashboard2}/>
+        <Route path="/lte/ui/button" component={UiButtonView}/>
+        <Route path="/lte/ui/general" component={UiGeneralView}/>
+        <Route path="/lte/ui/form" component={UiFormView}/>
+        <Route path="/lte/googlemaps" component={GoogleMaps}/>                    
         {/* <Route path="/calendar" component={CalendarView}/> */}
-        <Route path="/bsview" component={BsView}/>
-        <Route path="/matches" component={MatchesView}/>
-        <Route path="/properties" component={PropertiesView}/>
-        <Route path="/shortlist" component={ShortlistView}/>
-        <Route path="/posts" component={PostView}/>
-        <Route path="/modals" component={ModalView}/>
+        <Route path="/lte/bsview" component={BsView}/>
+        <Route path="/lte/matches" component={MatchesView}/>
+        <Route path="/lte/properties" component={PropertiesView}/>
+        <Route path="/lte/shortlist" component={ShortlistView}/>
+        <Route path="/lte/posts" component={PostView}/>
+        <Route path="/lte/modals" component={ModalView}/>
     </Switch>
 )
 

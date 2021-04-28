@@ -95,15 +95,15 @@ const AppView = () => {
         <GlobalStyle />
         <div>
             <Switch>
-                <Route path="/main" render={(props) => <MainPage {...props} />} />
+                <Route path="/lte" render={(props) => <MainView {...props} />} />
                 <Route path="/home" component={Home}/>
                 <Route path="/login" component={LoginView}/>
                 <Route exact path="/">
-                  {currentUser ? <MainView /> : <Home />}
+                  {currentUser ? <MainPage /> : <Home />}
                 </Route>
                 <Route>
                   {currentUser ? 
-                    <MainView /> : 
+                    <MainPage /> : 
                     <Redirect to={{ pathname: "/login", state: { from: location }}} />
                   }
                 </Route>
