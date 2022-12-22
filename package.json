@@ -34,7 +34,7 @@
     "hapi-auth-jwt2": "^10.2.0",
     "hapi-swagger": "^14.1.0",
     "joi": "^17.4.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^3.6.4",
     "mongoose": "^5.11.15",
     "mongoose-type-url": "^2.1.0",
